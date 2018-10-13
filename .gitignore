@@ -102,3 +102,8 @@ venv.bak/
 
 # mypy
 .mypy_cache/
+Core/stats/migrations/
+Core/CoreCityStats.sqlite3
+Core/Core/settings.py
+*.png
+*.jpg

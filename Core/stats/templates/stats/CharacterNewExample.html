@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Character Sheet</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <style>
+   
+   
+	/* The dopnav menu */
+	.topnav {
+		background-color: #333;
+		overflow: hidden;
+	}
+
+	/* Style the links inside the navigation bar */
+	.topnav a {
+		float: left;
+		color: #f2f2f2;
+		text-align: center;
+		padding: 14px 16px;
+		text-decoration: none;
+		font-size: 17px;
+	}
+
+	/* Change the color of links on hover */
+	.topnav a:hover {
+		background-color: #ddd;
+		color: black;
+	}
+
+	/* Add a color to the active/current link */
+	.topnav a.active {
+		background-color: #4CAF50;
+		color: white;
+	}
+    /* The sidebar menu */
+	.sidenav {
+	    z-index: 1; /* Stay on top */
+		top: 0; /* Stay at the top */
+		left: 0;
+		height: 100%; /* Full-height: remove this if you want "auto" height */
+		color: #ffffff;
+		background-color: #3b7651; /* green */
+		min-height:100%;
+		padding-bottom: 100%; /* THIS! made the green go all the way to the bottem*/
+	}
+
+	/* The navigation menu links */
+	.sidenav a {
+		padding: 6px 8px 6px 16px;
+		text-decoration: none;
+		font-size: 25px;
+		color: #ffffff;
+		display: block;
+	}
+	
+	/* When you mouse over the navigation links, change their color */
+	.sidenav a:hover {
+		color: #394639;
+	}
+	
+	.nav-pills > li.active > a{
+		color: white;
+		background-color: #262626; /* grey */
+	}
+	
+	/* Style page content */
+	.main {
+		background-color: #262626; /* grey */
+	}
+        
+    /* On small screens, set height to 'auto' for the grid */
+    @media screen and (max-width: 767px) {
+      .row.content {height: auto;} 
+    }
+    
+  </style>
+</head>
+<body>
+<div class="main">
+
+<div class="topnav hidden-xs">
+  <a class="active" href="#home">CoreCityComics.com</a>
+  <a href="#">Comics</a>
+  <a href="#">The Forest RPG</a>
+  <a href="#">About</a>
+</div>
+
+<nav class="navbar navbar-inverse visible-xs">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>                        
+      </button>
+      <a class="navbar-brand" href="#">CCC</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+		<ul class="nav navbar-nav">
+		<li class="active"><a href="#">CoreCityComics.com<</a></li>
+		<li><a href="#">Comics</a></li>
+		<li><a href="#">The Forest RPG</a></li>
+		<li><a href="#">About</a></li>
+        <li class="active"><a href="#">Squad 168</a></li>
+        <li><a href="#">Team member 1</a></li>
+        <li><a href="#">Team member 2</a></li>
+        <li><a href="#">Team member 3</a></li>
+        <li><a href="#">Team member 4</a></li>
+        <li class="active"><a href="#">NPCs</a></li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container-fluid"><div class="row content">
+    <div class="col-sm-3 sidenav hidden-xs">
+      <h2>Nav</h2>
+      <ul class="nav nav-pills nav-stacked">
+        <li class="active"><a href="#">Squad 169</a></li>
+        <li><a href="#">Team member 1</a></li>
+        <li><a href="#">Team member 2</a></li>
+        <li><a href="#">Team member 3</a></li>
+        <li><a href="#">Team member 4</a></li>
+        <li class="active"><a href="#">NPCs</a></li>
+      </ul>
+    </div>
+    <br>
+	
+<div class="col-sm-9">
+    <div class="col-md-8">
+        <div class="container-fluid bg-1 text-center">
+            <img src="bird.jpg" alt="Bird">
+			<div class="well">
+            <h3><b>Name:</b> Elth</h3>
+			</div>
+        </div>
+		<div class="col-md-12">
+		  <div class="row">
+			<div class="col-xs-4">
+			  <div class="well">
+				<P><b>Age:</b>20</P>
+			  </div>
+			</div>
+			<div class="col-xs-4">
+			  <div class="well">
+				<P4><b>Gender:</b> Female</P>
+			  </div>
+			</div>
+			<div class="col-xs-4">
+			  <div class="well">
+				<P><b>Faction:</b> Necrotsundere</P>
+			  </div>
+			</div>
+		  </div>
+			<div class="row">
+				<div class="well">
+					<h4>Appearance</h4>
+					<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.</p>
+				 </div>
+			</div>
+		</div>  	
+    </div>
+	  
+	  
+    <div class="col-md-4"> 
+        <div class="row">
+            <div class="col">
+                <div class="well">
+                  <h4><b>Stats</b></h4>
+				  <div class="well">
+                  <p>Head 1</p> 
+                  <p>Fist 2</p> 
+                  <p>Face 3</p> 
+                  <p>Mind 4</p> 
+                </div></div>
+            </div>
+            <div class="col">
+                <div class="well">
+                  <h4><b>Skills</b></h4>
+				  <div class="well">
+                  <p>Scout</p> 
+                  <p>Assault</p> 
+                  <p>spying</p> 
+                  <p>killing</p> 
+                </div></div>
+            </div>
+			<div class="col">
+                <div class="well">
+                  <h4><b>Powers</b></h4>
+				  <div class="well">
+                  <p>Maximum form</p>
+				  <p>Resistance to death</p>
+                </div></div>
+            </div>
+			<div class="col">
+                <div class="well">
+                  <h4><b>Action Surges</b></h4>
+				  <div class="well">
+				  <h4 class="text-center"><b>5</b></h4>
+                </div></div>
+            </div>
+        </div>
+    </div>
+	  
+	  
+	<div class="col-md-12"> 
+		<div class="well">
+          <h4>Health</h4>
+          <p>STUFFFF</p>
+        </div>
+        <div class="well">
+          <h4>ARMOUR</h4>
+          <p>STUFFFF</p>
+        </div>
+	</div>
+    
+    
+	<div class="col-md-12">
+		<div class="row">
+			<div class="col-xs-6">
+			  <div class="well">
+				<h4><b>Weapons</b></h4>
+				<p>[ ] Assault Rifle</p> 
+				<p>[x] Club</p>
+			  </div>
+			</div>
+			<div class="col-xs-6">
+			  <div class="well">
+				<h4><b>Equipment</b></h4>
+				<p>[x] Shoes</p>
+				<p>[ ] Grenades</p>
+			  </div>
+			</div>
+		</div>
+		<div class="col-md-12">
+		  <div class="well">
+			<h4><b>Items</b></h4>
+			<p>money</p>
+			<p>fame</p>
+			<p>fortune</p>
+			<p>a stick</p>
+			<p>money</p>
+		  </div>
+		</div>
+    </div>
+	
+	<div class="col-md-12">
+		<div class="row">
+			<div class="well">
+				<h4><b>Additional Details</b></h4>
+				<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.</p> 
+				<p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.</p>
+			</div>
+		</div>
+	</div>
+ 
+ </div>
+ 
+	
+</div>
+</div>
+</div>
+
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'stats/base.html' %}
+
+{% block title %}{{ Group.Name }}'s NPC list{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="col-md-12"> 
+		<div class="well-lg">
+		  <h2 class="active"><a href="{% url 'group' Group.GID %}">{{ Group.Name }}'s NPCs</a></h2>
+		</div>
+			{% if NPCList %}
+			<div class="well">
+			{% for NPC in NPCList %}
+				<h3><li><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{ NPC.NID.Name }}</a>
+				{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
+				{% elif NPC.Disposition < -5 %} &#x1F624
+				{% elif NPC.Disposition < 0 %}  &#x1F620
+				{% elif NPC.Disposition == 0 %} &#x1F610
+				{% elif NPC.Disposition > 5 %} 	&#x1F604
+				{% elif NPC.Disposition > 0 %} 	&#x1F642				
+				{% endif %}
+				</li></h3>
+			{% endfor %}
+			</div>
+			{% else %}
+				<p>No NPCs are available.</p>
+			{% endif %}
+	</div>
+</div>
+{% endblock %}

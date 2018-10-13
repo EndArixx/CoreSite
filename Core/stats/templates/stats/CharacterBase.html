@@ -1,0 +1,20 @@
+{% extends 'stats/base.html' %}
+{% block title %}{{ character.Name }} 's CharacterSheet{% endblock %}
+{% block Navigation %}
+        {% include 'stats/CharacterNav.html'%}
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid"><div class="row content">
+    <div class="col-sm-3 sidenav hidden-xs">
+      <h2>Nav</h2>
+      <ul class="nav nav-pills nav-stacked">
+		{% include 'stats/CharacterNav.html'%}
+      </ul>
+    </div>
+    <br>
+{% block SheetLayout %}	
+{% endblock %}
+</div>
+</div>
+{% endblock %}

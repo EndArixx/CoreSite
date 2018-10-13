@@ -1,0 +1,223 @@
+{% extends 'stats/CharacterBase.html' %}
+{% block SheetLayout %}	
+<div class="col-sm-9">
+    <div class="col-md-8">
+        <div class="container-fluid bg-1 text-center">
+			{% load static %}
+			<img class="img-responsive" src="{% static 'stats/character/' %}{{character.Image}}" alt="Player Image"/>
+			<div class="well">
+            <h1>{{ character.Name }}</h1s>
+			</div>
+        </div>
+		<div class="col-md-12">
+		  <div class="row">
+			<div class="col-xs-4">
+			  <div class="well">
+				<P><b>Age:</b> {% if character.Age < 0 %} Unknown{% else %} {{character.Age }}{% endif %}</P>
+			  </div>
+			</div>
+			<div class="col-xs-4">
+			  <div class="well">
+				<P4><b>Gender:</b> {{ character.Gender }}</P>
+			  </div>
+			</div>
+			<div class="col-xs-4">
+			  <div class="well">
+				<P><b>Faction:</b> {{ character.GID.FID.Name }}</P>
+			  </div>
+			</div>
+		  </div>
+			<div class="row">
+				<div class="well">
+					<h4>Appearance</h4>
+					<p>{{ character.Appearance }}</p>
+				 </div>
+			</div>
+		</div>  	
+    </div>
+	  
+	  
+    <div class="col-md-4"> 
+        <div class="row">
+			<div class="col">
+				<div>
+					<div class="col-md-6"> <div class="well-lg">
+					<h4><b>Action Surges</b></h4>
+					  <h3 class="text-center"><b>{{ character.ActionSurges_stat }}/{{ character.Max_ActionSurges_stat }}</b></h3>
+					</div></div>
+					
+					<div class="col-md-6"> <div class="well-lg">
+					<h4><b>Moments of Strength</b></h4>
+					  <h3 class="text-center"><b>{{ character.Momentofstrength_stat }}/{{ character.Max_MomentofStrength_stat }}</b></h3>
+					</div></div>
+					<p>&nbsp;</p>
+				</div>
+			</div>
+            <div class="col">
+                <div class="well">
+                  <h4><b>Stats</b></h4>
+				  <div class="well">
+				  {% if characterStat %}
+					{% for cstat in characterStat %}
+						<p>{{ cstat.STID.Name }} : {{ cstat.Value}}</p> 
+				    {% endfor %}
+				  {% else %}
+					<p>No Stats</p>
+				  {% endif %}
+                </div></div>
+            </div>
+            <div class="col">
+                <div class="well">
+                  <h4><b>Skills</b></h4>
+				  <div class="well">
+                  {% if characterSkill %}
+					{% for cSkill in characterSkill %}
+						<p>{{ cSkill.SID.Name }} : {{ cSkill.SID.STID.Name }}  + {{ cSkill.Mod}}</p> 
+				    {% endfor %}
+				  {% else %}
+					<p>No Skills</p>
+				  {% endif %}
+                </div></div>
+            </div>
+			<div class="col">
+                <div class="well">
+                  <h4><b>Powers</b></h4>
+				  <div class="well">
+                  {% if characterPower %}
+					{% for cPower in characterPower %}
+						<h1>{{ cPower.Name }} {% if cPower.Power_stat > 0 %} + {{ cPower.Power_stat}} {% endif %}</h1> 
+						<p> {{cPower.Details}}</p>
+				    {% endfor %}
+				  {% else %}
+					<p>No Powers</p>
+				  {% endif %}
+                </div></div>
+            </div>
+        </div>
+    </div>
+	  
+	  
+	<div class="col-md-12"> 
+		<div class="well-lg">
+          <h4>(Armor) <b>Health</b></h4>
+		  
+         {% if characterHP %}
+		  <div class="well">
+			<table style="width:100%">
+				<tr>
+					<td> </td>
+					<td> </td>
+					<td>Head:</td>
+					<td>{% if characterArmor %}({{characterArmor.Head_Armor}} /{{characterArmor.Max_Head_Armor}}) {% endif %}
+					<b>{{characterHP.Head_HP}} / {{characterHP.Max_Head_HP}}</b></td>
+					<td> </td>
+					<td> </td>
+				</tr>
+				<tr>
+					<td>Left Arm:</td>
+					<td>{% if characterArmor %}({{characterArmor.Left_Arm_Armor}} /{{characterArmor.Max_Left_Arm_Armor}}) {% endif %}
+					<b>{{characterHP.Left_Arm_HP}} / {{characterHP.Max_Left_Arm_HP}}</b></td>
+					<td>Core:</td>
+					<td>{% if characterArmor %}({{characterArmor.Core_Armor}} /{{characterArmor.Max_Core_Armor}}) {% endif %}
+					<b>{{characterHP.Core_HP}} / {{characterHP.Max_Core_HP}}</b></td>
+					<td>Right Arm:</td>
+					<td>{% if characterArmor %}({{characterArmor.Right_Arm_Armor}} /{{characterArmor.Max_Right_Arm_Armor}}) {% endif %}
+					<b>{{characterHP.Right_Arm_HP}} / {{characterHP.Max_Right_Arm_HP}}</b></td>
+				</tr>
+				<tr>
+					<td>Left Leg:</td>
+					<td>{% if characterArmor %}({{characterArmor.Left_Leg_Armor}} /{{characterArmor.Max_Left_Leg_Armor}}) {% endif %}
+					<b>{{characterHP.Left_Leg_HP}} / {{characterHP.Max_Left_Leg_HP}}</b></td>
+					<td></td>
+					<td></td>
+					<td>Right Leg:</td>
+					<td>{% if characterArmor %}({{characterArmor.Right_Leg_Armor}} /{{characterArmor.Max_Right_Leg_Armor}}) {% endif %}
+					<b>{{characterHP.Right_Leg_HP}} / {{characterHP.Max_Right_Leg_HP}}</b></td>
+				</tr>
+			</table>
+		  </div>
+		{% endif %}
+			<div class="well">
+          <h4><b>Status</b></h4>
+          {% if characterStatus %}
+			{% for cStatus in characterStatus %}
+				<p>{{ cStatus.SUID.Name }} - {{ cStatus.SUID.Details}}</p> 
+			{% endfor %}
+		  {% else %}
+			<p>No Status Effects</p>
+		  {% endif %}
+        </div>
+        </div>
+	</div>
+    
+    
+	<div class="col-md-12">
+	 <div class="well-lg">
+		<div class="row">
+			<div class="col-sm-6">
+			  <div class="well">
+				<h3><b>Weapons</b></h3>
+				{% if characterWeapon %}
+					{% for cWeapon in characterWeapon %}
+						<h4>{% if  cWeapon.Equiped %}[X]{% else %}[ ]{% endif %} {{ cWeapon.WID.Name }} {% if  cWeapon.Count > 1 %}({{ cWeapon.Count }}){% endif %} </h4>
+						<div class="well">
+						<p>Range: {{ cWeapon.WID.RID.Name}} ({{ cWeapon.WID.RID.Distance}})</p> 
+						<p>{% if cWeapon.WID.Capacity > 0 %} Ammo:{{ cWeapon.WID.AAID.Name}} ({{ cWeapon.WID.Capacity}}){% endif %}</p> 
+						<p>Details: {{ cWeapon.WID.Details}}</p> 
+						</div>
+				    {% endfor %}
+				  {% else %}
+					<p>No Weapons</p>
+				  {% endif %}
+			  </div>
+			</div>
+			<div class="col-sm-6">
+			  <div class="well">
+				<h3><b>Equipment</b></h3>
+				{% if characterGear %}
+					{% for cGear in characterGear %}
+						<div class="well">
+							<h4> {% if  cGear.Equiped %}[X]{% else %}[ ]{% endif %} {{ cGear.Name }}</h4> 
+							<p>{% if  cGear.Count > 1 %}({{ cGear.Count }}){% endif %} {{ cGear.Details}}</p> 
+						</div>
+				    {% endfor %}
+				  {% else %}
+					<p>No Equipment</p>
+				 {% endif %}
+			  </div>
+			</div>
+		</div>
+		<div class="row">
+		<div class="col-md-12">
+		  <div class="well">
+			<h3><b>Items</b></h3>
+			{% if characterItem %}
+					{% for cItem in characterItem %}
+						<div class="well">
+							<h4>{{ cItem.Name }}</h4> 
+							<p>{% if  cItem.Count > 1 %}({{ cItem.Count }}){% endif %}  {{ cItem.Details}}</p> 
+						</div>
+				    {% endfor %}
+				  {% else %}
+					<p>No Items</p>
+				 {% endif %}
+		  </div>
+		</div></div>
+	  </div>
+    </div>
+	
+	<div class="col-md-12">
+		<div class="row">
+			{% if characterDetails %}
+				<div class="well">
+					<h4><b>Additional Details</b></h4>
+						{% for cDetail in characterDetails %}
+							<p>{{ cDetail.Details }}</p> 
+						{% endfor %}
+				</div>
+			{% endif %}
+		</div>
+	</div>
+ 
+ </div>
+{% endblock %}

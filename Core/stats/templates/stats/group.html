@@ -1,0 +1,21 @@
+{% extends 'stats/base.html' %}
+
+{% block title %}Group{% endblock %}
+
+{% block content %}
+{% if chractersInGroup %}
+    <div class="container-fluid">
+	<h1>{{ Group.Name }}</h1>
+	<div class = well>
+    {% for Character in chractersInGroup %}
+        <h2><b><a href="../CharacterSheet/{{ Character.CID }}">{{ Character.Name }}</a></b></h2>
+    {% endfor %}
+	</div>
+	<div class = well-lg>
+		<h2 class="active"><a href="{% url 'NPClist' Group.GID %}">NPC list</a></h2>
+	</div>
+    </div>
+{% else %}
+    <p>No characters are available.</p>
+{% endif %}
+{% endblock %}
