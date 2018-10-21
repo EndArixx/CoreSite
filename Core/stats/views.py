@@ -99,7 +99,9 @@ def NPClist(request, GIDin):
 	
 def NPCpage(request, GIDin,NIDin):
 	if CanViewGroup(request,GIDin):
-		return HttpResponse("You're looking at the characters of " + str(GIDin) + " " + str(NIDin))
+		theGroup = get_object_or_404(Group,GID = GIDin)
+		NPC_dist = get_object_or_404(NPC_Disposition,GID = GIDin, NID = NIDin)
+		return render(request, 'stats/NPC.html', {'Group':theGroup,'NPC':NPC_dist})
 	else:
 		raise Http404()
 	

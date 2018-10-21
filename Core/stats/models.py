@@ -425,6 +425,7 @@ class NPC(models.Model):
 	Alive = models.BooleanField(default = True)
 	Status = models.ForeignKey(Status, on_delete=models.CASCADE)
 	FID = models.ForeignKey(Faction, on_delete=models.CASCADE) 
+	Appearance  =  models.CharField(max_length=2000) 
 	Details =  models.CharField(max_length=2000,blank=True, null=True)
 	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
 	class Meta:

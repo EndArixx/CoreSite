@@ -1,0 +1,56 @@
+{% extends 'stats/base.html' %}
+
+{% block title %}{{ NPC.Name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="col-md-12"> 
+		
+			{% if NPC %}
+			<div class="well-lg">
+				<h1>{{ NPC.NID.Name }}</a>
+				{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
+				{% elif NPC.Disposition < -5 %} &#x1F624
+				{% elif NPC.Disposition < 0 %}  &#x1F620
+				{% elif NPC.Disposition == 0 %} &#x1F610
+				{% elif NPC.Disposition > 5 %} 	&#x1F604
+				{% elif NPC.Disposition > 0 %} 	&#x1F642				
+				{% endif %}
+				</h1>
+		
+				{% if NPC.NID.Appearance is not nothing %} 
+				<div class = "well">
+					<h3>Appearance</h3>
+					<h4>{{NPC.NID.Appearance}} </h4>
+				</div>
+				{% endif %}
+				{% if NPC.NID.Details  is not nothing %} 
+				<div class = "well">
+					<h3> Details </h3>
+					<h4>{{NPC.NID.Details}} </h4>
+				</div>
+				{% endif %}
+			
+
+				<div class="well">
+				<h2 class="active"><a href="{% url 'group' Group.GID %}">{{ Group.Name }}</a></h2>
+				{% if NPC.Details  is not nothing %} 
+				<div class = "well">
+					<h3>Relationship details </h3>
+					<h4>{{NPC.Details}} </h4>
+				</div>
+				{% endif %}
+				</div>
+			</div>
+			
+			<div class="well">
+				<h3 class="active"><a href="{% url 'NPClist' Group.GID %}">Return to the NPC list</a></h3>
+			</div>
+			
+			
+			{% else %}
+				<div class="well-lg"><h2>No NPC Data.</p></h2></div>
+			{% endif %}
+	</div>
+</div>
+{% endblock %}
