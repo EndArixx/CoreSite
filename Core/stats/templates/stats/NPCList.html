@@ -11,12 +11,8 @@
 			{% if NPCList %}
 			<div class="well-lg">
 			{% for Fac in NPCFaction %}
-				<h3>
-					{{ Fac.Name }}
-				</h3>
-				<div class = 'well'>
-				{% for NPC in NPCList %}
-					{% if NPC.NID.FID == Fac %}
+				<h3>{{ Fac.Name }}</h3>
+				<div class = 'well'>{% for NPC in NPCList %}{% if NPC.NID.FID == Fac %}
 					<h4><li><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{ NPC.NID.Name }}</a>
 					{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
 					{% elif NPC.Disposition < -5 %} &#x1F624
@@ -24,10 +20,7 @@
 					{% elif NPC.Disposition == 0 %} &#x1F610
 					{% elif NPC.Disposition > 5 %} 	&#x1F604
 					{% elif NPC.Disposition > 0 %} 	&#x1F642				
-					{% endif %}
-					</li></h4>
-					{% endif %}
-				{% endfor %}
+					{% endif %}</li></h4>{% endif %}{% endfor %}
 				</div>
 			{% endfor %}
 			</div>
