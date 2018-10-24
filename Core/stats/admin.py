@@ -9,7 +9,17 @@ admin.site.register(Status)
 
 #Player-----------------------------------------------------------------------------------
 admin.site.register(Player)
-admin.site.register(Faction)
+
+
+#Faction-----------------------------------------------------------------------------
+class Faction_ChainInline(admin.StackedInline):
+	model = Faction_Chain
+	fk_name = "FID"
+	extra = 0
+class Faction_Admin(admin.ModelAdmin):
+	inlines = [Faction_ChainInline]
+	
+admin.site.register(Faction,Faction_Admin)
 
 #Armor-----------------------------------------------------------------------------------
 admin.site.register(Armor)
@@ -125,6 +135,7 @@ class Character_NPC_NoteInline(admin.StackedInline):
 	extra = 0
 	
 class NPCAdmin(admin.ModelAdmin):
+	ordering = ('-FID','-Name')
 	inlines = [NPC_DispositionInline, Character_NPC_NoteInline]
 admin.site.register(NPC,NPCAdmin)
 

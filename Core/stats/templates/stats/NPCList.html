@@ -11,7 +11,7 @@
 			{% if NPCList %}
 			<div class="well">
 			{% for NPC in NPCList %}
-				<h3><li><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{ NPC.NID.Name }}</a>
+				<h3><li><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{NPC.NID.FID.Name}} - {{ NPC.NID.Name }}</a>
 				{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
 				{% elif NPC.Disposition < -5 %} &#x1F624
 				{% elif NPC.Disposition < 0 %}  &#x1F620

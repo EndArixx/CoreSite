@@ -55,8 +55,17 @@ class Faction(models.Model):
 	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
 	def __str__(self):
 		return self.Name
-				
-		
+
+class Faction_Chain(models.Model):
+	FID = models.ForeignKey(Faction, on_delete=models.CASCADE) 
+	SuperFID = models.ForeignKey(Faction, on_delete=models.CASCADE, related_name='Super') 
+	def __str__(self):
+		if self.FID == self.SuperFID:
+			raise Exception('Faction cannot be equal to super Faction.')
+		return self.FID.Name
+	
+	
+	
 class Group(models.Model):
 	GID = models.AutoField(primary_key=True)
 	FID = models.ForeignKey(Faction, on_delete=models.CASCADE) 
@@ -432,7 +441,7 @@ class NPC(models.Model):
 		verbose_name = 'NPC'
 		verbose_name_plural = 'NPCs'
 	def __str__(self):
-		return self.Name
+		return self.FID.Name + " - " + self.Name
 	
 class NPC_Disposition(models.Model):
 		#This shows if the NPC likes the player group
