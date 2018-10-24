@@ -6,17 +6,18 @@
 <div class="container-fluid">
 	<div class="col-md-12"> 
 		<div class="well-lg">
-		  <h2 class="active"><a href="{% url 'group' Group.GID %}">{{ Group.Name }}'s NPCs</a></h2>
+		  <h1 class="active"><a href="{% url 'group' Group.GID %}">{{ Group.Name }}'s NPCs</a></h1>
 		</div>
 			{% if NPCList %}
-			<div class="well">
+			<div class="well-lg">
 			{% for Fac in NPCFaction %}
-				<h2>
+				<h3>
 					{{ Fac.Name }}
-				</h2>
+				</h3>
+				<div class = 'well'>
 				{% for NPC in NPCList %}
 					{% if NPC.NID.FID == Fac %}
-					<h3><li><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{ NPC.NID.Name }}</a>
+					<h4><li><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{ NPC.NID.Name }}</a>
 					{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
 					{% elif NPC.Disposition < -5 %} &#x1F624
 					{% elif NPC.Disposition < 0 %}  &#x1F620
@@ -24,9 +25,10 @@
 					{% elif NPC.Disposition > 5 %} 	&#x1F604
 					{% elif NPC.Disposition > 0 %} 	&#x1F642				
 					{% endif %}
-					</li></h3>
+					</li></h4>
 					{% endif %}
 				{% endfor %}
+				</div>
 			{% endfor %}
 			</div>
 			{% else %}
