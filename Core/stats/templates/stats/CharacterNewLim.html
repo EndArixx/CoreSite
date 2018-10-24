@@ -193,10 +193,9 @@
 			<h3><b>Items</b></h3>
 			{% if characterItem %}
 					{% for cItem in characterItem %}
-						<div class="well">
-							<h4>{{ cItem.Name }}</h4> 
-							<p>{% if  cItem.Count > 1 %}({{ cItem.Count }}){% endif %}  {{ cItem.Details}}</p> 
-						</div>
+						<li>
+							<h4>{{ cItem.Name }} - {% if  cItem.Count > 1 %}({{ cItem.Count }}){% endif %}  {{ cItem.Details}}</h4> 
+						</li>
 				    {% endfor %}
 				  {% else %}
 					<p>No Items</p>
