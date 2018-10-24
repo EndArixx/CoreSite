@@ -91,9 +91,9 @@ def NPClist(request, GIDin):
 			theGroup = get_object_or_404(Group,GID = GIDin)
 		except Character.DoesNotExist:
 			raise Http404("group does not exist")
-		NPC_dis = NPC_Disposition.objects.filter(GID = GIDin).order_by('NID__FID__Name','NID')
-		#NPClist = NPC.object.filter(NID = NPC_dis.NID)
-		return render(request, 'stats/NPCList.html', {'Group':theGroup,'NPCList':NPC_dis})
+		NPC_dis = NPC_Disposition.objects.filter(GID = GIDin).order_by('NID__FID__Name','NID__Name')
+		NPC_fac = Faction.objects.filter(FID__in = set(NPC_dis.values_list('NID__FID', flat=True))).order_by('Name')
+		return render(request, 'stats/NPCList.html', {'Group':theGroup,'NPCList':NPC_dis, 'NPCFaction':NPC_fac})
 	else:
 		raise Http404()
 	
