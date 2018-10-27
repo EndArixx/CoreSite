@@ -15,12 +15,12 @@
 			<div class = well-lg>
 			<h3>Factions<h3>
 			{% for Fac in NPCFaction %}
-				<h4><li><a href = "#{{ Fac.Name }}">{{ Fac.Name }}</a></h4></li>
+				<h4><li><a href = "#{{ Fac }}">{{ Fac.Name }}</a></h4></li>
 			{% endfor %}
 			</div>
 			</section>			
 			{% for Fac in NPCFaction %}
-				<section id = '{{ Fac.Name }}<'><h3>{{ Fac.Name }}</h3>
+				<section id = '{{ Fac }}'><h3>{{ Fac.Name }}</h3>
 				<div class = 'well'>{% for NPC in NPCList %}{% if NPC.NID.FID == Fac %}
 					<h4><li><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{ NPC.NID.Name }}</a>
 					{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
