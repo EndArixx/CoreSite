@@ -7,18 +7,25 @@
 	<div class="col-md-12"> 
 		<div class="well-lg">
 		  <h1 class="active"><a href="{% url 'group' Group.GID %}">{{ Group.Name }}'s NPCs</a></h1>
-		</div>
-	
+		 </div>
 		{% if NPCList %}
-			
 			<section id = 'contents'>
-			<div class = well-lg>
-			<h2>Factions<h2>
-			{% for Fac in NPCFaction %}
-				<h3><li><a href = "#{{ Fac }}">{{ Fac.Name }}</a></h3></li>
-			{% endfor %}
-			</div>
-			</section>			
+			  <div class="panel panel">
+				<div class="panel-heading">
+				  <h4 class="panel-title">
+					<a data-toggle="collapse" href="#collapse1"><h2>Faction List<h2></a>
+				  </h4>
+				</div>
+				<div id="collapse1" class="panel-collapse collapse">
+				  <ul class="list-group list-group">
+					{% for Fac in NPCFaction %}
+						<a href = "#{{ Fac }}"><li class="list-group-item">{{ Fac.Name }}</li></a>
+					{% endfor %}
+				  </ul>
+				</div>
+			  </div>
+		
+		</section>			
 			{% for Fac in NPCFaction %}
 				<section id = '{{ Fac }}'><h2>{{ Fac.Name }}</h2>
 				<div class = 'well'>{% for NPC in NPCList %}{% if NPC.NID.FID == Fac %}
@@ -33,7 +40,7 @@
 				<p><a href = "#contents">[Return to top]</a></p></div></section>
 			{% endfor %}
 			{% else %}
-				<p>No NPCs are available.</p>
+			</div><div class = 'well'><p>No NPCs are available.</p></div>
 			{% endif %}
 	</div>
 </div>

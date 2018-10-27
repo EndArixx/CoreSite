@@ -82,16 +82,28 @@
 			<div class="col">
                 <div class="well">
                   <h4><b>Powers</b></h4>
-				  <div class="well">
                   {% if characterPower %}
-					{% for cPower in characterPower %}
-						<h1>{{ cPower.Name }} {% if cPower.Power_stat > 0 %} + {{ cPower.Power_stat}} {% endif %}</h1> 
-						<p> {{cPower.Details}}</p>
-				    {% endfor %}
+				  <div class="panel-group" id="accordionPow">
+					  {% for cPower in characterPower %}
+						<div class="panel">
+						 <div class="panel-heading">
+							<h4 class="panel-title">
+							  <a data-toggle="collapse" data-parent="#accordionPow" href="#collapsePow{{cPower.id}}"><h4>{{ cPower.Name }} {% if cPower.Power_stat > 0 %} + {{ cPower.Power_stat}} {% endif %}</h4></a>
+							</h4>
+						  </div>
+						  <div id="collapsePow{{cPower.id}}" class="panel-collapse collapse">
+							<div class="panel-body">
+								<p> {{cPower.Details}}</p>
+							</div>
+						  </div>
+						</div>
+					  {% endfor %}
+					</div>
+					
 				  {% else %}
 					<p>No Powers</p>
 				  {% endif %}
-                </div></div>
+                </div>
             </div>
         </div>
     </div>
@@ -158,29 +170,50 @@
 			  <div class="well">
 				<h3><b>Weapons</b></h3>
 				{% if characterWeapon %}
-					{% for cWeapon in characterWeapon %}
-						<h4>{% if  cWeapon.Equiped %}[X]{% else %}[ ]{% endif %} {{ cWeapon.WID.Name }} {% if  cWeapon.Count > 1 %}({{ cWeapon.Count }}){% endif %} </h4>
-						<div class="well">
+				  <div class="panel-group" id="accordionWeap">
+				  {% for cWeapon in characterWeapon %}
+					<div class="panel">
+					 <div class="panel-heading">
+						<h4 class="panel-title">
+						  <a data-toggle="collapse" data-parent="#accordionWeap" href="#collapseWeap{{cWeapon.WID.WID}}"><h4>{% if  cWeapon.Equiped %}[X]{% else %}[ ]{% endif %} {{ cWeapon.WID.Name }} {% if  cWeapon.Count > 1 %}({{ cWeapon.Count }}){% endif %} </h4></a>
+						</h4>
+					  </div>
+					  <div id="collapseWeap{{cWeapon.WID.WID}}" class="panel-collapse collapse">
+						<div class="panel-body">
 						<p>Range: {{ cWeapon.WID.RID.Name}} ({{ cWeapon.WID.RID.Distance}})</p> 
 						<p>{% if cWeapon.WID.Capacity > 0 %} Ammo:{{ cWeapon.WID.AAID.Name}} ({{ cWeapon.WID.Capacity}}){% endif %}</p> 
 						<p>Details: {{ cWeapon.WID.Details}}</p> 
 						</div>
-				    {% endfor %}
+					  </div>
+					</div>
+					{% endfor %}
+				  </div> 
 				  {% else %}
 					<p>No Weapons</p>
 				  {% endif %}
+				  
 			  </div>
 			</div>
 			<div class="col-sm-6">
 			  <div class="well">
 				<h3><b>Equipment</b></h3>
 				{% if characterGear %}
+					<div class="panel-group" id="accordionGear">
 					{% for cGear in characterGear %}
-						<div class="well">
-							<h4> {% if  cGear.Equiped %}[X]{% else %}[ ]{% endif %} {{ cGear.Name }}</h4> 
-							<p>{% if  cGear.Count > 1 %}({{ cGear.Count }}){% endif %} {{ cGear.Details}}</p> 
+					<div class="panel">
+					 <div class="panel-heading">
+						<h4 class="panel-title">
+						  <a data-toggle="collapse" data-parent="#accordionGear" href="#collapseGear{{cGear.IID}}"><p>{% if  cGear.Equiped %}[X]{% else %}[ ]{% endif %} {{ cGear.Name }}</p></a>
+						</h4>
+					  </div>
+					  <div id="collapseGear{{cGear.IID}}" class="panel-collapse collapse">
+						<div class="panel-body">
+						<p>{% if  cGear.Count > 1 %}({{ cGear.Count }}){% endif %} {{ cGear.Details}}</p> 
 						</div>
+					  </div>
+					</div>
 				    {% endfor %}
+					</div>
 				  {% else %}
 					<p>No Equipment</p>
 				 {% endif %}
@@ -192,11 +225,23 @@
 		  <div class="well">
 			<h3><b>Items</b></h3>
 			{% if characterItem %}
-					{% for cItem in characterItem %}
-						<h4><li>
-							{{ cItem.Name }} - {% if  cItem.Count > 1 %}({{ cItem.Count }}){% endif %}  {{ cItem.Details}}
-						</li></h4> 
-				    {% endfor %}
+					<div class="panel-group" id="accordionItem">
+					  {% for cItem in characterItem %}
+						<div class="panel">
+						 <div class="panel-heading">
+							<h4 class="panel-title">
+							  <a data-toggle="collapse" data-parent="#accordionItem" href="#collapseItem{{cItem.IID}}"><h4>{{ cItem.Name }} - {% if  cItem.Count > 1 %}({{ cItem.Count }}){% endif %}  </h4></a>
+							</h4>
+						  </div>
+						  <div id="collapseItem{{cItem.IID}}" class="panel-collapse collapse">
+							<div class="panel-body">
+								{{ cItem.Details}}
+							</div>
+						  </div>
+						</div>
+					  {% endfor %}
+					</div> 
+					
 				  {% else %}
 					<p>No Items</p>
 				 {% endif %}
