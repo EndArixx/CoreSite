@@ -13,24 +13,24 @@
 			
 			<section id = 'contents'>
 			<div class = well-lg>
-			<h3>Factions<h3>
+			<h2>Factions<h2>
 			{% for Fac in NPCFaction %}
-				<h4><li><a href = "#{{ Fac }}">{{ Fac.Name }}</a></h4></li>
+				<h3><li><a href = "#{{ Fac }}">{{ Fac.Name }}</a></h3></li>
 			{% endfor %}
 			</div>
 			</section>			
 			{% for Fac in NPCFaction %}
-				<section id = '{{ Fac }}'><h3>{{ Fac.Name }}</h3>
+				<section id = '{{ Fac }}'><h2>{{ Fac.Name }}</h2>
 				<div class = 'well'>{% for NPC in NPCList %}{% if NPC.NID.FID == Fac %}
-					<h4><li><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{ NPC.NID.Name }}</a>
+					<h3><li><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{ NPC.NID.Name }}</a>
 					{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
 					{% elif NPC.Disposition < -5 %} &#x1F624
 					{% elif NPC.Disposition < 0 %}  &#x1F620
 					{% elif NPC.Disposition == 0 %} &#x1F610
 					{% elif NPC.Disposition > 5 %} 	&#x1F604
 					{% elif NPC.Disposition > 0 %} 	&#x1F642				
-					{% endif %}</li></h4>{% endif %}{% endfor %}
-				</div><p><a href = "#contents">[Return to top]</a></p></section>
+					{% endif %}</li></h3>{% endif %}{% endfor %}
+				<p><a href = "#contents">[Return to top]</a></p></div></section>
 			{% endfor %}
 			{% else %}
 				<p>No NPCs are available.</p>
