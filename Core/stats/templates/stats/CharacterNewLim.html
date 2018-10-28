@@ -230,7 +230,7 @@
 						<div class="panel">
 						 <div class="panel-heading">
 							<h4 class="panel-title">
-							  <a data-toggle="collapse" data-parent="#accordionItem" href="#collapseItem{{cItem.IID}}"><h4>{{ cItem.Name }} - {% if  cItem.Count > 1 %}({{ cItem.Count }}){% endif %}  </h4></a>
+							  <a data-toggle="collapse" data-parent="#accordionItem" href="#collapseItem{{cItem.IID}}"><h4>{{ cItem.Name }}{% if  cItem.Count > 1 %} - ({{ cItem.Count }}){% endif %}  </h4></a>
 							</h4>
 						  </div>
 						  <div id="collapseItem{{cItem.IID}}" class="panel-collapse collapse">
