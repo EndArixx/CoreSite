@@ -135,7 +135,7 @@ class Character_NPC_NoteInline(admin.StackedInline):
 	extra = 0
 	
 class NPCAdmin(admin.ModelAdmin):
-	ordering = ('-FID','-Name')
+	ordering = ('FID__Name','Name')
 	inlines = [NPC_DispositionInline, Character_NPC_NoteInline]
 admin.site.register(NPC,NPCAdmin)
 
