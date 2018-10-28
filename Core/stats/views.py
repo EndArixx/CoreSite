@@ -101,6 +101,12 @@ def NPCpage(request, GIDin,NIDin):
 	if CanViewGroup(request,GIDin):
 		theGroup = get_object_or_404(Group,GID = GIDin)
 		NPC_dist = get_object_or_404(NPC_Disposition,GID = GIDin, NID = NIDin)
+		
+		if NPC_dist.NID.Image:		
+			image = finders.find('stats/npc/'+NPC_dist.NID.Image)
+			if not image:
+				NPC_dist.NID.Image = 'invalid.png'
+		
 		return render(request, 'stats/NPC.html', {'Group':theGroup,'NPC':NPC_dist})
 	else:
 		raise Http404()

@@ -8,16 +8,37 @@
 		
 			{% if NPC %}
 			<div class="well-lg">
-				<h1>{{ NPC.NID.Name }}</a>
-				{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
-				{% elif NPC.Disposition < -5 %} &#x1F624
-				{% elif NPC.Disposition < 0 %}  &#x1F620
-				{% elif NPC.Disposition == 0 %} &#x1F610
-				{% elif NPC.Disposition > 5 %} 	&#x1F604
-				{% elif NPC.Disposition > 0 %} 	&#x1F642				
-				{% endif %}
-				</h1>
-		
+				<div class="container-fluid bg-1 text-center">
+					{% if NPC.NID.Image is not nothing %}
+					{% load static %}
+					<img class="img-responsive center-block" src="{% static 'stats/npc/' %}{{NPC.NID.Image}}" alt="NPC Image"/>
+					{% endif %}
+					<div class = "well">
+					<h1>{{ NPC.NID.Name }}
+					{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
+					{% elif NPC.Disposition < -5 %} &#x1F624
+					{% elif NPC.Disposition < 0 %}  &#x1F620
+					{% elif NPC.Disposition == 0 %} &#x1F610
+					{% elif NPC.Disposition > 5 %} 	&#x1F604
+					{% elif NPC.Disposition > 0 %} 	&#x1F642				
+					{% endif %}{% if NPC.NID.Alive is False %}(deceased){% endif %}
+					</h1>	
+					</div>
+				</div>
+							
+				<div class = "well">
+				<div class ="row">
+				<div class="col-sm-6">
+					<div class = "well">
+						<h3>Faction: {{NPC.NID.FID}}</h3>
+					</div>
+				</div>
+				<div class="col-sm-6">
+					<div class = "well">
+						<h3>Status: {{NPC.NID.Status}}</h3>
+					</div>
+				</div>
+				</div>
 				{% if NPC.NID.Appearance is not nothing %} 
 				<div class = "well">
 					<h3>Appearance</h3>
@@ -30,7 +51,7 @@
 					<h4>{{NPC.NID.Details}} </h4>
 				</div>
 				{% endif %}
-			
+				</div>
 
 				<div class="well">
 				<h2 class="active"><a href="{% url 'group' Group.GID %}">{{ Group.Name }}</a></h2>
