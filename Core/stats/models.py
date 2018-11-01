@@ -1,5 +1,5 @@
 from django.db import models
-
+from datetime import datetime  
 '''
 IMPORTANT Identifiers/ForeignKeys:
 	--character--
@@ -19,10 +19,12 @@ IMPORTANT Identifiers/ForeignKeys:
 	VID = Vehicle ID
 	CVID = Character Vehicle ID
 	GID = Group Vehicle ID
-	--NPS--
+	--NPC--
 	NID = NPC ID 
 	FID = Faction ID
+	--Other--
 	WCID = War Crime ID
+	EID = event ID
 '''
 
 
@@ -121,7 +123,7 @@ class Character_HP(models.Model):
 	Max_Right_Leg_HP = models.IntegerField(default=30)
 	Max_Left_Leg_HP = models.IntegerField(default=30)
 		#Current HP per slot
-	Head_HP = models.IntegerField(default=Max_Head_HP.default)
+	Head_HP = models.IntegerField() #this isn't defaulted because it wont make a record if they're all defaults.
 	Core_HP = models.IntegerField(default=Max_Core_HP.default)
 	Right_Arm_HP = models.IntegerField(default=Max_Right_Arm_HP.default)
 	Left_Arm_HP = models.IntegerField(default=Max_Left_Arm_HP.default)
@@ -469,19 +471,79 @@ class Character_NPC_Note(models.Model):
 	def __str__(self):
 		return self.NID.Name + ' - '+ self.CID.Name
 		
-	
+
+#------------------------------------------------------------------------------	
+#---------------------------EVENTS TIMELINE------------------------------------
+#------------------------------------------------------------------------------	
+
+class Event(models.Model):
+	EID =  models.AutoField(primary_key=True)
+	Name =  models.CharField(max_length=200)
+	Details =  models.CharField(max_length=2000)
+	InUniverseDate =  models.CharField(max_length=100)
+	GC_date =  models.DateTimeField(default= datetime.now)
+	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
+	def __str__(self):
+		return self.Name
+		
+class Group_Event(models.Model):
+	EID = models.ForeignKey(Event, on_delete=models.CASCADE) 
+	GID = models.ForeignKey(Group, on_delete=models.CASCADE) 
+	GC_DisplayOrder = models.IntegerField(default=-1)
+	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
+	class Meta:
+		unique_together = (('EID', 'GID'),)
+	def __str__(self):
+		return self.EID.Name +' - '+ self.GID.Name
+
+class NPC_Event(models.Model):
+	EID = models.ForeignKey(Event, on_delete=models.CASCADE) 
+	NID = models.ForeignKey(NPC, on_delete=models.CASCADE) 
+	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
+	class Meta:
+		unique_together = (('EID', 'NID'),)
+	def __str__(self):
+		return self.EID.Name +' - '+ self.NID.Name
+		
+class Faction_Event(models.Model):
+	EID = models.ForeignKey(Event, on_delete=models.CASCADE) 
+	FID = models.ForeignKey(Faction, on_delete=models.CASCADE) 
+	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
+	class Meta:
+		unique_together = (('EID', 'FID'),)
+	def __str__(self):
+		return self.EID.Name +' - '+ self.FID.Name
+		
 #------------------------------------------------------------------------------	
 #----------------------------- MISC -------------------------------------------
 #------------------------------------------------------------------------------
 	
 class War_Crime(models.Model):
 	WCID =  models.AutoField(primary_key=True)
+	EID = models.ForeignKey(Event, on_delete=models.CASCADE) 
 	Name =  models.CharField(max_length=200)
-	GID = models.ForeignKey(Group, on_delete=models.CASCADE)
 	Details =  models.CharField(max_length=2000,blank=True, null=True)
 	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
 	def __str__(self):
-		return self.Name		
+		return self.Name	
+
+class Group_War_Crime(models.Model):
+	WCID = models.ForeignKey(War_Crime, on_delete=models.CASCADE) 
+	GID = models.ForeignKey(Group, on_delete=models.CASCADE) 
+	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
+	class Meta:
+		unique_together = (('WCID', 'GID'),)
+	def __str__(self):
+		return self.WCID.Name
+
+class Character_War_Crime(models.Model):
+	WCID = models.ForeignKey(War_Crime, on_delete=models.CASCADE) 
+	CID = models.ForeignKey(Character, on_delete=models.CASCADE) 
+	GC_notes = models.CharField(max_length=2000,blank=True, null=True)	
+	class Meta:
+		unique_together = (('WCID', 'CID'),)
+	def __str__(self):
+		return self.WCID.Name
 		
 #------------------------------------------------------------------------------	
 #----------------------- Administration ---------------------------------------

@@ -68,16 +68,19 @@ class Group_ItemInline(admin.StackedInline):
 class Group_VehicleInline(admin.StackedInline):
 	model = Group_Vehicle
 	extra = 0
-class War_CrimeInline(admin.StackedInline):
-	model = War_Crime
+class Group_War_CrimeInline(admin.StackedInline):
+	model = Group_War_Crime
 	extra = 0	
-	
 class public_GroupInline(admin.StackedInline):
 	model = public_Group
 	extra = 0	
+class Group_EventInline(admin.StackedInline):
+	ordering = ('GC_DisplayOrder','EID')
+	model = Group_Event
+	extra = 0	
 	
 class GroupAdmin(admin.ModelAdmin):
-	inlines = [Group_ItemInline,Group_VehicleInline,War_CrimeInline,public_GroupInline]	
+	inlines = [Group_ItemInline,Group_VehicleInline,public_GroupInline,Group_EventInline,Group_War_CrimeInline]	
 admin.site.register(Group,GroupAdmin)
 
 #Character--------------------------------------------------------------------------------
@@ -110,6 +113,10 @@ class Character_VehicleInline(admin.StackedInline):
 	model = Character_Vehicle
 	extra = 0
 	
+class Character_War_CrimeInline(admin.StackedInline):
+	model = Character_War_Crime
+	extra = 0	
+	
 class CharacterAdmin(admin.ModelAdmin):
 	inlines = [
 	Character_StatusInline,
@@ -121,7 +128,8 @@ class CharacterAdmin(admin.ModelAdmin):
 	Character_WeaponInline,
 	Character_Equipped_ArmorInline,
 	Character_ItemInline,
-	Character_VehicleInline]
+	Character_VehicleInline,
+	Character_War_CrimeInline]
 
 admin.site.register(Character,CharacterAdmin)
 
@@ -138,6 +146,27 @@ class NPCAdmin(admin.ModelAdmin):
 	ordering = ('FID__Name','Name')
 	inlines = [NPC_DispositionInline, Character_NPC_NoteInline]
 admin.site.register(NPC,NPCAdmin)
+
+
+#Timeline--------------------------------------------------------------------------------
+class NPC_EventInline(admin.StackedInline):
+	model = NPC_Event
+	extra = 0
+	
+class Faction_EventInline(admin.StackedInline):
+	model = Faction_Event
+	extra = 0
+	
+class EventAdmin(admin.ModelAdmin):
+	inlines = [Group_EventInline, NPC_EventInline,Faction_EventInline]
+
+admin.site.register(Event,EventAdmin)
+
+#warCrimes--------------------------------------------------------------------------------
+
+class War_CrimeAdmin(admin.ModelAdmin):
+	inlines = [Character_War_CrimeInline,Group_War_CrimeInline]
+admin.site.register(War_Crime,War_CrimeAdmin)
 
 #Administration---------------------------------------------------------------------------
 admin.site.register(character_Access)
