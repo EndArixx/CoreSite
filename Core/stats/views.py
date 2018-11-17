@@ -120,7 +120,7 @@ def EventTimeline(request, GIDin):
 		except theGroup.DoesNotExist:
 			raise Http404("group does not exist")
 		Events = Group_Event.objects.filter(GID = GIDin).order_by('GC_DisplayOrder')
-		return render(request, 'stats/EventTimeline.html', {'Group':theGroup,'Events':Events})
+		return render(request, 'stats/eventTimeline.html', {'Group':theGroup,'Events':Events})
 	else:
 		raise Http404()
 	
