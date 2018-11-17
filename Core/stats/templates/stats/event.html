@@ -1,0 +1,56 @@
+{% extends 'stats/base.html' %}
+
+{% block title %}{{ NPC.Name }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+	<div class="col-md-12"> 
+		
+			{% if event %}
+				<div class="well-lg">
+					<div class="col">
+							<div class="col-md-6"> 
+							<h2><b>{{event.EID.Name}}</b></h2>
+							</div>
+							
+							<div class="col-md-6 text-right"> 
+							<h3>{{event.EID.InUniverseDate}}</h3>
+							</div>
+							<p>&nbsp;</p>
+							<h4>{{event.EID.Details}}</h4>
+					</div>
+				</div>
+				{% if NPCList %}
+					<div class="well-lg">
+						<h3>NPC's Present</h3>
+						<ul>
+						{% for NPC in NPCList %}
+							<li><h4>
+								<a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{{ NPC.NID.Name }}</a>
+							</h4></li>
+						{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+				{% if FactionList %}
+					<div class="well-lg">
+						<h3>Faction's Present</h3>
+						<ul>
+						{% for faction in FactionList %}
+							<li><h4>
+								<a href="{% url 'FactionPage' Group.GID faction.FID.FID %}">{{ faction.FID.Name }}</a>
+							</h4></li>
+						{% endfor %}
+						</ul>
+					</div>
+				{% endif %}
+			{% else %}
+				<div class="well-lg"><h2>No Event Data.</p></h2></div>
+			{% endif %}
+			
+			<div class="well">
+				<h3 class="active"><a href="{% url 'EventTimeline' Group.GID %}">Return to timeline</a></h3>
+			</div>
+	</div>
+</div>
+{% endblock %}

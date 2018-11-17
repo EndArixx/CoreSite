@@ -12,7 +12,8 @@
     {% endfor %}
 	</div>
 	<div class = well-lg>
-		<h2 class="active"><a href="{% url 'NPClist' Group.GID %}">NPC list</a></h2>
+		<h2 class="active"><a href="{% url 'NPClist' Group.GID %}">NPCs</a></h2>
+		<h2 class="active"><a href="{% url 'EventTimeline' Group.GID %}">Timeline</a></h2>
 	</div>
     </div>
 {% else %}

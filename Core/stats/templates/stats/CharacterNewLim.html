@@ -23,7 +23,7 @@
 			</div>
 			<div class="col-xs-4">
 			  <div class="well">
-				<P><b>Faction:</b> {{ character.GID.FID.Name }}</P>
+				<P><b>Faction: </b><a href="{% url 'FactionPage' character.GID.GID character.GID.FID.FID %}">{{ character.GID.FID.Name }}</a></P>
 			  </div>
 			</div>
 		  </div>

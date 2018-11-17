@@ -89,7 +89,7 @@ def NPClist(request, GIDin):
 	if CanViewGroup(request,GIDin):
 		try:
 			theGroup = get_object_or_404(Group,GID = GIDin)
-		except Character.DoesNotExist:
+		except theGroup.DoesNotExist:
 			raise Http404("group does not exist")
 		NPC_dis = NPC_Disposition.objects.filter(GID = GIDin).order_by('NID__FID__Name','NID__Name')
 		NPC_fac = Faction.objects.filter(FID__in = set(NPC_dis.values_list('NID__FID', flat=True))).order_by('Name')
@@ -110,7 +110,67 @@ def NPCpage(request, GIDin,NIDin):
 		return render(request, 'stats/NPC.html', {'Group':theGroup,'NPC':NPC_dist})
 	else:
 		raise Http404()
+
+#Events---------------------------------------
+#----------------------------------------------		
+def EventTimeline(request, GIDin):
+	if CanViewGroup(request,GIDin):
+		try:
+			theGroup = get_object_or_404(Group,GID = GIDin)
+		except theGroup.DoesNotExist:
+			raise Http404("group does not exist")
+		Events = Group_Event.objects.filter(GID = GIDin).order_by('GC_DisplayOrder')
+		return render(request, 'stats/EventTimeline.html', {'Group':theGroup,'Events':Events})
+	else:
+		raise Http404()
 	
+def EventPage(request, GIDin,EIDin):
+	if CanViewGroup(request,GIDin):
+		theGroup = get_object_or_404(Group,GID = GIDin)
+		Event = get_object_or_404(Group_Event,GID = GIDin, EID = EIDin)
+		
+		#using a filter so It only shows NPC's the group can see.
+		NPCEvent = NPC_Event.objects.filter(EID = EIDin).order_by('NID__Name')
+		NPCList = NPC_Disposition.objects.filter(GID = GIDin,NID__in = set(NPCEvent.values_list('NID', flat=True))).order_by('NID__Name')
+		
+		FactionList = Faction_Event.objects.filter(EID = EIDin).order_by('FID__Name')
+		# if NPC_dist.NID.Image:		
+			# image = finders.find('stats/npc/'+NPC_dist.NID.Image)
+			# if not image:
+				# NPC_dist.NID.Image = 'invalid.png'
+		
+		return render(request, 'stats/event.html', {'Group':theGroup,'event':Event,'NPCList':NPCList,'FactionList':FactionList})
+	else:
+		raise Http404()	
+		
+		
+#Faction--------------------------------------
+#---------------------------------------------
+def FactionList(request, GIDin):
+	#this isn't ready yet.
+	raise Http404()
+	
+def FactionPage(request, GIDin,FIDin):
+	if CanViewGroup(request,GIDin):
+		theGroup = get_object_or_404(Group,GID = GIDin)
+		theFaction = get_object_or_404(Faction,FID = FIDin)
+		superFactions = Faction_Chain.objects.filter(FID = FIDin).order_by('FID__Name')
+		subFactions  = Faction_Chain.objects.filter(SuperFID = FIDin).order_by('FID__Name')
+
+		#using a filter so It only shows NPC's the group can see.
+		NPCPrefilter = NPC.objects.filter(FID = FIDin).order_by('Name')
+		NPCList = NPC_Disposition.objects.filter(GID = GIDin,NID__in = set(NPCPrefilter.values_list('NID', flat=True))).order_by('NID__Name')
+
+		return render(request, 'stats/faction.html', {
+		'Group':theGroup,'Faction':theFaction,
+		'superFactions':superFactions,
+		'subFactions':subFactions,
+		'NPCList':NPCList})
+	else:
+		raise Http404()	
+
+	
+		
 #Player---------------------------------------
 #---------------------------------------------
 def player(request, PID):

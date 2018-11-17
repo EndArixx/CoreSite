@@ -6,7 +6,7 @@
 <div class="container-fluid">
 	<div class="col-md-12"> 
 		<div class="well-lg">
-		  <h1 class="active"><a href="{% url 'group' Group.GID %}">{{ Group.Name }}'s NPCs</a></h1>
+		  <h1 class="active"><a href="{% url 'group' Group.GID %}">{{ Group.Name }}</a>'s NPCs</h1>
 		 </div>
 		{% if NPCList %}
 			<section id = 'contents'>
@@ -27,7 +27,8 @@
 		
 		</section>			
 			{% for Fac in NPCFaction %}
-				<section id = '{{ Fac }}'><h2>{{ Fac.Name }}</h2>
+				<section id = '{{ Fac }}'>
+				<h2><a href="{% url 'FactionPage' Group.GID Fac.FID %}">{{ Fac.Name }}</a></h2>
 				<div class = 'well'>{% for NPC in NPCList %}{% if NPC.NID.FID == Fac %}
 					<h3><a href="{% url 'NPCpage' Group.GID NPC.NID.NID %}">{% if NPC.NID.Alive is False %}(&#x1F480){% endif %}{{ NPC.NID.Name }}
 					{% if NPC.EmogiOverride is not nothing %} {{ NPC.EmogiOverride }}
