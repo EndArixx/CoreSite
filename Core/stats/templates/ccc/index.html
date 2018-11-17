@@ -1,20 +1,26 @@
 {% extends 'stats/base.html' %}
 
-{% block title %}Core City{% endblock %}
-
 {% block content %}
 
 <div class="container-fluid">
 	<div class="row">	
+	{% load static %}
 		<div class="col-sm-6">
-			<div class="well">
-				<h1><a href="#">Comics</a></h1>
-			</div> 
+				<a href="#">
+				<img class="img-responsive"  src="{% static 'stats/home/' %}ComicHome.png" alt="Hero"/>
+				<div class="centered text-center"><h1>Coming Soon</h1></div>
+				<div class="well-lg col-xs-11 text-center bottom-right">
+					<h1>Comics</h1>
+				</div> 
+				</a>
 		</div> 
 		<div class="col-sm-6">
-			<div class="well">
-				<h1><a href="/rpg/">The Forest RPG</a></h1>
-			</div> 
+				<a href="/rpg/">
+					<img class="img-responsive" src="{% static 'stats/home/' %}ForestHome.png" alt="Soldier"/>
+					<div class="well-lg col-xs-11 text-center bottom-left">
+						<h1>The Forest RPG</h1>
+					</div> 
+				</a>
 		</div> 
 	</div> 
 </div>
