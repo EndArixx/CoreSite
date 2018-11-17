@@ -14,11 +14,12 @@
 			<ul class="timeline">
 			{% for event in Events %}
 				<li>
-					<h3><a href="{% url 'Eventpage' Group.GID event.EID.EID %}">{{event.EID.Name}}:</a></h3>
-					<p class="float-right">[{{event.EID.InUniverseDate}}]</p>
-					<h4>{{event.EID.Details}}</h4>
+					<h4>{{event.EID.InUniverseDate}}</h4>
+					<h3 class="col-md-offset-1"><a href="{% url 'Eventpage' Group.GID event.EID.EID %}">{{event.EID.Name}}</a></h3>
+					<p>{{event.EID.Details}}</p>
 				</li>
 			{% endfor %}
+			<li><p>&nbsp;</p></li>
 			</ul>
 			</div>
 		</div></div>
