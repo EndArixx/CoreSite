@@ -13,13 +13,11 @@ from .forms import CharacterForm
 
 
 #utilities-------------------------------------------------------------------
-
 def getPid(request):
 	uname = request.user.get_username()
-	playA = Player.objects.get(Name = uname)
+	playA = Player.objects.get(User = request.user)
 	PIDin = playA.PID
 	return PIDin
-
 
 def isGameCommander(request,GIDin):
 	userIsGC = False
@@ -61,8 +59,9 @@ def CanEditCharacter(request,CIDin):
 			userCanEditCharacter = accessstats.HasEdit
 	return userCanEditCharacter
 	
-	
-#Views-----------------------------------------------------------------------
+#----------------------------------------------------------------------------------	
+#Views-----------------------------------------------------------------------------
+#----------------------------------------------------------------------------------
 
 #player handbook, this is static.
 #future idea: base handbook based on game?
@@ -77,7 +76,7 @@ def index(request):
 		uname = request.user.get_username()
 		try:
 			#Get player Name
-			playA = Player.objects.get(Name = uname)
+			playA = Player.objects.get(User = request.user)
 			PIDin = playA.PID
 			accessstats = Group_Access.objects.filter(Q(PID = PIDin) & (Q(IsPlayer = True) | Q(IsGC = True)))
 				
@@ -271,7 +270,7 @@ def Character_Old(request, CIDin):
 		uname = request.user.get_username()
 		try:
 			#Get player Name
-			playA = Player.objects.get(Name = uname)
+			playA = Player.objects.get(User = request.user)
 			PIDin = playA.PID
 			accessstats = character_Access.objects.get(PID = PIDin, CID = CIDin)
 			if accessstats != None:

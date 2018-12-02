@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 from datetime import datetime  
 '''
@@ -34,8 +35,6 @@ This should never show up on any pages that normal players can see.
 Every table should have this so the GC can add a note on anything.
 '''
 
-#JOHN LOOK INTO IMPORTING USER FOR PLAYER TABLE
-
 
 #------------------------------------------------------------------------------	
 #----------------------------- Player------------------------------------------
@@ -44,6 +43,7 @@ Every table should have this so the GC can add a note on anything.
 class Player(models.Model):
 	PID = models.AutoField(primary_key=True)
 	Name = models.CharField(max_length=200)
+	User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,)
 	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
 	def __str__(self):
 		return self.Name
@@ -83,7 +83,7 @@ class Group(models.Model):
 class Character(models.Model):
 	#names_And FKs
 	CID = models.AutoField(primary_key=True)
-	PID = models.ForeignKey(Player, on_delete=models.CASCADE) 
+	#PID = models.ForeignKey(Player, on_delete=models.CASCADE) 
 	GID = models.ForeignKey(Group, on_delete=models.CASCADE) 
 	Name =  models.CharField(max_length=200)
 	Image  =  models.CharField(max_length=200, blank=True, null=True)
@@ -123,7 +123,7 @@ class Character_HP(models.Model):
 	Max_Right_Leg_HP = models.IntegerField(default=30)
 	Max_Left_Leg_HP = models.IntegerField(default=30)
 		#Current HP per slot
-	Head_HP = models.IntegerField() #this isn't defaulted because it wont make a record if they're all defaults.
+	Head_HP = models.IntegerField(default=Max_Head_HP.default)
 	Core_HP = models.IntegerField(default=Max_Core_HP.default)
 	Right_Arm_HP = models.IntegerField(default=Max_Right_Arm_HP.default)
 	Left_Arm_HP = models.IntegerField(default=Max_Left_Arm_HP.default)

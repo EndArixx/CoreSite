@@ -1,15 +1,30 @@
 from django.contrib import admin
 #imports
 from .models import  *
+from django.forms.models import BaseInlineFormSet, ModelForm
 
-
+#Utilities-------------------------------------------------------------------------------
+class AlwaysChangedModelForm(ModelForm):
+	def has_changed(self):
+		return True
 
 #Status-----------------------------------------------------------------------------------
 admin.site.register(Status)
 
 #Player-----------------------------------------------------------------------------------
-admin.site.register(Player)
+#Administration---------------------------------------------------------------------------
+class Character_AccessInLine(admin.StackedInline):
+	model = character_Access
+	extra = 0
+class Group_AccessInLine(admin.StackedInline):
+	model = Group_Access
+	extra = 0
+class PlayerAdmin(admin.ModelAdmin):
+	inlines = [Character_AccessInLine,Group_AccessInLine]
 
+admin.site.register(Player,PlayerAdmin)
+# admin.site.register(character_Access)
+# admin.site.register(Group_Access)
 
 #Faction-----------------------------------------------------------------------------
 class Faction_ChainInline(admin.StackedInline):
@@ -34,9 +49,6 @@ admin.site.register(Weapon)
 
 admin.site.register(Stat)
 admin.site.register(Skill)
-
-
-
 
 #Item-------------------------------------------------------------------------------------
 class Character_Vehicle_FeatureInline(admin.StackedInline):
@@ -80,7 +92,12 @@ class Group_EventInline(admin.StackedInline):
 	extra = 0	
 	
 class GroupAdmin(admin.ModelAdmin):
-	inlines = [Group_ItemInline,Group_VehicleInline,public_GroupInline,Group_EventInline,Group_War_CrimeInline]	
+	inlines = [Group_ItemInline,
+	Group_VehicleInline,
+	public_GroupInline,
+	Group_EventInline,
+	Group_War_CrimeInline,
+	Group_AccessInLine]	
 admin.site.register(Group,GroupAdmin)
 
 #Character--------------------------------------------------------------------------------
@@ -92,6 +109,8 @@ class Character_DetailsInline(admin.StackedInline):
 	extra = 0
 class Character_HPInline(admin.StackedInline):
 	model = Character_HP
+	form = AlwaysChangedModelForm
+	
 class Character_StatInline(admin.StackedInline):
 	model = Character_Stat
 	extra = 0
@@ -129,7 +148,8 @@ class CharacterAdmin(admin.ModelAdmin):
 	Character_Equipped_ArmorInline,
 	Character_ItemInline,
 	Character_VehicleInline,
-	Character_War_CrimeInline]
+	Character_War_CrimeInline,
+	Character_AccessInLine]
 
 admin.site.register(Character,CharacterAdmin)
 
@@ -148,7 +168,7 @@ class NPCAdmin(admin.ModelAdmin):
 admin.site.register(NPC,NPCAdmin)
 
 
-#Timeline--------------------------------------------------------------------------------
+#Time line-------------------------------------------------------------------------------
 class NPC_EventInline(admin.StackedInline):
 	model = NPC_Event
 	extra = 0
@@ -168,6 +188,3 @@ class War_CrimeAdmin(admin.ModelAdmin):
 	inlines = [Character_War_CrimeInline,Group_War_CrimeInline]
 admin.site.register(War_Crime,War_CrimeAdmin)
 
-#Administration---------------------------------------------------------------------------
-admin.site.register(character_Access)
-admin.site.register(Group_Access)

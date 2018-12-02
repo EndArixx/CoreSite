@@ -11,7 +11,7 @@
 	<div class="well">
 	<h2>Your Groups</h2>
     {% for Group in groupAccess %}
-        <h3><li><a href="group/{{ Group.GID.GID }}">{{ Group.GID.Name }}</a></li></h3>
+        <h3><li><a href="group/{{ Group.GID.GID }}">{% if Group.IsGC %}<em>(GC) </em>{% endif %}{{ Group.GID.Name }}</a></li></h3>
     {% endfor %}
     </div>
 {% else %}
