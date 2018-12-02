@@ -43,7 +43,7 @@ Every table should have this so the GC can add a note on anything.
 class Player(models.Model):
 	PID = models.AutoField(primary_key=True)
 	Name = models.CharField(max_length=200)
-	User = models.ForeignKey(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,)
+	User = models.OneToOneField(settings.AUTH_USER_MODEL,on_delete=models.CASCADE,)
 	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
 	def __str__(self):
 		return self.Name
