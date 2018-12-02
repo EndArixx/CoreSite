@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import permission_required
 from django.http import Http404, HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.staticfiles import finders
+from django.db.models import Q
 
 #models
 from .models import  *
@@ -12,17 +13,31 @@ from .forms import CharacterForm
 
 
 #utilities-------------------------------------------------------------------
+
+def getPid(request):
+	uname = request.user.get_username()
+	playA = Player.objects.get(Name = uname)
+	PIDin = playA.PID
+	return PIDin
+
+
+def isGameCommander(request,GIDin):
+	userIsGC = False
+	if request.user.is_authenticated:
+			accessstats = Group_Access.objects.filter(PID = getPid(request), GID = GIDin).first()
+			if accessstats != None:
+				userIsGC = accessstats.IsGC
+	return userIsGC
+
 def CanViewGroup(request,GIDin):
 	userHasGroup = False
 	publicGroups = public_Group.objects.filter(GID = GIDin).first()
 	if publicGroups != None:
 		userHasGroup = publicGroups.IsPublic
+	if not userHasGroup:
+		userHasGroup = isGameCommander(request, GIDin)
 	if not userHasGroup and request.user.is_authenticated:
-			uname = request.user.get_username()
-			#Get player Name
-			playA = Player.objects.get(Name = uname)
-			PIDin = playA.PID
-			accessstats = Group_Access.objects.filter(PID = PIDin, GID = GIDin).first()
+			accessstats = Group_Access.objects.filter(PID = getPid(request), GID = GIDin).first()
 			if accessstats != None:
 				userHasGroup = accessstats.IsPlayer
 	return userHasGroup
@@ -32,14 +47,19 @@ def CanViewCharacter(request,CIDin):
 	character = get_object_or_404(Character,CID = CIDin)
 	userHasCharacter = CanViewGroup(request, character.GID)
 	if not userHasCharacter and request.user.is_authenticated:
-		uname = request.user.get_username()
-		playA = Player.objects.get(Name = uname)
-		PIDin = playA.PID
-		accessstats = character_Access.objects.filter(PID = PIDin, CID = CIDin).first()
+		accessstats = character_Access.objects.filter(PID = getPid(request), CID = CIDin).first()
 		if accessstats != None:
 			userHasCharacter = accessstats.HasAccess
 	return userHasCharacter
 	
+def CanEditCharacter(request,CIDin):
+	userCanEditCharacter = False
+	character = get_object_or_404(Character,CID = CIDin)
+	if request.user.is_authenticated:
+		accessstats = character_Access.objects.filter(PID = getPid(request), CID = CIDin).first()
+		if accessstats != None:
+			userCanEditCharacter = accessstats.HasEdit
+	return userCanEditCharacter
 	
 	
 #Views-----------------------------------------------------------------------
@@ -59,7 +79,7 @@ def index(request):
 			#Get player Name
 			playA = Player.objects.get(Name = uname)
 			PIDin = playA.PID
-			accessstats = Group_Access.objects.filter(PID = PIDin, IsPlayer = True)
+			accessstats = Group_Access.objects.filter(Q(PID = PIDin) & (Q(IsPlayer = True) | Q(IsGC = True)))
 				
 			context = {'groupAccess': accessstats, 'publicGroups' : publicGroups}
 			return render(request, 'stats/index.html', context)
@@ -181,33 +201,37 @@ def player(request, PID):
 #---------------------------------------------
 def Character_Sheet(request, CIDin):
 	Access = CanViewCharacter(request, CIDin)
-	
+	htmlpage = 'stats/{0}.html'
 	if not Access:
 		raise Http404()
 	
 	character = get_object_or_404(Character,CID = CIDin)
-		
 	try:
-		#getHP/Armour Data		
+		#Some Things may be hidden from everyone but the player owner and the DB.
+		if isGameCommander(request, character.GID) or CanEditCharacter(request, CIDin):
+			characterStatus = Character_Status.objects.filter(CID = CIDin)
+			characterPower = Character_Power.objects.filter(CID = CIDin)	
+			characterWeapon = Character_Weapon.objects.filter(CID = CIDin)	
+			characterGear = Character_Item.objects.filter(CID = CIDin, Equipable = True)	
+			characterItem = Character_Item.objects.filter(CID = CIDin, Equipable = False)	
+			characterDetails = Character_Details.objects.filter(CID = CIDin)	
+			htmlpage  = htmlpage.format('CharacterNewCon')
+		else:
+			characterStatus = Character_Status.objects.filter(CID = CIDin, Hidden = False)
+			characterPower = Character_Power.objects.filter(CID = CIDin, Hidden = False)	
+			characterWeapon = Character_Weapon.objects.filter(CID = CIDin, Hidden = False)	
+			characterGear = Character_Item.objects.filter(CID = CIDin, Equipable = True, Hidden = False)	
+			characterItem = Character_Item.objects.filter(CID = CIDin, Equipable = False, Hidden = False)	
+			characterDetails = Character_Details.objects.filter(CID = CIDin, Hidden = False)
+			htmlpage = htmlpage.format('CharacterNewLim')
+			
+		#These tables do not have a hidden column. 
 		characterHP = get_object_or_404(Character_HP,CID = CIDin)	
-		#john this is dirty
+			#john this is dirty
 		characterArmor = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
-		characterStatus = Character_Status.objects.filter(CID = CIDin, Hidden = False)
-		
-		#team members
 		groupMembers = Character.objects.filter(GID = character.GID)
-	
-		#stats
 		characterStat = Character_Stat.objects.filter(CID = CIDin)	
 		characterSkill = Character_Skill.objects.filter(CID = CIDin)	
-		characterPower = Character_Power.objects.filter(CID = CIDin, Hidden = False)	
-
-		#Items
-		characterWeapon = Character_Weapon.objects.filter(CID = CIDin, Hidden = False)	
-		characterGear = Character_Item.objects.filter(CID = CIDin, Equipable = True, Hidden = False)	
-		characterItem = Character_Item.objects.filter(CID = CIDin, Equipable = False, Hidden = False)	
-		
-		characterDetails = Character_Details.objects.filter(CID = CIDin, Hidden = False)	
 		
 		if not character.Image:		
 			character.Image = 'default.png'
@@ -215,13 +239,13 @@ def Character_Sheet(request, CIDin):
 			image = finders.find('stats/character/'+character.Image)
 			if not image:
 				character.Image = 'invalid.png'
+				
 			
-		
 	except Exception as e:
 		print(str(e))
 		raise Http404("Error loading character: " + str(character.Name))
 
-	return render(request, 'stats/CharacterNewLim.html', {
+	return render(request, htmlpage, {
 	'character': character,
 	'characterHP': characterHP,
 	'characterArmor': characterArmor,
