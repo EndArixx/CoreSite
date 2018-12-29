@@ -16,6 +16,8 @@ urlpatterns = [
 	path('group/<int:GIDin>/event/<int:EIDin>', views.EventPage, name = 'Eventpage'),
 	#path('group/<int:GIDin>/factions', views.FactionList,name = 'FactionList'),
 	path('group/<int:GIDin>/faction/<int:FIDin>', views.FactionPage, name = 'FactionPage'),
+	path('group/<int:GIDin>/SurgeControl', views.SurgePage, name = 'SurgePage'),
+	path('group/<int:GIDin>/SurgeControl/<int:CIDin>/Save', views.SurgePageCharacterSave, name = 'SurgePageCharacterSave'),
 	#login stuff
 	url(r'^login/$', auth_views.LoginView.as_view(template_name='stats/login.html'), name='login'),
 	url(r'^logout/$', auth_views.LogoutView.as_view(next_page ='/'), name='logout'),

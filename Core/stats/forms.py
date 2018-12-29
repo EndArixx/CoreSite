@@ -1,8 +1,10 @@
 from django import forms
 
-class CharacterForm(forms.Form):
-	MIND_stat_f = forms.IntegerField(label='Mind Stat',required=False)
-	FIST_stat_f = forms.IntegerField(label='Fist Stat',required=False)
-	EYES_stat_f = forms.IntegerField(label='Eyes Stat',required=False)
-	FACE_stat_f = forms.IntegerField(label='Face Stat',required=False)
-	HEART_stat_f = forms.IntegerField(label='Heart Stat',required=False)
+class SurgeForm(forms.Form):
+	Max_ActionSurges_f = forms.IntegerField(label='Max Action',required=False)
+	Total_ActionSurges_f = forms.IntegerField(label='Total Action',required=False)
+	ActionSurges_f = forms.IntegerField(label='Current Action',required=False)
+	Max_MomentofStrength_f = forms.IntegerField(label='Max Strength',required=False)
+	Momentofstrength_f = forms.IntegerField(label='Current Strength',required=False)
+	MomentofWeakness_failed_f = forms.IntegerField(label='Total Failed',required=False)
+	MomentofWeakness_passed_f = forms.IntegerField(label='Total Passed',required=False) 

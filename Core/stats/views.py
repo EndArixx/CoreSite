@@ -4,12 +4,12 @@ from django.http import Http404, HttpResponse
 from django.http import HttpResponseRedirect
 from django.contrib.staticfiles import finders
 from django.db.models import Q
-
+from django.urls import reverse
 #models
 from .models import  *
 
 #forms
-from .forms import CharacterForm
+from .forms import SurgeForm
 
 
 #utilities-------------------------------------------------------------------
@@ -130,7 +130,39 @@ def NPCpage(request, GIDin,NIDin):
 	else:
 		raise Http404()
 
-#Events---------------------------------------
+#GameCommander Control-------------------------
+#----------------------------------------------		
+def SurgePage(request, GIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			theGroup = get_object_or_404(Group,GID = GIDin)
+			chractersInGroup = Character.objects.filter(GID = GIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+		return render(request, 'stats/surgeControl.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup})
+	else:
+		raise Http404()
+		
+def SurgePageCharacterSave(request, GIDin, CIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			theGroup = get_object_or_404(Group,GID = GIDin)
+			chracter = get_object_or_404(Character, CID = CIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+			
+		if request.method == 'POST':
+			form = SurgeForm(request.POST)
+			if form.is_valid():
+				if form.cleaned_data['ActionSurges_f'] != None:
+					chracter.ActionSurges_stat = form.cleaned_data['ActionSurges_f']
+				chracter.save()
+		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
+	else:
+		raise Http404()
+		
+
+#Events----------------------------------------
 #----------------------------------------------		
 def EventTimeline(request, GIDin):
 	if CanViewGroup(request,GIDin):
@@ -257,67 +289,3 @@ def Character_Sheet(request, CIDin):
 	'characterItem': characterItem,
 	'characterDetails': characterDetails,
 	'characterStatus': characterStatus})	
-	
-	
-#JOHN USED FOR TESTING YOU MAY REMOVE AFTER NEW SHEETS ARE COMPLETED
-#player characters
-def Character_Old(request, CIDin):
-	uname = 'NotLoggedIn'
-	Access = False
-	
-	#check access rights of user.
-	if request.user.is_authenticated:
-		uname = request.user.get_username()
-		try:
-			#Get player Name
-			playA = Player.objects.get(User = request.user)
-			PIDin = playA.PID
-			accessstats = character_Access.objects.get(PID = PIDin, CID = CIDin)
-			if accessstats != None:
-				Access = accessstats.HasAccess
-				uname  = uname + ' - ' + str(Access)
-			else:
-				uname = uname +  ' - [not in table]' 
-		except Character.DoesNotExist:
-			raise Http404("Character does not exist")
-		except Exception as e:
-			uname = uname + '[Access Error]' + str(e)
-		
-	try:
-		chractersInGroup = Character.objects.get(CID = CIDin)
-	except  Character.DoesNotExist:
-		raise Http404("character does not exist")
-		
-	if Access:
-		#getHP Data		
-		characterHP = get_object_or_404(Character_HP,CID = CIDin)
-		#JOHN: this should have a new method
-		if request.method == 'POST':
-			form = CharacterForm(request.POST)
-			#user is updating?
-			if form.is_valid():
-				if form.cleaned_data['MIND_stat_f'] != None:
-					chractersInGroup.MIND_stat = form.cleaned_data['MIND_stat_f']
-					
-				if form.cleaned_data['FIST_stat_f'] != None:
-					chractersInGroup.FIST_stat = form.cleaned_data['FIST_stat_f']
-					
-				if form.cleaned_data['EYES_stat_f'] != None:
-					chractersInGroup.EYES_stat = form.cleaned_data['EYES_stat_f']
-					
-				if form.cleaned_data['FACE_stat_f'] != None:
-					chractersInGroup.FACE_stat = form.cleaned_data['FACE_stat_f']
-					
-				if form.cleaned_data['HEART_stat_f'] != None:
-					chractersInGroup.HEART_stat = form.cleaned_data['HEART_stat_f']
-				chractersInGroup.save()
-				
-		else:
-			form = CharacterForm()
-		#Send Access
-		return render(request, 'stats/characterCon.html', {'chractersInGroup': chractersInGroup,'characterHP': characterHP, 'userNamePass': uname, 'form': form})
-	else:
-		#send Non Access
-		return render(request, 'stats/characterLim.html', {'chractersInGroup': chractersInGroup, 'userNamePass': uname})
-		
-		

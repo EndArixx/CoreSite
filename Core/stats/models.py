@@ -95,7 +95,6 @@ class Character(models.Model):
 	Max_ActionSurges_stat = models.IntegerField(default=5)
 	Total_ActionSurges_stat = models.IntegerField(default=0)
 	ActionSurges_stat = models.IntegerField(default=0)
-	Total_MomentofStrength_stat = models.IntegerField(default=0)
 	Max_MomentofStrength_stat = models.IntegerField(default=10)
 	Momentofstrength_stat = models.IntegerField(default=0)
 	MomentofWeakness_failed_stat = models.IntegerField(default=0)
