@@ -14,6 +14,9 @@
 	<div class = well-lg>
 		<h2 class="active"><a href="{% url 'NPClist' Group.GID %}">NPCs</a></h2>
 		<h2 class="active"><a href="{% url 'EventTimeline' Group.GID %}">Timeline</a></h2>
+		{% if isGC %}
+			<h2 class="active"><a href="{% url 'SurgePage' Group.GID %}">Surge Control</a></h2>
+		{% endif %}
 	</div>
     </div>
 {% else %}

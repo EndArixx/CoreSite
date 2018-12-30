@@ -16,8 +16,15 @@ urlpatterns = [
 	path('group/<int:GIDin>/event/<int:EIDin>', views.EventPage, name = 'Eventpage'),
 	#path('group/<int:GIDin>/factions', views.FactionList,name = 'FactionList'),
 	path('group/<int:GIDin>/faction/<int:FIDin>', views.FactionPage, name = 'FactionPage'),
+	#surgeControl Things
 	path('group/<int:GIDin>/SurgeControl', views.SurgePage, name = 'SurgePage'),
 	path('group/<int:GIDin>/SurgeControl/<int:CIDin>/Save', views.SurgePageCharacterSave, name = 'SurgePageCharacterSave'),
+	path('group/<int:GIDin>/SurgeControl/<int:CIDin>/incAc', views.SurgePageIncrementAction, name = 'SurgePageIncrementAction'),
+	path('group/<int:GIDin>/SurgeControl/<int:CIDin>/spenAc', views.SurgePageSpendAction, name = 'SurgePageSpendAction'),
+	path('group/<int:GIDin>/SurgeControl/<int:CIDin>/spenAcT', views.SurgePageSpendActionTwenty, name = 'SurgePageSpendActionTwenty'),
+	path('group/<int:GIDin>/SurgeControl/<int:CIDin>/incWP', views.SurgePageIncrementWeaknessPassed, name = 'SurgePageIncrementWeaknessPassed'),
+	path('group/<int:GIDin>/SurgeControl/<int:CIDin>/incWF', views.SurgePageIncrementWeaknessFailed, name = 'SurgePageIncrementWeaknessFailed'),
+	path('group/<int:GIDin>/SurgeControl/<int:CIDin>/spenSt', views.SurgePageSpendStrength, name = 'SurgePageSpendStrength'),
 	#login stuff
 	url(r'^login/$', auth_views.LoginView.as_view(template_name='stats/login.html'), name='login'),
 	url(r'^logout/$', auth_views.LogoutView.as_view(next_page ='/'), name='logout'),

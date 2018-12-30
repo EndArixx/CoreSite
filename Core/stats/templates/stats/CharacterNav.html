@@ -8,4 +8,7 @@
 {% endfor %}
 <li class="active"><a href="{% url 'NPClist' character.GID.GID %}">NPCs</a></li>
 <li class="active"><a href="{% url 'EventTimeline' character.GID.GID %}">Timeline</a></li>
-<li class="active"> <a href="{% url 'PlayerHandbook' %}">Player Handbook</a></li>
+<li class="active"><a href="{% url 'PlayerHandbook' %}">Player Handbook</a></li>
+{% if isGC %}
+	<li class="active"><a href="{% url 'SurgePage' character.GID.GID %}">Surge Control</a></li>
+{% endif %}

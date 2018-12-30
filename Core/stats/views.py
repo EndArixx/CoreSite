@@ -96,9 +96,10 @@ def group(request, GIDin):
 			chractersInGroup = Character.objects.filter(GID = GIDin)
 			#theGroup = Group.objects.filter(GID = GIDin)
 			theGroup = get_object_or_404(Group,GID = GIDin)
+			isGC = isGameCommander(request,GIDin)
 		except Character.DoesNotExist:
 			raise Http404("group does not exist")
-		return render(request, 'stats/group.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup})
+		return render(request, 'stats/group.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup, 'isGC':isGC})
 	else:
 		raise Http404()
 
@@ -129,38 +130,6 @@ def NPCpage(request, GIDin,NIDin):
 		return render(request, 'stats/NPC.html', {'Group':theGroup,'NPC':NPC_dist})
 	else:
 		raise Http404()
-
-#GameCommander Control-------------------------
-#----------------------------------------------		
-def SurgePage(request, GIDin):
-	if isGameCommander(request,GIDin):
-		try:
-			theGroup = get_object_or_404(Group,GID = GIDin)
-			chractersInGroup = Character.objects.filter(GID = GIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
-		return render(request, 'stats/surgeControl.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup})
-	else:
-		raise Http404()
-		
-def SurgePageCharacterSave(request, GIDin, CIDin):
-	if isGameCommander(request,GIDin):
-		try:
-			theGroup = get_object_or_404(Group,GID = GIDin)
-			chracter = get_object_or_404(Character, CID = CIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
-			
-		if request.method == 'POST':
-			form = SurgeForm(request.POST)
-			if form.is_valid():
-				if form.cleaned_data['ActionSurges_f'] != None:
-					chracter.ActionSurges_stat = form.cleaned_data['ActionSurges_f']
-				chracter.save()
-		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
-	else:
-		raise Http404()
-		
 
 #Events----------------------------------------
 #----------------------------------------------		
@@ -237,9 +206,10 @@ def Character_Sheet(request, CIDin):
 		raise Http404()
 	
 	character = get_object_or_404(Character,CID = CIDin)
+	isGC = isGameCommander(request, character.GID)
 	try:
 		#Some Things may be hidden from everyone but the player owner and the DB.
-		if isGameCommander(request, character.GID) or CanEditCharacter(request, CIDin):
+		if isGC or CanEditCharacter(request, CIDin):
 			characterStatus = Character_Status.objects.filter(CID = CIDin)
 			characterPower = Character_Power.objects.filter(CID = CIDin)	
 			characterWeapon = Character_Weapon.objects.filter(CID = CIDin)	
@@ -288,4 +258,151 @@ def Character_Sheet(request, CIDin):
 	'characterGear': characterGear,
 	'characterItem': characterItem,
 	'characterDetails': characterDetails,
-	'characterStatus': characterStatus})	
+	'characterStatus': characterStatus,
+	'isGC':isGC})	
+	
+	
+#GameCommander Control-------------------------
+#----------------------------------------------		
+def SurgePage(request, GIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			theGroup = get_object_or_404(Group,GID = GIDin)
+			chractersInGroup = Character.objects.filter(GID = GIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+		return render(request, 'stats/surgeControl.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup})
+	else:
+		raise Http404()
+		
+def SurgePageCharacterSave(request, GIDin, CIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			chracter = get_object_or_404(Character, CID = CIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+			
+		if request.method == 'POST':
+			form = SurgeForm(request.POST)
+			if form.is_valid():
+				if form.cleaned_data['Max_ActionSurges_f'] != None:
+					chracter.Max_ActionSurges_stat = form.cleaned_data['Max_ActionSurges_f']
+				if form.cleaned_data['Total_ActionSurges_f'] != None:
+					chracter.Total_ActionSurges_stat  = form.cleaned_data['Total_ActionSurges_f']
+				if form.cleaned_data['ActionSurges_f'] != None:
+					chracter.ActionSurges_stat = form.cleaned_data['ActionSurges_f']
+				if form.cleaned_data['Max_MomentofStrength_f'] != None:
+					chracter.Max_MomentofStrength_stat = form.cleaned_data['Max_MomentofStrength_f']
+				if form.cleaned_data['Momentofstrength_f'] != None:
+					chracter.Momentofstrength_stat = form.cleaned_data['Momentofstrength_f']
+				if form.cleaned_data['MomentofWeakness_passed_f'] != None:
+					chracter.MomentofWeakness_passed_stat = form.cleaned_data['MomentofWeakness_passed_f']
+				if form.cleaned_data['MomentofWeakness_failed_f'] != None:
+					chracter.MomentofWeakness_failed_stat = form.cleaned_data['MomentofWeakness_failed_f']
+				chracter.save()
+		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
+	else:
+		raise Http404()
+		
+def SurgePageIncrementAction(request, GIDin, CIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			chracter = get_object_or_404(Character, CID = CIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+			
+		if request.method == 'POST':
+			form = SurgeForm(request.POST)
+			if form.is_valid():
+				if chracter.ActionSurges_stat < chracter.Max_ActionSurges_stat:
+					chracter.ActionSurges_stat += 1
+				chracter.Total_ActionSurges_stat += 1
+				chracter.save()
+		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
+	else:
+		raise Http404()
+
+def SurgePageSpendAction(request, GIDin, CIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			chracter = get_object_or_404(Character, CID = CIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+			
+		if request.method == 'POST':
+			form = SurgeForm(request.POST)
+			if form.is_valid():
+				if chracter.ActionSurges_stat > 0:
+					chracter.ActionSurges_stat -= 1
+				chracter.save()
+		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
+	else:
+		raise Http404()
+	
+def SurgePageSpendActionTwenty(request, GIDin, CIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			chracter = get_object_or_404(Character, CID = CIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+			
+		if request.method == 'POST':
+			form = SurgeForm(request.POST)
+			if form.is_valid():
+				if chracter.ActionSurges_stat > 2:
+					chracter.ActionSurges_stat -= 3
+				chracter.save()
+		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
+	else:
+		raise Http404()	
+	
+def SurgePageIncrementWeaknessPassed(request, GIDin, CIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			chracter = get_object_or_404(Character, CID = CIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+			
+		if request.method == 'POST':
+			form = SurgeForm(request.POST)
+			if form.is_valid():
+				chracter.MomentofWeakness_passed_stat += 1
+				if chracter.Momentofstrength_stat < chracter.Max_MomentofStrength_stat:
+					chracter.Momentofstrength_stat += 1
+				chracter.save()
+		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
+	else:
+		raise Http404()
+
+def SurgePageIncrementWeaknessFailed(request, GIDin, CIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			chracter = get_object_or_404(Character, CID = CIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+			
+		if request.method == 'POST':
+			form = SurgeForm(request.POST)
+			if form.is_valid():
+				chracter.MomentofWeakness_failed_stat += 1
+				chracter.save()
+		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
+	else:
+		raise Http404()
+	
+def SurgePageSpendStrength(request, GIDin, CIDin):
+	if isGameCommander(request,GIDin):
+		try:
+			chracter = get_object_or_404(Character, CID = CIDin)
+		except Character.DoesNotExist:
+			raise Http404("group does not exist")
+			
+		if request.method == 'POST':
+			form = SurgeForm(request.POST)
+			if form.is_valid():
+				if chracter.Momentofstrength_stat > 4:
+					chracter.Momentofstrength_stat -= 5
+				chracter.save()
+		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
+	else:
+		raise Http404()

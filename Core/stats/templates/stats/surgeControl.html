@@ -1,28 +1,102 @@
 {% extends 'stats/base.html' %}
 
-{% block title %}{{ Group.Name }}{% endblock %}
+{% block title %}{{ Group.Name }} Surge Page{% endblock %}
 
 {% block content %}
 {% if chractersInGroup %}
     <div class="container-fluid">
 	<h1><a href="{% url 'group' Group.GID %}">{{ Group.Name }}</a> Surge Control</h1>
-	<div class = well>
+
     {% for Character in chractersInGroup %}
+		
 		<h2><b><a href="{% url 'CharacterSheet' Character.CID %}">{{ Character.Name }}</a></b></h2>
-		<div class = panel> 
-			
+		<div class="row">
+			<div class="col-md-2">
+				<form action="{% url 'SurgePageIncrementAction' Group.GID Character.CID %}" method="post">
+					{% csrf_token %}
+					<input class="btn btn-greener btn-block" type="submit" value="Add Action Surge">
+				</form>
+			</div>
+			<div class="col-md-2">
+				<form action="{% url 'SurgePageSpendAction' Group.GID Character.CID %}" method="post">
+					{% csrf_token %}
+					<input class="btn btn-greener btn-block" type="submit" value="Spend Action Surge">
+				</form>
+			</div>
+			<div class="col-md-2">
+				<form action="{% url 'SurgePageSpendActionTwenty' Group.GID Character.CID %}" method="post">
+					{% csrf_token %}
+					<input class="btn btn-greener btn-block" type="submit" value="Spend Action Critical">
+				</form>
+			</div>
+			<div class="col-md-2">
+				<form action="{% url 'SurgePageSpendStrength' Group.GID Character.CID %}" method="post">
+					{% csrf_token %}
+					<input class="btn btn-greener btn-block" type="submit" value="Spend Strength Surge">
+				</form>
+			</div>
+			<div class="col-md-2">
+				<form action="{% url 'SurgePageIncrementWeaknessPassed' Group.GID Character.CID %}" method="post">
+					{% csrf_token %}
+					<input class="btn btn-greener btn-block" type="submit" value="Add Weakness Passed">
+				</form>
+			</div>
+			<div class="col-md-2">
+				<form action="{% url 'SurgePageIncrementWeaknessFailed' Group.GID Character.CID %}" method="post">
+					{% csrf_token %}
+					<input class="btn btn-greener btn-block" type="submit" value="Add Weakness Failed">
+				</form>
+			</div>
+		</div>
+		<div class = well-lg>
 			<form action="{% url 'SurgePageCharacterSave' Group.GID Character.CID %}" method="post">
-				<label for="cActionSurges">Action Surges: </label>
 				{% csrf_token %}
-				<input id="ActionSurges_f" type="number" name="ActionSurges_f" value="{{ Character.ActionSurges_stat }}">
-				/ {{ Character.Max_ActionSurges_stat }}
-				<input type="submit" value="OK">
+					<div class=well>
+						<div class="row">
+							<div class="col-md-4">
+								<label for="cActionSurges">Action Surges: </label>
+								<input id="ActionSurges_f" type="number" name="ActionSurges_f" value="{{ Character.ActionSurges_stat }}">
+							</div>
+							<div class="col-md-4">
+							<label for="cActionSurges">Max Allowed: </label>
+								<input id="Max_ActionSurges_f" type="number" name="Max_ActionSurges_f" value="{{ Character.Max_ActionSurges_stat }}">
+							</div>
+							<div class="col-md-4">
+								<label for="cActionSurges">Total: </label>
+								<input id="Total_ActionSurges_f" type="number" name="Total_ActionSurges_f" value="{{ Character.Total_ActionSurges_stat }}">
+							</div>
+						</div>
+					</div>
+					<div class=well>
+						<div class="row">
+							<div class="col-md-6">
+								<label for="cActionSurges">Moments of Strength: </label>
+								<input id="Momentofstrength_f" type="number" name="Momentofstrength_f" value="{{ Character.Momentofstrength_stat }}">
+							</div>
+							<div class="col-md-6">
+								<label for="cActionSurges">Max Allowed: </label>
+								<input id="Max_MomentofStrength_f" type="number" name="Max_MomentofStrength_f" value="{{ Character.Max_MomentofStrength_stat }}">
+							</div>
+						</div>
+					</div>
+					<div class=well>
+						<div class="row">
+							<div class="col-md-6">
+								<label for="cActionSurges">Weakness Passed: </label>
+								<input id="MomentofWeakness_passed_f" type="number" name="MomentofWeakness_passed_f" value="{{ Character.MomentofWeakness_passed_stat }}">
+							</div>
+							 <div class="col-md-4">
+								<label for="cActionSurges">Weakness Failed: </label>
+								<input id="MomentofWeakness_failed_f" type="number" name="MomentofWeakness_failed_f" value="{{ Character.MomentofWeakness_failed_stat }}">
+							</div>
+						</div>
+					</div>
+				<input class="btn btn-greener btn-lg btn-block" type="submit" value="Update">
 			</form>
 			
 		</div>
-		
     {% endfor %}
-	</div>
+
     </div>
 {% else %}
     <p>No characters are available.</p>
