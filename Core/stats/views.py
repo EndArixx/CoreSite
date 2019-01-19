@@ -216,6 +216,7 @@ def Character_Sheet(request, CIDin):
 			characterGear = Character_Item.objects.filter(CID = CIDin, Equipable = True)	
 			characterItem = Character_Item.objects.filter(CID = CIDin, Equipable = False)	
 			characterDetails = Character_Details.objects.filter(CID = CIDin)	
+			characterMoney = Character_Currency.objects.filter(CID = CIDin).order_by('-MID__Value')
 			htmlpage  = htmlpage.format('CharacterNewCon')
 		else:
 			characterStatus = Character_Status.objects.filter(CID = CIDin, Hidden = False)
@@ -224,6 +225,7 @@ def Character_Sheet(request, CIDin):
 			characterGear = Character_Item.objects.filter(CID = CIDin, Equipable = True, Hidden = False)	
 			characterItem = Character_Item.objects.filter(CID = CIDin, Equipable = False, Hidden = False)	
 			characterDetails = Character_Details.objects.filter(CID = CIDin, Hidden = False)
+			characterMoney = Character_Currency.objects.filter(CID = CIDin, Hidden = False).order_by('MID__Value')
 			htmlpage = htmlpage.format('CharacterNewLim')
 			
 		#These tables do not have a hidden column. 
@@ -258,6 +260,7 @@ def Character_Sheet(request, CIDin):
 	'characterGear': characterGear,
 	'characterItem': characterItem,
 	'characterDetails': characterDetails,
+	'characterMoney': characterMoney,
 	'characterStatus': characterStatus,
 	'isGC':isGC})	
 	
