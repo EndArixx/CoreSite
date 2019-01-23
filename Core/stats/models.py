@@ -16,7 +16,6 @@ IMPORTANT Identifiers/ForeignKeys:
 	AMID = Ammo ID
 	AID = Armor ID
 	IIP = Item ID
-	MID = Money ID
 	BID = Ammo ID
 	VID = Vehicle ID
 	CVID = Character Vehicle ID
@@ -226,7 +225,6 @@ class Weapon(models.Model):
 	Details =  models.CharField(max_length=2000,blank=True, null=True)
 	Capacity = models.IntegerField(default=1)
 	Rarity  = models.IntegerField(default=1)
-	Cost =  models.IntegerField(default=-1)
 	Details =  models.CharField(max_length=2000,blank=True, null=True)
 	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
 	def __str__(self):
@@ -304,7 +302,6 @@ class Character_Item(models.Model):
 	CID = models.ForeignKey(Character, on_delete=models.CASCADE) 
 	Name =  models.CharField(max_length=200)
 	Count = models.IntegerField(default=1)
-	Cost =  models.IntegerField(default=-1)
 	Details =  models.CharField(max_length=2000,blank=True, null=True)
 	Equipable = models.BooleanField(default = False)
 	Equiped = models.BooleanField(default = False)
@@ -381,30 +378,7 @@ class Group_Vehicle_Feature(models.Model):
 	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
 	def __str__(self):
 		return self.Name
-		
-#------------------------------------------------------------------------------			
-#------------------------------ Currency --------------------------------------
-#------------------------------------------------------------------------------		
-
-class Currency(models.Model):
-	MID = models.AutoField(primary_key=True)
-	Name =  models.CharField(max_length=200)
-	Value = models.IntegerField(default=1)
-	Details =  models.CharField(max_length=2000,blank=True, null=True)
-	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
-	def __str__(self):
-		return self.Name
-		
-class Character_Currency(models.Model):
-	MID = models.ForeignKey(Currency, on_delete=models.CASCADE)
-	CID = models.ForeignKey(Character, on_delete=models.CASCADE) 
-	Count = models.IntegerField(default=1)
-	Hidden = models.BooleanField(default = False)
-	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
-	def __str__(self):
-		return self.CID.Name + ' - '+ self.MID.Name 	
-		
-		
+	
 #------------------------------------------------------------------------------			
 #------------------------------ Status ----------------------------------------
 #------------------------------------------------------------------------------

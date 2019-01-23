@@ -35,6 +35,8 @@
 			</div>
 		</div>  	
     </div>
+	  
+	  
     <div class="col-md-4"> 
         <div class="row">
 			<div class="col">
@@ -105,6 +107,8 @@
             </div>
         </div>
     </div>
+	  
+	  
 	<div class="col-md-12"> 
 		<div class="well-lg">
           <h4>(Armor) <b>Health</b></h4>
@@ -157,6 +161,8 @@
         </div>
         </div>
 	</div>
+    
+    
 	<div class="col-md-12">
 	 <div class="well-lg">
 		<div class="row">
@@ -216,54 +222,34 @@
 		</div>
 		<div class="row">
 		<div class="col-md-12">
-		{% if characterItem %}
-		<div class="well">
-			<h3><b>Items</b></h3>
-			<div class="panel-group" id="accordionItem">
-			  {% for cItem in characterItem %}
-				<div class="panel">
-				 <div class="panel-heading">
-					<h4 class="panel-title">
-					  <a data-toggle="collapse" data-parent="#accordionItem" href="#collapseItem{{cItem.IID}}"><h4>{{ cItem.Name }}{% if  cItem.Count > 1 %} - ({{ cItem.Count }}){% endif %}  </h4></a>
-					</h4>
-				  </div>
-				  <div id="collapseItem{{cItem.IID}}" class="panel-collapse collapse">
-					<div class="panel-body">
-						{{ cItem.Details}}
-					</div>
-				  </div>
-				</div>
-			  {% endfor %}
-			</div> 
-		</div>	
-		{% endif %}		  
-		  {% if characterMoney %}
 		  <div class="well">
-			<h3><b>Money</b></h3>
-			<div class="panel-group" id="accordionWallet">
-			  {% for cMoney in characterMoney %}
-			  {% if  cMoney.Count > 0 %}
-				<div class="panel">
-				 <div class="panel-heading">
-					<h4 class="panel-title">
-					  <a data-toggle="collapse" data-parent="#accordionWallet" href="#collapseItem{{cMoney.MID.MID}}"><h4>{{ cMoney.MID.Name }} - ({{ cMoney.Count }})</h4></a>
-					</h4>
-				  </div>
-				  <div id="collapseItem{{cMoney.MID.MID}}" class="panel-collapse collapse">
-					<div class="panel-body">
-						{{ cMoney.MID.Details}} <p>
-						Total value: {% widthratio  cMoney.MID.Value 1 cMoney.Count %} 
-					</div>
-				  </div>
-				</div>
-				{% endif %}  
-			  {% endfor %}
-			</div> 
+			<h3><b>Items</b></h3>
+			{% if characterItem %}
+					<div class="panel-group" id="accordionItem">
+					  {% for cItem in characterItem %}
+						<div class="panel">
+						 <div class="panel-heading">
+							<h4 class="panel-title">
+							  <a data-toggle="collapse" data-parent="#accordionItem" href="#collapseItem{{cItem.IID}}"><h4>{{ cItem.Name }}{% if  cItem.Count > 1 %} - ({{ cItem.Count }}){% endif %}  </h4></a>
+							</h4>
+						  </div>
+						  <div id="collapseItem{{cItem.IID}}" class="panel-collapse collapse">
+							<div class="panel-body">
+								{{ cItem.Details}}
+							</div>
+						  </div>
+						</div>
+					  {% endfor %}
+					</div> 
+					
+				  {% else %}
+					<p>No Items</p>
+				 {% endif %}
 		  </div>
-		  {% endif %}
 		</div></div>
 	  </div>
     </div>
+	
 	<div class="col-md-12">
 		<div class="row">
 			{% if characterDetails %}

@@ -1,7 +1,14 @@
 <li class="active"><a href="{% url 'group' character.GID.GID %}">{{ character.GID.Name }}</a></li>
-{% for member in groupMembers %}{% if character.CID == member.CID %}<li class="FocusOn"><a href="{% url 'CharacterSheet' member.CID %}">{{ member.Name }}</a></li>{% else %}<li><a href="{% url 'CharacterSheet' member.CID %}">{{ member.Name }}</a></li>{% endif %}
+{% for member in groupMembers %}
+	{% if character.CID == member.CID %}	
+	<li class="FocusOn"><a href="{% url 'CharacterSheet' member.CID %}">{{ member.Name }}</a></li>	
+	{% else %}			
+	<li><a href="{% url 'CharacterSheet' member.CID %}">{{ member.Name }}</a></li>
+	{% endif %}
 {% endfor %}
 <li class="active"><a href="{% url 'NPClist' character.GID.GID %}">NPCs</a></li>
 <li class="active"><a href="{% url 'EventTimeline' character.GID.GID %}">Timeline</a></li>
 <li class="active"><a href="{% url 'PlayerHandbook' %}">Player Handbook</a></li>
-{% if isGC %}<li class="active"><a href="{% url 'SurgePage' character.GID.GID %}">Surge Control</a></li>{% endif %}
+{% if isGC %}
+	<li class="active"><a href="{% url 'SurgePage' character.GID.GID %}">Surge Control</a></li>
+{% endif %}
