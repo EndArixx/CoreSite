@@ -73,6 +73,16 @@ admin.site.register(Vehicle)
 admin.site.register(Character_Vehicle,Character_VehicleAdmin)
 admin.site.register(Group_Vehicle,Group_VehicleAdmin)
 
+
+#Currency---------------------------------------------------------------------------------
+class Character_CurrencyInline(admin.StackedInline):
+	model = Character_Currency
+	extra = 0
+class Currency_Admin(admin.ModelAdmin):
+	inlines = [Character_CurrencyInline]
+	
+admin.site.register(Currency,Currency_Admin)
+
 #group------------------------------------------------------------------------------------
 class Group_ItemInline(admin.StackedInline):
 	model = Group_Item	
@@ -136,6 +146,7 @@ class Character_War_CrimeInline(admin.StackedInline):
 	model = Character_War_Crime
 	extra = 0	
 	
+	
 class CharacterAdmin(admin.ModelAdmin):
 	inlines = [
 	Character_StatusInline,
@@ -147,9 +158,11 @@ class CharacterAdmin(admin.ModelAdmin):
 	Character_WeaponInline,
 	Character_Equipped_ArmorInline,
 	Character_ItemInline,
+	Character_CurrencyInline,
 	Character_VehicleInline,
 	Character_War_CrimeInline,
-	Character_AccessInLine]
+	Character_AccessInLine,
+	Character_CurrencyInline]
 
 admin.site.register(Character,CharacterAdmin)
 
