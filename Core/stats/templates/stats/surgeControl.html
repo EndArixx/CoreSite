@@ -14,37 +14,37 @@
 			<div class="col-md-2">
 				<form action="{% url 'SurgePageIncrementAction' Group.GID Character.CID %}" method="post">
 					{% csrf_token %}
-					<input class="btn btn-greener btn-block" type="submit" value="Add Action Surge">
+					<input class="btn btn-greener btn-block" type="submit" value="&#x21E7; Add Action Surge">
 				</form>
 			</div>
 			<div class="col-md-2">
 				<form action="{% url 'SurgePageSpendAction' Group.GID Character.CID %}" method="post">
 					{% csrf_token %}
-					<input class="btn btn-greener btn-block" type="submit" value="Spend Action Surge">
+					<input class="btn btn-greener btn-block" type="submit" value="&#x21E9; Spend Action Surge">
 				</form>
 			</div>
 			<div class="col-md-2">
 				<form action="{% url 'SurgePageSpendActionTwenty' Group.GID Character.CID %}" method="post">
 					{% csrf_token %}
-					<input class="btn btn-greener btn-block" type="submit" value="Spend Action Critical">
+					<input class="btn btn-greener btn-block" type="submit" value="&#x21E9;&#x21E9;&#x21E9; Spend Action Critical">
 				</form>
 			</div>
 			<div class="col-md-2">
 				<form action="{% url 'SurgePageSpendStrength' Group.GID Character.CID %}" method="post">
 					{% csrf_token %}
-					<input class="btn btn-greener btn-block" type="submit" value="Spend Strength Surge">
+					<input class="btn btn-greener btn-block" type="submit" value="&#x21E9;&#x1F44D; Spend Strength Surge">
 				</form>
 			</div>
 			<div class="col-md-2">
 				<form action="{% url 'SurgePageIncrementWeaknessPassed' Group.GID Character.CID %}" method="post">
 					{% csrf_token %}
-					<input class="btn btn-greener btn-block" type="submit" value="Add Weakness Passed">
+					<input class="btn btn-greener btn-block" type="submit" value="&#x21E7;&#x1F44D; Add Weakness Passed">
 				</form>
 			</div>
 			<div class="col-md-2">
 				<form action="{% url 'SurgePageIncrementWeaknessFailed' Group.GID Character.CID %}" method="post">
 					{% csrf_token %}
-					<input class="btn btn-greener btn-block" type="submit" value="Add Weakness Failed">
+					<input class="btn btn-greener btn-block" type="submit" value="&#x21E7;&#x1F44E; Add Weakness Failed">
 				</form>
 			</div>
 		</div>
