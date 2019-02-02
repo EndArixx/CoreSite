@@ -42,21 +42,23 @@ def CanViewGroup(request,GIDin):
 	
 def CanViewCharacter(request,CIDin):
 	userHasCharacter = False
-	character = get_object_or_404(Character,CID = CIDin)
-	userHasCharacter = CanViewGroup(request, character.GID)
-	if not userHasCharacter and request.user.is_authenticated:
-		accessstats = character_Access.objects.filter(PID = getPid(request), CID = CIDin).first()
-		if accessstats != None:
-			userHasCharacter = accessstats.HasAccess
+	character = Character.objects.filter(CID = CIDin).first()
+	if character:
+		userHasCharacter = CanViewGroup(request, character.GID)
+		if not userHasCharacter and request.user.is_authenticated:
+			accessstats = character_Access.objects.filter(PID = getPid(request), CID = CIDin).first()
+			if accessstats != None:
+				userHasCharacter = accessstats.HasAccess
 	return userHasCharacter
 	
 def CanEditCharacter(request,CIDin):
 	userCanEditCharacter = False
-	character = get_object_or_404(Character,CID = CIDin)
-	if request.user.is_authenticated:
-		accessstats = character_Access.objects.filter(PID = getPid(request), CID = CIDin).first()
-		if accessstats != None:
-			userCanEditCharacter = accessstats.HasEdit
+	character = Character.objects.filter(CID = CIDin).first()
+	if character:
+		if request.user.is_authenticated:
+			accessstats = character_Access.objects.filter(PID = getPid(request), CID = CIDin).first()
+			if accessstats != None:
+				userCanEditCharacter = accessstats.HasEdit
 	return userCanEditCharacter
 	
 #----------------------------------------------------------------------------------	
@@ -101,7 +103,7 @@ def group(request, GIDin):
 			raise Http404("group does not exist")
 		return render(request, 'stats/group.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup, 'isGC':isGC})
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 
 #NPC stuff------------------------------------
 #---------------------------------------------
@@ -115,7 +117,7 @@ def NPClist(request, GIDin):
 		NPC_fac = Faction.objects.filter(FID__in = set(NPC_dis.values_list('NID__FID', flat=True))).order_by('Name')
 		return render(request, 'stats/NPCList.html', {'Group':theGroup,'NPCList':NPC_dis, 'NPCFaction':NPC_fac})
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 	
 def NPCpage(request, GIDin,NIDin):
 	if CanViewGroup(request,GIDin):
@@ -129,7 +131,7 @@ def NPCpage(request, GIDin,NIDin):
 		
 		return render(request, 'stats/NPC.html', {'Group':theGroup,'NPC':NPC_dist})
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 
 #Events----------------------------------------
 #----------------------------------------------		
@@ -142,7 +144,7 @@ def EventTimeline(request, GIDin):
 		Events = Group_Event.objects.filter(GID = GIDin).order_by('GC_DisplayOrder')
 		return render(request, 'stats/eventTimeline.html', {'Group':theGroup,'Events':Events})
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 	
 def EventPage(request, GIDin,EIDin):
 	if CanViewGroup(request,GIDin):
@@ -161,7 +163,7 @@ def EventPage(request, GIDin,EIDin):
 		
 		return render(request, 'stats/event.html', {'Group':theGroup,'event':Event,'NPCList':NPCList,'FactionList':FactionList})
 	else:
-		raise Http404()	
+		return HttpResponseRedirect(reverse('index'))
 		
 		
 #Faction--------------------------------------
@@ -187,7 +189,7 @@ def FactionPage(request, GIDin,FIDin):
 		'subFactions':subFactions,
 		'NPCList':NPCList})
 	else:
-		raise Http404()	
+		return HttpResponseRedirect(reverse('index'))
 
 	
 		
@@ -203,7 +205,7 @@ def Character_Sheet(request, CIDin):
 	Access = CanViewCharacter(request, CIDin)
 	htmlpage = 'stats/{0}.html'
 	if not Access:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 	
 	character = get_object_or_404(Character,CID = CIDin)
 	isGC = isGameCommander(request, character.GID)
@@ -276,7 +278,7 @@ def SurgePage(request, GIDin):
 			raise Http404("group does not exist")
 		return render(request, 'stats/surgeControl.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup})
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 		
 def SurgePageCharacterSave(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
@@ -305,7 +307,7 @@ def SurgePageCharacterSave(request, GIDin, CIDin):
 				chracter.save()
 		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 		
 def SurgePageIncrementAction(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
@@ -323,7 +325,7 @@ def SurgePageIncrementAction(request, GIDin, CIDin):
 				chracter.save()
 		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 
 def SurgePageSpendAction(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
@@ -340,7 +342,7 @@ def SurgePageSpendAction(request, GIDin, CIDin):
 				chracter.save()
 		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 	
 def SurgePageSpendActionTwenty(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
@@ -357,7 +359,7 @@ def SurgePageSpendActionTwenty(request, GIDin, CIDin):
 				chracter.save()
 		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
 	else:
-		raise Http404()	
+		return HttpResponseRedirect(reverse('index'))
 	
 def SurgePageIncrementWeaknessPassed(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
@@ -375,7 +377,7 @@ def SurgePageIncrementWeaknessPassed(request, GIDin, CIDin):
 				chracter.save()
 		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 
 def SurgePageIncrementWeaknessFailed(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
@@ -391,7 +393,7 @@ def SurgePageIncrementWeaknessFailed(request, GIDin, CIDin):
 				chracter.save()
 		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
 	
 def SurgePageSpendStrength(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
@@ -408,4 +410,4 @@ def SurgePageSpendStrength(request, GIDin, CIDin):
 				chracter.save()
 		return HttpResponseRedirect(reverse('SurgePage',  kwargs={'GIDin': GIDin}))
 	else:
-		raise Http404()
+		return HttpResponseRedirect(reverse('index'))
