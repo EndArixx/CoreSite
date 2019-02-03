@@ -9,7 +9,7 @@ from django.urls import reverse
 from .models import  *
 
 #forms
-from .forms import SurgeForm
+from .forms import *
 
 
 #utilities-------------------------------------------------------------------
@@ -54,7 +54,9 @@ def CanViewCharacter(request,CIDin):
 def CanEditCharacter(request,CIDin):
 	userCanEditCharacter = False
 	character = Character.objects.filter(CID = CIDin).first()
-	if character:
+	if isGameCommander(request,character.GID):
+		userCanEditCharacter = True
+	elif character:
 		if request.user.is_authenticated:
 			accessstats = character_Access.objects.filter(PID = getPid(request), CID = CIDin).first()
 			if accessstats != None:
@@ -211,7 +213,7 @@ def Character_Sheet(request, CIDin):
 	isGC = isGameCommander(request, character.GID)
 	try:
 		#Some Things may be hidden from everyone but the player owner and the DB.
-		if isGC or CanEditCharacter(request, CIDin):
+		if CanEditCharacter(request, CIDin):
 			characterStatus = Character_Status.objects.filter(CID = CIDin)
 			characterPower = Character_Power.objects.filter(CID = CIDin)	
 			characterWeapon = Character_Weapon.objects.filter(CID = CIDin)	
@@ -234,10 +236,16 @@ def Character_Sheet(request, CIDin):
 		characterHP = get_object_or_404(Character_HP,CID = CIDin)	
 			#john this is dirty
 		characterArmor = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
+		characterArmorName  = Character_Equipped_Armor.objects.filter(CID = CIDin).first()
 		groupMembers = Character.objects.filter(GID = character.GID)
 		characterStat = Character_Stat.objects.filter(CID = CIDin)	
 		characterSkill = Character_Skill.objects.filter(CID = CIDin)	
 		
+		#forms
+		hpDamageForm = HPFormDamage()
+		hpHealForm = HPFormHeal()
+		hpHealAllForm = HPAllForm()
+		armorAllForm = ArmorAllForm()
 		if not character.Image:		
 			character.Image = 'default.png'
 		else:
@@ -254,6 +262,7 @@ def Character_Sheet(request, CIDin):
 	'character': character,
 	'characterHP': characterHP,
 	'characterArmor': characterArmor,
+	'characterArmorName': characterArmorName,
 	'groupMembers': groupMembers,
 	'characterStat': characterStat,
 	'characterSkill': characterSkill,
@@ -264,9 +273,477 @@ def Character_Sheet(request, CIDin):
 	'characterDetails': characterDetails,
 	'characterMoney': characterMoney,
 	'characterStatus': characterStatus,
+	'hpDamageForm': hpDamageForm,
+	'hpHealForm': hpHealForm,
+	'hpHealAllForm': hpHealAllForm,
+	'armorAllForm':armorAllForm,
 	'isGC':isGC})	
 	
 	
+
+#Character Health------------------------------	
+#----------------------------------------------	
+def CharacterHPFullHeal(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		if request.method == 'POST':
+			characterhp.Head_HP = characterhp.Max_Head_HP
+			characterhp.Core_HP  = characterhp.Max_Core_HP 
+			characterhp.Right_Arm_HP  = characterhp.Max_Right_Arm_HP 
+			characterhp.Left_Arm_HP  = characterhp.Max_Left_Arm_HP 
+			characterhp.Right_Leg_HP  = characterhp.Max_Right_Leg_HP 
+			characterhp.Left_Leg_HP  = characterhp.Max_Left_Leg_HP 
+			
+			characterhp.Temp_Head_HP = 0
+			characterhp.Temp_Core_HP = 0
+			characterhp.Temp_Right_Arm_HP = 0
+			characterhp.Temp_Left_Arm_HP = 0
+			characterhp.Temp_Right_Leg_HP = 0
+			characterhp.Temp_Left_Leg_HP = 0
+			
+			characterhp.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+		
+def CharacterArmorReset(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterArmorValue = Character_Equipped_Armor_Value.objects.get(CID = CIDin)
+		characterArmorName  = Character_Equipped_Armor.objects.get(CID = CIDin)
+		if request.method == 'POST':
+			#set maximum values
+			characterArmorValue.Max_Head_Armor 		= characterArmorName.Equiped_Head.Value
+			characterArmorValue.Max_Core_Armor 		= characterArmorName.Equiped_Core.Value
+			characterArmorValue.Max_Right_Arm_Armor = characterArmorName.Equiped_Right_Arm.Value
+			characterArmorValue.Max_Left_Arm_Armor 	= characterArmorName.Equiped_Left_Arm.Value
+			characterArmorValue.Max_Right_Leg_Armor = characterArmorName.Equiped_Right_Leg.Value
+			characterArmorValue.Max_Left_Leg_Armor 	= characterArmorName.Equiped_Left_Leg.Value
+			
+			#repair armor
+			characterArmorValue.Head_Armor 		= characterArmorValue.Max_Head_Armor
+			characterArmorValue.Core_Armor 		= characterArmorValue.Max_Core_Armor
+			characterArmorValue.Right_Arm_Armor = characterArmorValue.Max_Right_Arm_Armor
+			characterArmorValue.Left_Arm_Armor 	= characterArmorValue.Max_Left_Arm_Armor
+			characterArmorValue.Right_Leg_Armor = characterArmorValue.Max_Right_Leg_Armor
+			characterArmorValue.Left_Leg_Armor 	= characterArmorValue.Max_Left_Leg_Armor
+			
+			characterArmorValue.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+
+		
+def CharacterHPHealALL(request, CIDin):	
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		if request.method == 'POST':
+			form = HPAllForm(request.POST)
+			if form.is_valid():
+				if( form.cleaned_data['OverHeal_f']):
+					if(form.cleaned_data['AddorO_f'] == 'Add_f'):
+						if form.cleaned_data['HeadHP_f'] != None:
+							characterhp.Temp_Head_HP += form.cleaned_data['HeadHP_f']
+						if form.cleaned_data['CoreHP_f'] != None:
+							characterhp.Temp_Core_HP += form.cleaned_data['CoreHP_f']
+						if form.cleaned_data['ArmRightHP_f'] != None:
+							characterhp.Temp_Right_Arm_HP += form.cleaned_data['ArmRightHP_f']
+						if form.cleaned_data['ArmLeftHP_f'] != None:
+							characterhp.Temp_Left_Arm_HP += form.cleaned_data['ArmLeftHP_f']
+						if form.cleaned_data['LegRightHP_f'] != None:
+							characterhp.Temp_Right_Leg_HP += form.cleaned_data['LegRightHP_f']
+						if form.cleaned_data['LegLeftHP_f'] != None:
+							characterhp.Temp_Left_Leg_HP += form.cleaned_data['LegLeftHP_f']
+					if(form.cleaned_data['AddorO_f'] == 'Override_f'):
+						if form.cleaned_data['HeadHP_f'] != None:
+							characterhp.Temp_Head_HP = form.cleaned_data['HeadHP_f']
+						if form.cleaned_data['CoreHP_f'] != None:
+							characterhp.Temp_Core_HP = form.cleaned_data['CoreHP_f']
+						if form.cleaned_data['ArmRightHP_f'] != None:
+							characterhp.Temp_Right_Arm_HP = form.cleaned_data['ArmRightHP_f']
+						if form.cleaned_data['ArmLeftHP_f'] != None:
+							characterhp.Temp_Left_Arm_HP = form.cleaned_data['ArmLeftHP_f']
+						if form.cleaned_data['LegRightHP_f'] != None:
+							characterhp.Temp_Right_Leg_HP = form.cleaned_data['LegRightHP_f']
+						if form.cleaned_data['LegLeftHP_f'] != None:
+							characterhp.Temp_Left_Leg_HP = form.cleaned_data['LegLeftHP_f']
+				else:
+					if(form.cleaned_data['AddorO_f'] == 'Add_f'):
+						if form.cleaned_data['HeadHP_f'] != None:
+							characterhp.Head_HP += form.cleaned_data['HeadHP_f']
+						if form.cleaned_data['CoreHP_f'] != None:
+							characterhp.Core_HP += form.cleaned_data['CoreHP_f']
+						if form.cleaned_data['ArmRightHP_f'] != None:
+							characterhp.Right_Arm_HP += form.cleaned_data['ArmRightHP_f']
+						if form.cleaned_data['ArmLeftHP_f'] != None:
+							characterhp.Left_Arm_HP += form.cleaned_data['ArmLeftHP_f']
+						if form.cleaned_data['LegRightHP_f'] != None:
+							characterhp.Right_Leg_HP += form.cleaned_data['LegRightHP_f']
+						if form.cleaned_data['LegLeftHP_f'] != None:
+							characterhp.Left_Leg_HP += form.cleaned_data['LegLeftHP_f']
+					if(form.cleaned_data['AddorO_f'] == 'Override_f'):
+						if form.cleaned_data['HeadHP_f'] != None:
+							characterhp.Head_HP = form.cleaned_data['HeadHP_f']
+						if form.cleaned_data['CoreHP_f'] != None:
+							characterhp.Core_HP = form.cleaned_data['CoreHP_f']
+						if form.cleaned_data['ArmRightHP_f'] != None:
+							characterhp.Right_Arm_HP = form.cleaned_data['ArmRightHP_f']
+						if form.cleaned_data['ArmLeftHP_f'] != None:
+							characterhp.Left_Arm_HP = form.cleaned_data['ArmLeftHP_f']
+						if form.cleaned_data['LegRightHP_f'] != None:
+							characterhp.Right_Leg_HP = form.cleaned_data['LegRightHP_f']
+						if form.cleaned_data['LegLeftHP_f'] != None:
+							characterhp.Left_Leg_HP = form.cleaned_data['LegLeftHP_f']
+							
+					#consider writing a 'check max HP/Armor Method		
+					if characterhp.Head_HP > characterhp.Max_Head_HP:
+						characterhp.Head_HP = characterhp.Max_Head_HP
+					if characterhp.Core_HP  > characterhp.Max_Core_HP:
+						characterhp.Core_HP  = characterhp.Max_Core_HP 
+					if characterhp.Right_Arm_HP  > characterhp.Max_Right_Arm_HP:
+						characterhp.Right_Arm_HP  = characterhp.Max_Right_Arm_HP 
+					if characterhp.Left_Arm_HP  > characterhp.Max_Left_Arm_HP:
+						characterhp.Left_Arm_HP  = characterhp.Max_Left_Arm_HP 
+					if characterhp.Right_Leg_HP  > characterhp.Max_Right_Leg_HP:
+						characterhp.Right_Leg_HP  = characterhp.Max_Right_Leg_HP 
+					if characterhp.Left_Leg_HP  > characterhp.Max_Left_Leg_HP:
+						characterhp.Left_Leg_HP  = characterhp.Max_Left_Leg_HP 
+					
+				characterhp.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+
+def CharacterArmorALL(request, CIDin):	
+	if CanEditCharacter(request,CIDin):
+		characterArmorValue = Character_Equipped_Armor_Value.objects.get(CID = CIDin)
+		characterArmorName  = Character_Equipped_Armor.objects.get(CID = CIDin)
+		if request.method == 'POST':
+			form = ArmorAllForm(request.POST)
+			if form.is_valid():
+				if(form.cleaned_data['AddorO_f'] == 'Add_f'):
+					if form.cleaned_data['HeadArmor_f'] != None:
+						characterArmorValue.Head_Armor += form.cleaned_data['HeadArmor_f']
+					if form.cleaned_data['CoreArmor_f'] != None:
+						characterArmorValue.Core_Armor += form.cleaned_data['CoreArmor_f']
+					if form.cleaned_data['ArmRightArmor_f'] != None:
+						characterArmorValue.Right_Arm_Armor += form.cleaned_data['ArmRightArmor_f']
+					if form.cleaned_data['ArmLeftArmor_f'] != None:
+						characterArmorValue.Left_Arm_Armor += form.cleaned_data['ArmLeftArmor_f']
+					if form.cleaned_data['LegRightArmor_f'] != None:
+						characterArmorValue.Right_Leg_Armor += form.cleaned_data['LegRightArmor_f']
+					if form.cleaned_data['LegLeftArmor_f'] != None:
+						characterArmorValue.Left_Leg_Armor += form.cleaned_data['LegLeftArmor_f']
+				if(form.cleaned_data['AddorO_f'] == 'Override_f'):
+					if form.cleaned_data['HeadArmor_f'] != None:
+						characterArmorValue.Head_Armor = form.cleaned_data['HeadArmor_f']
+					if form.cleaned_data['CoreArmor_f'] != None:
+						characterArmorValue.Core_Armor = form.cleaned_data['CoreArmor_f']
+					if form.cleaned_data['ArmRightArmor_f'] != None:
+						characterArmorValue.Right_Arm_Armor = form.cleaned_data['ArmRightArmor_f']
+					if form.cleaned_data['ArmLeftArmor_f'] != None:
+						characterArmorValue.Left_Arm_Armor = form.cleaned_data['ArmLeftArmor_f']
+					if form.cleaned_data['LegRightArmor_f'] != None:
+						characterArmorValue.Right_Leg_Armor = form.cleaned_data['LegRightArmor_f']
+					if form.cleaned_data['LegLeftArmor_f'] != None:
+						characterArmorValue.Left_Leg_Armor = form.cleaned_data['LegLeftArmor_f']
+						
+			#consider writing a 'check max HP/Armor Method				
+			if characterArmorValue.Head_Armor > characterArmorValue.Max_Head_Armor:
+				characterArmorValue.Head_Armor = characterArmorValue.Max_Head_Armor
+			if characterArmorValue.Core_Armor > characterArmorValue.Max_Core_Armor:
+				characterArmorValue.Core_Armor = characterArmorValue.Max_Core_Armor
+			if characterArmorValue.Right_Arm_Armor > characterArmorValue.Max_Right_Arm_Armor:
+				characterArmorValue.Right_Arm_Armor = characterArmorValue.Max_Right_Arm_Armor
+			if characterArmorValue.Left_Arm_Armor > characterArmorValue.Max_Left_Arm_Armor:
+				characterArmorValue.Left_Arm_Armor = characterArmorValue.Max_Left_Arm_Armor
+			if characterArmorValue.Right_Leg_Armor > characterArmorValue.Max_Right_Leg_Armor:
+				characterArmorValue.Right_Leg_Armor = characterArmorValue.Max_Right_Leg_Armor
+			if characterArmorValue.Left_Leg_Armor > characterArmorValue.Max_Left_Leg_Armor:
+				characterArmorValue.Left_Leg_Armor = characterArmorValue.Max_Left_Leg_Armor
+		characterArmorValue.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))		
+		
+def CharacterDamageHead(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
+		if request.method == 'POST':
+			form = HPFormDamage(request.POST)
+			if form.is_valid():
+				rem = form.cleaned_data['Value_f']
+				if not form.cleaned_data['skipArmor_f'] and characterArmorValue and characterArmorValue.Head_Armor > 0:
+					rem = rem - characterArmorValue.Head_Armor
+					characterArmorValue.Head_Armor += -1
+				if(characterhp.Temp_Head_HP > 0 and rem > 0):
+					rem2 = rem
+					rem = rem - characterhp.Temp_Head_HP
+					characterhp.Temp_Head_HP += - rem2
+					if(characterhp.Temp_Head_HP < 0):
+						characterhp.Temp_Head_HP = 0
+				if(0 < rem):
+					characterhp.Head_HP = characterhp.Head_HP - rem
+					if(characterhp.Head_HP < 0):
+						characterhp.Head_HP = 0
+				characterhp.save()
+				characterArmorValue.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+		
+def CharacterHealHead(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		if request.method == 'POST':
+			form = HPFormHeal(request.POST)
+			if form.is_valid():
+				if form.cleaned_data['OverHeal_f']:
+					characterhp.Temp_Head_HP += form.cleaned_data['Value_f']
+				else:
+					hp = form.cleaned_data['Value_f'] + characterhp.Head_HP 
+					if(hp < characterhp.Max_Head_HP):
+						characterhp.Head_HP = hp
+					else:
+						characterhp.Head_HP = characterhp.Max_Head_HP
+			characterhp.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+		
+def CharacterDamageCore(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
+		if request.method == 'POST':
+			form = HPFormDamage(request.POST)
+			if form.is_valid():
+				rem = form.cleaned_data['Value_f']
+				if not form.cleaned_data['skipArmor_f'] and characterArmorValue and characterArmorValue.Core_Armor > 0:
+					rem = rem - characterArmorValue.Core_Armor
+					characterArmorValue.Core_Armor += -1
+				if(characterhp.Temp_Core_HP > 0 and rem > 0):
+					rem2 = rem
+					rem = rem - characterhp.Temp_Core_HP
+					characterhp.Temp_Core_HP += - rem2
+					if(characterhp.Temp_Core_HP < 0):
+						characterhp.Temp_Core_HP = 0					
+				if(0 < rem):
+					characterhp.Core_HP = characterhp.Core_HP - rem
+					if(characterhp.Core_HP < 0):
+						characterhp.Core_HP = 0
+				characterhp.save()
+				characterArmorValue.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+		
+def CharacterHealCore(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		if request.method == 'POST':
+			form = HPFormHeal(request.POST)
+			if form.is_valid():
+				
+				if form.cleaned_data['OverHeal_f']:
+					characterhp.Temp_Core_HP += form.cleaned_data['Value_f']
+				else:
+					hp = form.cleaned_data['Value_f'] + characterhp.Core_HP 
+					if(hp < characterhp.Max_Core_HP):
+						characterhp.Core_HP = hp
+					else:
+						characterhp.Core_HP = characterhp.Max_Core_HP
+				characterhp.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))		
+
+def CharacterDamageRightArm(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
+		if request.method == 'POST':
+			form = HPFormDamage(request.POST)
+			if form.is_valid():
+				rem = form.cleaned_data['Value_f']
+				if not form.cleaned_data['skipArmor_f'] and characterArmorValue and characterArmorValue.Right_Arm_Armor > 0:
+					rem = rem - characterArmorValue.Right_Arm_Armor
+					characterArmorValue.Right_Arm_Armor += -1
+				if(characterhp.Temp_Right_Arm_HP > 0 and rem > 0):
+					rem2 = rem
+					rem = rem - characterhp.Temp_Right_Arm_HP
+					characterhp.Temp_Right_Arm_HP += - rem2
+					if(characterhp.Temp_Right_Arm_HP < 0):
+						characterhp.Temp_Right_Arm_HP = 0
+				if(0 < rem):
+					characterhp.Right_Arm_HP = characterhp.Right_Arm_HP - rem
+					if(characterhp.Right_Arm_HP < 0):
+						characterhp.Right_Arm_HP = 0
+				characterhp.save()
+				characterArmorValue.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+		
+def CharacterHealRightArm(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		if request.method == 'POST':
+			form = HPFormHeal(request.POST)
+			if form.is_valid():
+				if form.cleaned_data['OverHeal_f']:
+					characterhp.Temp_Right_Arm_HP += form.cleaned_data['Value_f']
+				else:
+					hp = form.cleaned_data['Value_f'] + characterhp.Right_Arm_HP 
+					if(hp < characterhp.Max_Right_Arm_HP):
+						characterhp.Right_Arm_HP = hp
+					else:
+						characterhp.Right_Arm_HP = characterhp.Max_Right_Arm_HP
+				characterhp.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))		
+		
+def CharacterDamageLeftArm(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
+		if request.method == 'POST':
+			form = HPFormDamage(request.POST)
+			if form.is_valid():
+				rem = form.cleaned_data['Value_f']
+				if not form.cleaned_data['skipArmor_f'] and characterArmorValue and characterArmorValue.Left_Arm_Armor > 0:
+					rem = rem - characterArmorValue.Left_Arm_Armor
+					characterArmorValue.Left_Arm_Armor += -1
+				if(characterhp.Temp_Left_Arm_HP > 0 and rem > 0):
+					rem2 = rem
+					rem = rem - characterhp.Temp_Left_Arm_HP
+					characterhp.Temp_Left_Arm_HP += - rem2
+					if(characterhp.Temp_Left_Arm_HP < 0):
+						characterhp.Temp_Left_Arm_HP = 0
+				if(0 < rem):
+					characterhp.Left_Arm_HP = characterhp.Left_Arm_HP - rem
+					if(characterhp.Left_Arm_HP < 0 ):
+						characterhp.Left_Arm_HP = 0
+				characterhp.save()
+				characterArmorValue.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+		
+def CharacterHealLeftArm(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		if request.method == 'POST':
+			form = HPFormHeal(request.POST)
+			if form.is_valid():
+				if form.cleaned_data['OverHeal_f']:
+					characterhp.Temp_Left_Arm_HP += form.cleaned_data['Value_f']
+				else:
+					hp = form.cleaned_data['Value_f'] + characterhp.Left_Arm_HP 
+					if(hp < characterhp.Max_Left_Arm_HP):
+						characterhp.Left_Arm_HP = hp
+					else:
+						characterhp.Left_Arm_HP = characterhp.Max_Left_Arm_HP
+				characterhp.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))		
+		
+def CharacterDamageRightLeg(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
+		if request.method == 'POST':
+			form = HPFormDamage(request.POST)
+			if form.is_valid():
+				rem = form.cleaned_data['Value_f']
+				if not form.cleaned_data['skipArmor_f'] and characterArmorValue and characterArmorValue.Right_Leg_Armor > 0:
+					rem = rem - characterArmorValue.Right_Leg_Armor
+					characterArmorValue.Right_Leg_Armor += -1
+				if(characterhp.Temp_Right_Leg_HP > 0 and rem > 0):
+					rem2 = rem
+					rem = rem - characterhp.Temp_Right_Leg_HP
+					characterhp.Temp_Right_Leg_HP += - rem2
+					if(characterhp.Temp_Right_Leg_HP < 0):
+						characterhp.Temp_Right_Leg_HP = 0
+				if(0 < rem):
+					characterhp.Right_Leg_HP = characterhp.Right_Leg_HP - rem
+					if(characterhp.Right_Leg_HP < 0):
+						characterhp.Right_Leg_HP = 0
+				characterhp.save()
+				characterArmorValue.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+		
+def CharacterHealRightLeg(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		if request.method == 'POST':
+			form = HPFormHeal(request.POST)
+			if form.is_valid():
+				if form.cleaned_data['OverHeal_f']:
+					characterhp.Temp_Right_Leg_HP += form.cleaned_data['Value_f'] 
+				else:
+					hp = form.cleaned_data['Value_f'] + characterhp.Right_Leg_HP 
+					if(hp < characterhp.Max_Right_Leg_HP):
+						characterhp.Right_Leg_HP = hp
+					else:
+						characterhp.Right_Leg_HP = characterhp.Max_Right_Leg_HP
+				characterhp.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))	
+		
+def CharacterDamageLeftLeg(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
+		if request.method == 'POST':
+			form = HPFormDamage(request.POST)
+			if form.is_valid():
+				rem = form.cleaned_data['Value_f']
+				if not form.cleaned_data['skipArmor_f'] and characterArmorValue and characterArmorValue.Left_Leg_Armor > 0:
+					rem = rem - characterArmorValue.Left_Leg_Armor
+					characterArmorValue.Left_Leg_Armor += -1
+				if(characterhp.Temp_Left_Leg_HP > 0 and rem > 0):
+					rem2 = rem
+					rem = rem - characterhp.Temp_Left_Leg_HP
+					characterhp.Temp_Left_Leg_HP += - rem2
+					if(characterhp.Temp_Left_Leg_HP < 0):
+						characterhp.Temp_Left_Leg_HP = 0
+				if(0 < rem < characterhp.Right_Leg_HP ):
+					characterhp.Left_Leg_HP = characterhp.Left_Leg_HP - rem
+					if(characterhp.Right_Leg_HP < 0):
+						characterhp.Left_Leg_HP = 0
+				characterhp.save()
+				characterArmorValue.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))
+		
+def CharacterHealLeftLeg(request, CIDin):
+	if CanEditCharacter(request,CIDin):
+		characterhp = get_object_or_404(Character_HP, CID = CIDin)
+		if request.method == 'POST':
+			form = HPFormHeal(request.POST)
+			if form.is_valid():
+				
+				if form.cleaned_data['OverHeal_f']:
+					characterhp.Temp_Left_Leg_HP += form.cleaned_data['Value_f'] 
+				else:
+					hp = form.cleaned_data['Value_f'] + characterhp.Left_Leg_HP 
+					if(hp < characterhp.Max_Left_Leg_HP):
+						characterhp.Left_Leg_HP = hp
+					else:
+						characterhp.Left_Leg_HP = characterhp.Max_Left_Leg_HP
+				characterhp.save()
+		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+	else:
+		return HttpResponseRedirect(reverse('index'))			
+		
+
 #GameCommander Control-------------------------
 #----------------------------------------------		
 def SurgePage(request, GIDin):
@@ -282,10 +759,7 @@ def SurgePage(request, GIDin):
 		
 def SurgePageCharacterSave(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
-		try:
-			chracter = get_object_or_404(Character, CID = CIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
+		chracter = get_object_or_404(Character, CID = CIDin)
 			
 		if request.method == 'POST':
 			form = SurgeForm(request.POST)
@@ -311,10 +785,7 @@ def SurgePageCharacterSave(request, GIDin, CIDin):
 		
 def SurgePageIncrementAction(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
-		try:
-			chracter = get_object_or_404(Character, CID = CIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
+		chracter = get_object_or_404(Character, CID = CIDin)
 			
 		if request.method == 'POST':
 			form = SurgeForm(request.POST)
@@ -329,10 +800,7 @@ def SurgePageIncrementAction(request, GIDin, CIDin):
 
 def SurgePageSpendAction(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
-		try:
-			chracter = get_object_or_404(Character, CID = CIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
+		chracter = get_object_or_404(Character, CID = CIDin)
 			
 		if request.method == 'POST':
 			form = SurgeForm(request.POST)
@@ -346,10 +814,7 @@ def SurgePageSpendAction(request, GIDin, CIDin):
 	
 def SurgePageSpendActionTwenty(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
-		try:
-			chracter = get_object_or_404(Character, CID = CIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
+		chracter = get_object_or_404(Character, CID = CIDin)
 			
 		if request.method == 'POST':
 			form = SurgeForm(request.POST)
@@ -363,10 +828,7 @@ def SurgePageSpendActionTwenty(request, GIDin, CIDin):
 	
 def SurgePageIncrementWeaknessPassed(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
-		try:
-			chracter = get_object_or_404(Character, CID = CIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
+		chracter = get_object_or_404(Character, CID = CIDin)
 			
 		if request.method == 'POST':
 			form = SurgeForm(request.POST)
@@ -381,10 +843,7 @@ def SurgePageIncrementWeaknessPassed(request, GIDin, CIDin):
 
 def SurgePageIncrementWeaknessFailed(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
-		try:
-			chracter = get_object_or_404(Character, CID = CIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
+		chracter = get_object_or_404(Character, CID = CIDin)
 			
 		if request.method == 'POST':
 			form = SurgeForm(request.POST)
@@ -397,10 +856,7 @@ def SurgePageIncrementWeaknessFailed(request, GIDin, CIDin):
 	
 def SurgePageSpendStrength(request, GIDin, CIDin):
 	if isGameCommander(request,GIDin):
-		try:
-			chracter = get_object_or_404(Character, CID = CIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
+		chracter = get_object_or_404(Character, CID = CIDin)
 			
 		if request.method == 'POST':
 			form = SurgeForm(request.POST)

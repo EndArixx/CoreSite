@@ -129,6 +129,13 @@ class Character_HP(models.Model):
 	Left_Arm_HP = models.IntegerField(default=Max_Left_Arm_HP.default)
 	Right_Leg_HP = models.IntegerField(default=Max_Right_Leg_HP.default)
 	Left_Leg_HP = models.IntegerField(default=Max_Left_Leg_HP.default)
+		#temporary HP stuff
+	Temp_Head_HP = models.IntegerField(default=0)
+	Temp_Core_HP = models.IntegerField(default=0)
+	Temp_Right_Arm_HP = models.IntegerField(default=0)
+	Temp_Left_Arm_HP = models.IntegerField(default=0)
+	Temp_Right_Leg_HP = models.IntegerField(default=0)
+	Temp_Left_Leg_HP = models.IntegerField(default=0)
 	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
 	def __str__(self):
 		return self.CID.Name
@@ -140,6 +147,7 @@ class Armor(models.Model):
 	AID = models.AutoField(primary_key=True)
 	Name =  models.CharField(max_length=200)
 	Value = models.IntegerField(default=10)
+	Effect = models.CharField(max_length=2000,blank=True, null=True)
 	Details =  models.CharField(max_length=2000,blank=True, null=True)
 	Allow_Head = models.BooleanField(default = True)
 	Allow_Core = models.BooleanField(default = True)

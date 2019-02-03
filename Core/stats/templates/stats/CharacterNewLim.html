@@ -105,58 +105,7 @@
             </div>
         </div>
     </div>
-	<div class="col-md-12"> 
-		<div class="well-lg">
-          <h4>(Armor) <b>Health</b></h4>
-		  
-         {% if characterHP %}
-		  <div class="well">
-			<table style="width:100%">
-				<tr>
-					<td> </td>
-					<td> </td>
-					<td>Head:</td>
-					<td>{% if characterArmor %}({{characterArmor.Head_Armor}} /{{characterArmor.Max_Head_Armor}}) {% endif %}
-					<b>{{characterHP.Head_HP}} / {{characterHP.Max_Head_HP}}</b></td>
-					<td> </td>
-					<td> </td>
-				</tr>
-				<tr>
-					<td>Left Arm:</td>
-					<td>{% if characterArmor %}({{characterArmor.Left_Arm_Armor}} /{{characterArmor.Max_Left_Arm_Armor}}) {% endif %}
-					<b>{{characterHP.Left_Arm_HP}} / {{characterHP.Max_Left_Arm_HP}}</b></td>
-					<td>Core:</td>
-					<td>{% if characterArmor %}({{characterArmor.Core_Armor}} /{{characterArmor.Max_Core_Armor}}) {% endif %}
-					<b>{{characterHP.Core_HP}} / {{characterHP.Max_Core_HP}}</b></td>
-					<td>Right Arm:</td>
-					<td>{% if characterArmor %}({{characterArmor.Right_Arm_Armor}} /{{characterArmor.Max_Right_Arm_Armor}}) {% endif %}
-					<b>{{characterHP.Right_Arm_HP}} / {{characterHP.Max_Right_Arm_HP}}</b></td>
-				</tr>
-				<tr>
-					<td>Left Leg:</td>
-					<td>{% if characterArmor %}({{characterArmor.Left_Leg_Armor}} /{{characterArmor.Max_Left_Leg_Armor}}) {% endif %}
-					<b>{{characterHP.Left_Leg_HP}} / {{characterHP.Max_Left_Leg_HP}}</b></td>
-					<td></td>
-					<td></td>
-					<td>Right Leg:</td>
-					<td>{% if characterArmor %}({{characterArmor.Right_Leg_Armor}} /{{characterArmor.Max_Right_Leg_Armor}}) {% endif %}
-					<b>{{characterHP.Right_Leg_HP}} / {{characterHP.Max_Right_Leg_HP}}</b></td>
-				</tr>
-			</table>
-		  </div>
-		{% endif %}
-			<div class="well">
-          <h4><b>Status</b></h4>
-          {% if characterStatus %}
-			{% for cStatus in characterStatus %}
-				<p>{{ cStatus.SUID.Name }} - {{ cStatus.SUID.Details}}</p> 
-			{% endfor %}
-		  {% else %}
-			<p>No Status Effects</p>
-		  {% endif %}
-        </div>
-        </div>
-	</div>
+	{% include 'stats/CharacterHPLim.html'%}
 	<div class="col-md-12">
 	 <div class="well-lg">
 		<div class="row">

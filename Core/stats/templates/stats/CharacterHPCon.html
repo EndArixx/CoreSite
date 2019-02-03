@@ -1,0 +1,295 @@
+<div class="col-md-12"> 
+	<div class="well-lg">
+    {% if characterHP %}
+	<div class="text-center">
+		<h3>{{ character }}'s Health</h3>
+<!--  --------------------------------------------------------------------------------- -->
+		<div class="row">
+			<div class="col-sm-4 col-sm-offset-4">
+				<h4>Head</h4>{% if characterArmor.Max_Head_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar-grey" role="progressbar" 
+					style="width:{% widthratio characterArmor.Head_Armor characterArmor.Max_Head_Armor 100%}%">
+						{{characterArmor.Head_Armor}}/{{characterArmor.Max_Head_Armor}}  {{characterArmorName.Equiped_Head}} 
+				</div></div>{% endif %}
+				{% if characterHP.Temp_Head_HP > 0 %}
+					<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar-danger" role="progressbar"  style="width:100%">+{{ characterHP.Temp_Head_HP }}</div></div>
+				{% endif %}
+				<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-danger" role="progressbar" 
+					style="width:{% widthratio characterHP.Head_HP characterHP.Max_Head_HP 100 %}%">
+					{{characterHP.Head_HP}} / {{characterHP.Max_Head_HP}}
+				</div></div>
+				<div class="row">
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#DamageHead">Damage</button>
+					</div>
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#HealHead">Heal</button>
+					</div>
+				</div>
+				<div class="modal fade" id="DamageHead" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterDamageHead' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpDamageForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Damage">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>
+				<div class="modal fade" id="HealHead" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterHealHead' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpHealForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Heal">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>
+			</div>
+		</div>
+<!--  --------------------------------------------------------------------------------- -->				
+		<div class="row">
+			<div class="col-sm-4">
+				<h4>Left Arm</h4>{% if characterArmor.Max_Left_Arm_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
+					style="width:{% widthratio characterArmor.Left_Arm_Armor characterArmor.Max_Left_Arm_Armor 100%}%">
+						{{characterArmor.Left_Arm_Armor}} /{{characterArmor.Max_Left_Arm_Armor}}  {{characterArmorName.Equiped_Left_Arm}}
+				</div></div>{% endif %}
+				{% if characterHP.Temp_Left_Arm_HP > 0 %}
+					<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar-danger" role="progressbar"  style="width:100%">+{{ characterHP.Temp_Left_Arm_HP }}</div></div>
+				{% endif %}
+				<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-danger" role="progressbar" 
+					style="width:{% widthratio characterHP.Left_Arm_HP characterHP.Max_Left_Arm_HP 100 %}%">
+					{{characterHP.Left_Arm_HP}} / {{characterHP.Max_Left_Arm_HP}}
+				</div></div>
+				<div class="row">
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#DamageLArm">Damage</button>
+					</div>
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#HealLArm">Heal</button>
+					</div>
+				</div>
+				<div class="modal fade" id="DamageLArm" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterDamageLeftArm' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpDamageForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Damage">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>
+				<div class="modal fade" id="HealLArm" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterHealLeftArm' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpHealForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Heal">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>					
+			</div>
+<!--  --------------------------------------------------------------------------------- -->
+			<div class="col-sm-4">
+				<h4>Core</h4>{% if characterArmor.Max_Core_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
+					style="width:{% widthratio characterArmor.Core_Armor characterArmor.Max_Core_Armor 100%}%">
+						{{characterArmor.Core_Armor}} /{{characterArmor.Max_Core_Armor}} {{characterArmorName.Equiped_Core}}
+				</div></div>{% endif %}
+				{% if characterHP.Temp_Core_HP > 0 %}
+					<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar-danger" role="progressbar"  style="width:100%">+{{ characterHP.Temp_Core_HP }}</div></div>
+				{% endif %}
+				<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-danger" role="progressbar" 
+					style="width:{% widthratio characterHP.Core_HP characterHP.Max_Core_HP 100 %}%">
+					{{characterHP.Core_HP}} / {{characterHP.Max_Core_HP}} 
+				</div></div>
+				<div class="row">
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#DamageCore">Damage</button>
+					</div>
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#HealCore">Heal</button>
+					</div>
+				</div>
+				<div class="modal fade" id="DamageCore" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterDamageCore' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpDamageForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Damage">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>
+				<div class="modal fade" id="HealCore" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterHealCore' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpHealForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Heal">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>					
+			</div>
+<!--  --------------------------------------------------------------------------------- -->
+			<div class="col-sm-4">
+				<h4>Right Arm</h4>{% if characterArmor.Max_Right_Arm_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
+					style="width:{% widthratio characterArmor.Right_Arm_Armor  characterArmor.Max_Right_Arm_Armor  100%}%">
+						{{characterArmor.Right_Arm_Armor }} /{{characterArmor.Max_Right_Arm_Armor }} {{characterArmorName.Equiped_Right_Arm  }}
+				</div></div>{% endif %}
+				{% if characterHP.Temp_Right_Arm_HP > 0 %}
+					<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar-danger" role="progressbar"  style="width:100%">+{{ characterHP.Temp_Right_Arm_HP }}</div></div>
+				{% endif %}
+				<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-danger" role="progressbar" 
+					style="width:{% widthratio characterHP.Right_Arm_HP characterHP.Max_Right_Leg_HP 100 %}%">
+					{{characterHP.Right_Arm_HP }} / {{characterHP.Max_Right_Arm_HP }}
+				</div> </div>	
+				<div class="row">
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#DamageRArm">Damage</button>
+					</div>
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#HealRArm">Heal</button>
+					</div>
+				</div>
+				<div class="modal fade" id="DamageRArm" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterDamageRightArm' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpDamageForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Damage">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>
+				<div class="modal fade" id="HealRArm" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterHealRightArm' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpHealForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Heal">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>					
+			</div>					
+		</div>
+<!--  --------------------------------------------------------------------------------- -->
+		<div class="row">
+			<div class="col-sm-4  col-sm-offset-1">
+				<h4>Left Leg</h4>{% if characterArmor.Max_Left_Leg_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
+					style="width:{% widthratio characterArmor.Left_Leg_Armor  characterArmor.Max_Left_Leg_Armor  100%}%">
+						{{characterArmor.Left_Leg_Armor }} /{{characterArmor.Max_Left_Leg_Armor }} {{characterArmorName.Equiped_Left_Leg }}
+				</div></div>{% endif %}
+				{% if characterHP.Temp_Left_Leg_HP > 0 %}
+					<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar-danger" role="progressbar"  style="width:100%">+{{ characterHP.Temp_Left_Leg_HP }}</div></div>
+				{% endif %}
+				<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-danger" role="progressbar" 
+					style="width:{% widthratio characterHP.Left_Leg_HP characterHP.Max_Right_Leg_HP 100 %}%">
+					{{characterHP.Left_Leg_HP }} / {{characterHP.Max_Left_Leg_HP }}
+				</div> </div>
+				<div class="row">
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#DamageLLeg">Damage</button>
+					</div>
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#HealLLeg">Heal</button>
+					</div>
+				</div>
+				<div class="modal fade" id="DamageLLeg" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterDamageLeftLeg' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpDamageForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Damage">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>
+				<div class="modal fade" id="HealLLeg" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterHealLeftLeg' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpHealForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Heal">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>					
+			</div>
+<!--  --------------------------------------------------------------------------------- -->
+			<div class="col-sm-4 col-sm-offset-2">
+				<h4>Right Leg</h4>{% if characterArmor.Max_Right_Leg_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
+					style="width:{% widthratio characterArmor.Right_Leg_Armor characterArmor.Max_Right_Leg_Armor  100%}%">
+						{{characterArmor.Right_Leg_Armor }} /{{characterArmor.Max_Right_Leg_Armor }} {{characterArmorName.Equiped_Right_Leg}}
+				</div></div>{% endif %}
+				{% if characterHP.Temp_Right_Leg_HP > 0 %}
+					<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar-danger" role="progressbar"  style="width:100%">+{{ characterHP.Temp_Right_Leg_HP }}</div></div>
+				{% endif %}
+				<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-danger" role="progressbar" 
+					style="width:{% widthratio characterHP.Right_Leg_HP characterHP.Max_Right_Leg_HP 100 %}%">
+					{{characterHP.Right_Leg_HP }} / {{characterHP.Max_Right_Leg_HP }}
+				</div> </div>
+				<div class="row">
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#DamageRLeg">Damage</button>
+					</div>
+					<div class="col-xs-6">
+						<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#HealRLeg">Heal</button>
+					</div>
+				</div>
+				<div class="modal fade" id="DamageRLeg" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterDamageRightLeg' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpDamageForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Damage">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>
+				<div class="modal fade" id="HealRLeg" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+					<form action="{% url 'CharacterHealRightLeg' character.CID %}" method="post">
+						{% csrf_token %}
+						{{ hpHealForm.as_p }}
+						<input type="submit" class="btn btn-greener" value="Heal">
+						<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+					</form>
+				</div></div></div></div>					
+			</div>
+		</div>
+	</div>
+	<br>
+<!--  --------------------------------------------------------------------------------- -->
+<!--  --------------------------------------------------------------------------------- -->
+<!--  --------------------------------------------------------------------------------- -->
+		{% endif %}
+		<div class="well">
+		  <h4><b>Status</b></h4>
+		  {% if characterStatus %}
+			{% for cStatus in characterStatus %}
+				<p>{{ cStatus.SUID.Name }} - {{ cStatus.SUID.Details}}</p> 
+			{% endfor %}
+		  {% else %}
+			<p>No Status Effects</p>
+		  {% endif %}
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#HPALL">Edit Health</button>
+			</div>
+			<div class="col-sm-6">
+				<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#ArmorALL">Edit Armor</button>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-6">
+				<form action="{% url 'CharacterHPFullHeal' character.CID %}" method="post">
+					{% csrf_token %}
+					<input class="btn btn-greener btn-block" type="submit" value="Reset Health">
+				</form>
+			</div>
+			<div class="col-sm-6">
+				<form action="{% url 'CharacterArmorReset' character.CID %}" method="post">
+					{% csrf_token %}
+					<input class="btn btn-greener btn-block" type="submit" value="Reset Armor">
+				</form>
+			</div>
+		</div>
+		<div class="modal fade" id="HPALL" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+			<form action="{% url 'CharacterHPHealALL' character.CID %}" method="post">
+				{% csrf_token %}
+				{{ hpHealAllForm.as_p }}
+				<input type="submit" class="btn btn-greener" value="Update">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</form>
+		</div></div></div></div>	
+		<div class="modal fade" id="ArmorALL" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+			<form action="{% url 'CharacterArmorALL' character.CID %}" method="post">
+				{% csrf_token %}
+				{{ armorAllForm.as_p }}
+				<input type="submit" class="btn btn-greener" value="Update">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+			</form>
+		</div></div></div></div>
+	</div>
+</div>
