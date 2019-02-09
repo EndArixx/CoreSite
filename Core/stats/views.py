@@ -240,6 +240,8 @@ def Character_Sheet(request, CIDin):
 		hpHealForm = HPFormHeal()
 		hpHealAllForm = HPAllForm()
 		armorAllForm = ArmorAllForm()
+		#redirect
+		Redirector  = reverse('CharacterSheet',  kwargs={'CIDin': CIDin})
 		if not character.Image:		
 			character.Image = 'default.png'
 		else:
@@ -271,6 +273,7 @@ def Character_Sheet(request, CIDin):
 	'hpHealForm': hpHealForm,
 	'hpHealAllForm': hpHealAllForm,
 	'armorAllForm':armorAllForm,
+	'Redirector':Redirector,
 	'isGC':isGC})	
 	
 	
@@ -310,6 +313,9 @@ def HealthPage(request, GIDin):
 		hpHealForm = HPFormHeal()
 		hpHealAllForm = HPAllForm()
 		armorAllForm = ArmorAllForm()		
+		#redirect control
+		Redirector  = reverse('HealthPage',  kwargs={'GIDin': GIDin})
+		
 		context = {'charactersCon': charactersCon,
 			'charactersLim':charactersLim,
 			'characterHPset':characterHPset,
@@ -319,6 +325,7 @@ def HealthPage(request, GIDin):
 			'hpHealForm': hpHealForm,
 			'hpHealAllForm': hpHealAllForm,
 			'armorAllForm':armorAllForm,
+			'Redirector':Redirector,
 			'Group':theGroup}
 		return render(request, 'stats/healthControl.html', context)	
 	else:
