@@ -16,6 +16,7 @@ urlpatterns = [
 	path('group/<int:GIDin>/event/<int:EIDin>', views.EventPage, name = 'Eventpage'),
 	#path('group/<int:GIDin>/factions', views.FactionList,name = 'FactionList'),
 	path('group/<int:GIDin>/faction/<int:FIDin>', views.FactionPage, name = 'FactionPage'),
+	path('group/<int:GIDin>/health/', views.HealthPage, name = 'HealthPage'),
 	#Character HP/ARMOR
 	path('CharacterSheet/<int:CIDin>/HPSetMax', views.CharacterHPFullHeal, name='CharacterHPFullHeal'),
 	path('CharacterSheet/<int:CIDin>/ArmorReset', views.CharacterArmorReset, name='CharacterArmorReset'),

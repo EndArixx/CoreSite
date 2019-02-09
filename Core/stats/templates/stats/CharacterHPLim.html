@@ -5,7 +5,7 @@
 		<h3>{{ character }}'s Health</h3>
 <!--  --------------------------------------------------------------------------------- -->
 		<div class="row">
-			<div class="col-md-4 col-md-offset-4">
+			<div class="col-sm-4 col-sm-offset-4">
 				<h4>Head</h4>{% if characterArmor.Max_Head_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar-grey" role="progressbar" 
 					style="width:{% widthratio characterArmor.Head_Armor characterArmor.Max_Head_Armor 100%}%">
 						{{characterArmor.Head_Armor}}/{{characterArmor.Max_Head_Armor}}  {{characterArmorName.Equiped_Head}} 
@@ -21,7 +21,7 @@
 		</div>
 <!--  --------------------------------------------------------------------------------- -->				
 		<div class="row">
-			<div class="col-md-4">
+			<div class="col-sm-4">
 				<h4>Left Arm</h4>{% if characterArmor.Max_Left_Arm_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
 					style="width:{% widthratio characterArmor.Left_Arm_Armor characterArmor.Max_Left_Arm_Armor 100%}%">
 						{{characterArmor.Left_Arm_Armor}} /{{characterArmor.Max_Left_Arm_Armor}}  {{characterArmorName.Equiped_Left_Arm}}
@@ -35,7 +35,7 @@
 				</div></div>					
 			</div>
 <!--  --------------------------------------------------------------------------------- -->
-			<div class="col-md-4">
+			<div class="col-sm-4">
 				<h4>Core</h4>{% if characterArmor.Max_Core_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
 					style="width:{% widthratio characterArmor.Core_Armor characterArmor.Max_Core_Armor 100%}%">
 						{{characterArmor.Core_Armor}} /{{characterArmor.Max_Core_Armor}} {{characterArmorName.Equiped_Core}}
@@ -49,7 +49,7 @@
 				</div></div>				
 			</div>
 <!--  --------------------------------------------------------------------------------- -->
-			<div class="col-md-4">
+			<div class="col-sm-4">
 				<h4>Right Arm</h4>{% if characterArmor.Max_Right_Arm_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
 					style="width:{% widthratio characterArmor.Right_Arm_Armor  characterArmor.Max_Right_Arm_Armor  100%}%">
 						{{characterArmor.Right_Arm_Armor }} /{{characterArmor.Max_Right_Arm_Armor }} {{characterArmorName.Equiped_Right_Arm  }}
@@ -65,7 +65,7 @@
 		</div>
 <!--  --------------------------------------------------------------------------------- -->
 		<div class="row">
-			<div class="col-md-4  col-md-offset-1">
+			<div class="col-sm-4  col-sm-offset-1">
 				<h4>Left Leg</h4>{% if characterArmor.Max_Left_Leg_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
 					style="width:{% widthratio characterArmor.Left_Leg_Armor  characterArmor.Max_Left_Leg_Armor  100%}%">
 						{{characterArmor.Left_Leg_Armor }} /{{characterArmor.Max_Left_Leg_Armor }} {{characterArmorName.Equiped_Left_Leg }}
@@ -79,7 +79,7 @@
 				</div> </div>				
 			</div>
 <!--  --------------------------------------------------------------------------------- -->
-			<div class="col-md-4 col-md-offset-2">
+			<div class="col-sm-4 col-sm-offset-2">
 				<h4>Right Leg</h4>{% if characterArmor.Max_Right_Leg_Armor > 0 %}<div class="progress center-block" style="margin-bottom:0px;"><div class="progress-bar progress-bar-grey" role="progressbar" 
 					style="width:{% widthratio characterArmor.Right_Leg_Armor characterArmor.Max_Right_Leg_Armor  100%}%">
 						{{characterArmor.Right_Leg_Armor }} /{{characterArmor.Max_Right_Leg_Armor }} {{characterArmorName.Equiped_Right_Leg}}

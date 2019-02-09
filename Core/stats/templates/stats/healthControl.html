@@ -1,0 +1,19 @@
+{% extends 'stats/base.html' %}
+
+{% block title %}{{ Group.Name }} Health Page{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+		<h1><a href="{% url 'group' Group.GID %}">{{ Group.Name }}'s </a> Health</h1>
+	{% if charactersCon %}{% for character in charactersCon %}{% for characterHP in characterHPset %}{% for characterArmor in characterArmorset %}{% for characterArmorName in characterArmorNameset %}{% if character == characterHP.CID %}{% if character == characterArmor.CID %}{% if character == characterArmorName.CID %}							
+		<div class="col-lg-6">
+		<h2><b><a href="{% url 'CharacterSheet' character.CID %}">{{ character.Name }}</a></b></h2>
+		{% include 'stats/CharacterHPCon.html'%}
+		</div>{% endif %}{% endif %}{% endif %}{% endfor %}{% endfor %}{% endfor %}{% endfor %}{% endif %}
+	{% if charactersLim %}{% for character in charactersLim %}{% for characterHP in characterHPset %}{% for characterArmor in characterArmorset %}{% for characterArmorName in characterArmorNameset %}{% if character == characterHP.CID %}{% if character == characterArmor.CID %}{% if character == characterArmorName.CID %}
+		<div class="col-lg-6">
+		<h2><b><a href="{% url 'CharacterSheet' character.CID %}">{{ character.Name }}</a></b></h2>
+		{% include 'stats/CharacterHPlim.html'%}
+		</div>{% endif %}{% endif %}{% endif %}{% endfor %}{% endfor %}{% endfor %}{% endfor %}{% endif %}
+	</div>
+{% endblock %}

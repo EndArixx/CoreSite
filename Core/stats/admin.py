@@ -79,6 +79,7 @@ class Character_CurrencyInline(admin.StackedInline):
 	model = Character_Currency
 	extra = 0
 class Currency_Admin(admin.ModelAdmin):
+	ordering = ('Name',)
 	inlines = [Character_CurrencyInline]
 	
 admin.site.register(Currency,Currency_Admin)
@@ -102,6 +103,7 @@ class Group_EventInline(admin.StackedInline):
 	extra = 0	
 	
 class GroupAdmin(admin.ModelAdmin):
+	ordering = ('Name','GID')
 	inlines = [Group_ItemInline,
 	Group_VehicleInline,
 	public_GroupInline,
@@ -133,9 +135,11 @@ class Character_PowerInline(admin.StackedInline):
 class Character_Equipped_ArmorInline(admin.StackedInline):
 	model = Character_Equipped_Armor
 class Character_WeaponInline(admin.StackedInline):
+	ordering = ('WID__Name',)
 	model = Character_Weapon
 	extra = 0
 class Character_ItemInline(admin.StackedInline):
+	ordering = ('Name',)
 	model = Character_Item
 	extra = 0
 class Character_VehicleInline(admin.StackedInline):
@@ -148,6 +152,7 @@ class Character_War_CrimeInline(admin.StackedInline):
 	
 	
 class CharacterAdmin(admin.ModelAdmin):
+	ordering = ('GID','Name')
 	inlines = [
 	Character_StatusInline,
 	Character_DetailsInline,

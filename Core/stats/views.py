@@ -75,14 +75,14 @@ def PlayerHandbook(request):
 #Index----------------------------------------
 #---------------------------------------------
 def index(request):
-	publicGroups = public_Group.objects.filter(IsPublic = True)
+	publicGroups = public_Group.objects.filter(IsPublic = True).order_by('GID__Name')
 	if request.user.is_authenticated:
 		uname = request.user.get_username()
 		try:
 			#Get player Name
 			playA = Player.objects.get(User = request.user)
 			PIDin = playA.PID
-			accessstats = Group_Access.objects.filter(Q(PID = PIDin) & (Q(IsPlayer = True) | Q(IsGC = True)))
+			accessstats = Group_Access.objects.filter(Q(PID = PIDin) & (Q(IsPlayer = True) | Q(IsGC = True))).order_by('GID__Name')
 				
 			context = {'groupAccess': accessstats, 'publicGroups' : publicGroups}
 			return render(request, 'stats/index.html', context)
@@ -96,13 +96,9 @@ def index(request):
 #----------------------------------------------
 def group(request, GIDin):
 	if CanViewGroup(request, GIDin):
-		try:
-			chractersInGroup = Character.objects.filter(GID = GIDin)
-			#theGroup = Group.objects.filter(GID = GIDin)
-			theGroup = get_object_or_404(Group,GID = GIDin)
-			isGC = isGameCommander(request,GIDin)
-		except Character.DoesNotExist:
-			raise Http404("group does not exist")
+		theGroup = get_object_or_404(Group,GID = GIDin)
+		chractersInGroup = Character.objects.filter(GID = GIDin).order_by('Name')
+		isGC = isGameCommander(request,GIDin)
 		return render(request, 'stats/group.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup, 'isGC':isGC})
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -111,10 +107,7 @@ def group(request, GIDin):
 #---------------------------------------------
 def NPClist(request, GIDin):
 	if CanViewGroup(request,GIDin):
-		try:
-			theGroup = get_object_or_404(Group,GID = GIDin)
-		except theGroup.DoesNotExist:
-			raise Http404("group does not exist")
+		theGroup = get_object_or_404(Group,GID = GIDin)
 		NPC_dis = NPC_Disposition.objects.filter(GID = GIDin).order_by('NID__FID__Name','NID__Name')
 		NPC_fac = Faction.objects.filter(FID__in = set(NPC_dis.values_list('NID__FID', flat=True))).order_by('Name')
 		return render(request, 'stats/NPCList.html', {'Group':theGroup,'NPCList':NPC_dis, 'NPCFaction':NPC_fac})
@@ -211,25 +204,26 @@ def Character_Sheet(request, CIDin):
 	
 	character = get_object_or_404(Character,CID = CIDin)
 	isGC = isGameCommander(request, character.GID)
+	redirectID = 0
 	try:
 		#Some Things may be hidden from everyone but the player owner and the DB.
 		if CanEditCharacter(request, CIDin):
-			characterStatus = Character_Status.objects.filter(CID = CIDin)
-			characterPower = Character_Power.objects.filter(CID = CIDin)	
-			characterWeapon = Character_Weapon.objects.filter(CID = CIDin)	
-			characterGear = Character_Item.objects.filter(CID = CIDin, Equipable = True)	
-			characterItem = Character_Item.objects.filter(CID = CIDin, Equipable = False)	
+			characterStatus = Character_Status.objects.filter(CID = CIDin).order_by('SUID__Name')
+			characterPower = Character_Power.objects.filter(CID = CIDin).order_by('Name')	
+			characterWeapon = Character_Weapon.objects.filter(CID = CIDin).order_by('WID__Name')	
+			characterGear = Character_Item.objects.filter(CID = CIDin, Equipable = True).order_by('Name')	
+			characterItem = Character_Item.objects.filter(CID = CIDin, Equipable = False).order_by('Name')	
 			characterDetails = Character_Details.objects.filter(CID = CIDin)	
 			characterMoney = Character_Currency.objects.filter(CID = CIDin).order_by('-MID__Value')
 			htmlpage  = htmlpage.format('CharacterNewCon')
 		else:
-			characterStatus = Character_Status.objects.filter(CID = CIDin, Hidden = False)
-			characterPower = Character_Power.objects.filter(CID = CIDin, Hidden = False)	
-			characterWeapon = Character_Weapon.objects.filter(CID = CIDin, Hidden = False)	
-			characterGear = Character_Item.objects.filter(CID = CIDin, Equipable = True, Hidden = False)	
-			characterItem = Character_Item.objects.filter(CID = CIDin, Equipable = False, Hidden = False)	
+			characterStatus = Character_Status.objects.filter(CID = CIDin, Hidden = False).order_by('SUID__Name')
+			characterPower = Character_Power.objects.filter(CID = CIDin, Hidden = False).order_by('Name')	
+			characterWeapon = Character_Weapon.objects.filter(CID = CIDin, Hidden = False).order_by('WID__Name')	
+			characterGear = Character_Item.objects.filter(CID = CIDin, Equipable = True, Hidden = False).order_by('Name')	
+			characterItem = Character_Item.objects.filter(CID = CIDin, Equipable = False, Hidden = False).order_by('Name')	
 			characterDetails = Character_Details.objects.filter(CID = CIDin, Hidden = False)
-			characterMoney = Character_Currency.objects.filter(CID = CIDin, Hidden = False).order_by('MID__Value')
+			characterMoney = Character_Currency.objects.filter(CID = CIDin, Hidden = False).order_by('-MID__Value')
 			htmlpage = htmlpage.format('CharacterNewLim')
 			
 		#These tables do not have a hidden column. 
@@ -237,9 +231,9 @@ def Character_Sheet(request, CIDin):
 			#john this is dirty
 		characterArmor = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
 		characterArmorName  = Character_Equipped_Armor.objects.filter(CID = CIDin).first()
-		groupMembers = Character.objects.filter(GID = character.GID)
-		characterStat = Character_Stat.objects.filter(CID = CIDin)	
-		characterSkill = Character_Skill.objects.filter(CID = CIDin)	
+		groupMembers = Character.objects.filter(GID = character.GID).order_by('Name')
+		characterStat = Character_Stat.objects.filter(CID = CIDin).order_by('STID__Name')	
+		characterSkill = Character_Skill.objects.filter(CID = CIDin).order_by('SID__Name')	
 		
 		#forms
 		hpDamageForm = HPFormDamage()
@@ -283,6 +277,53 @@ def Character_Sheet(request, CIDin):
 
 #Character Health------------------------------	
 #----------------------------------------------	
+def getRedirectOrHome(request):
+	redirect = reverse('index')
+	if request.method == 'POST':
+		redirect = request.POST.get('Redirect', reverse('index'))
+	return redirect
+
+def HealthPage(request, GIDin):
+	if CanViewGroup(request, GIDin):
+		#grab the data
+		theGroup = get_object_or_404(Group,GID = GIDin)
+		charactersInGroup = Character.objects.filter(GID = GIDin)
+		characterHPset = Character_HP.objects.filter(CID__in = set(charactersInGroup.values_list('CID', flat=True)))	
+		characterArmorset = Character_Equipped_Armor_Value.objects.filter(CID__in = set(charactersInGroup.values_list('CID', flat=True)))
+		characterArmorNameset  = Character_Equipped_Armor.objects.filter(CID__in = set(charactersInGroup.values_list('CID', flat=True)))
+		
+		#filter them based on if player can edit or not.
+		charactersCon = set()
+		charactersLim = set()
+		for char in charactersInGroup:
+			if CanEditCharacter(request, char.CID):
+				charactersCon.add(char)
+			else:
+				charactersLim.add(char)
+				
+		#Sort them for display
+		charactersCon = sorted(charactersCon, key=lambda o: o.Name)		
+		charactersLim = sorted(charactersLim, key=lambda o: o.Name)	
+		
+		#forms
+		hpDamageForm = HPFormDamage()
+		hpHealForm = HPFormHeal()
+		hpHealAllForm = HPAllForm()
+		armorAllForm = ArmorAllForm()		
+		context = {'charactersCon': charactersCon,
+			'charactersLim':charactersLim,
+			'characterHPset':characterHPset,
+			'characterArmorset':characterArmorset,
+			'characterArmorNameset':characterArmorNameset,
+			'hpDamageForm': hpDamageForm,
+			'hpHealForm': hpHealForm,
+			'hpHealAllForm': hpHealAllForm,
+			'armorAllForm':armorAllForm,
+			'Group':theGroup}
+		return render(request, 'stats/healthControl.html', context)	
+	else:
+		return HttpResponseRedirect(reverse('index'))
+
 def CharacterHPFullHeal(request, CIDin):
 	if CanEditCharacter(request,CIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
@@ -302,7 +343,7 @@ def CharacterHPFullHeal(request, CIDin):
 			characterhp.Temp_Left_Leg_HP = 0
 			
 			characterhp.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
@@ -328,7 +369,7 @@ def CharacterArmorReset(request, CIDin):
 			characterArmorValue.Left_Leg_Armor 	= characterArmorValue.Max_Left_Leg_Armor
 			
 			characterArmorValue.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 
@@ -409,7 +450,7 @@ def CharacterHPHealALL(request, CIDin):
 						characterhp.Left_Leg_HP  = characterhp.Max_Left_Leg_HP 
 					
 				characterhp.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 
@@ -461,7 +502,7 @@ def CharacterArmorALL(request, CIDin):
 			if characterArmorValue.Left_Leg_Armor > characterArmorValue.Max_Left_Leg_Armor:
 				characterArmorValue.Left_Leg_Armor = characterArmorValue.Max_Left_Leg_Armor
 		characterArmorValue.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))		
 		
@@ -488,7 +529,7 @@ def CharacterDamageHead(request, CIDin):
 						characterhp.Head_HP = 0
 				characterhp.save()
 				characterArmorValue.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
@@ -507,7 +548,7 @@ def CharacterHealHead(request, CIDin):
 					else:
 						characterhp.Head_HP = characterhp.Max_Head_HP
 			characterhp.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
@@ -534,7 +575,7 @@ def CharacterDamageCore(request, CIDin):
 						characterhp.Core_HP = 0
 				characterhp.save()
 				characterArmorValue.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
@@ -554,7 +595,7 @@ def CharacterHealCore(request, CIDin):
 					else:
 						characterhp.Core_HP = characterhp.Max_Core_HP
 				characterhp.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))		
 
@@ -581,7 +622,7 @@ def CharacterDamageRightArm(request, CIDin):
 						characterhp.Right_Arm_HP = 0
 				characterhp.save()
 				characterArmorValue.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
@@ -600,7 +641,7 @@ def CharacterHealRightArm(request, CIDin):
 					else:
 						characterhp.Right_Arm_HP = characterhp.Max_Right_Arm_HP
 				characterhp.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))		
 		
@@ -627,7 +668,7 @@ def CharacterDamageLeftArm(request, CIDin):
 						characterhp.Left_Arm_HP = 0
 				characterhp.save()
 				characterArmorValue.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
@@ -646,7 +687,7 @@ def CharacterHealLeftArm(request, CIDin):
 					else:
 						characterhp.Left_Arm_HP = characterhp.Max_Left_Arm_HP
 				characterhp.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))		
 		
@@ -673,7 +714,7 @@ def CharacterDamageRightLeg(request, CIDin):
 						characterhp.Right_Leg_HP = 0
 				characterhp.save()
 				characterArmorValue.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
@@ -692,7 +733,7 @@ def CharacterHealRightLeg(request, CIDin):
 					else:
 						characterhp.Right_Leg_HP = characterhp.Max_Right_Leg_HP
 				characterhp.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))	
 		
@@ -719,7 +760,7 @@ def CharacterDamageLeftLeg(request, CIDin):
 						characterhp.Left_Leg_HP = 0
 				characterhp.save()
 				characterArmorValue.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
@@ -739,7 +780,7 @@ def CharacterHealLeftLeg(request, CIDin):
 					else:
 						characterhp.Left_Leg_HP = characterhp.Max_Left_Leg_HP
 				characterhp.save()
-		return HttpResponseRedirect(reverse('CharacterSheet',  kwargs={'CIDin': CIDin}))
+		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))			
 		
@@ -750,7 +791,7 @@ def SurgePage(request, GIDin):
 	if isGameCommander(request,GIDin):
 		try:
 			theGroup = get_object_or_404(Group,GID = GIDin)
-			chractersInGroup = Character.objects.filter(GID = GIDin)
+			chractersInGroup = Character.objects.filter(GID = GIDin).order_by('Name')
 		except Character.DoesNotExist:
 			raise Http404("group does not exist")
 		return render(request, 'stats/surgeControl.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup})
