@@ -4,7 +4,13 @@
 
 {% block content %}
 
-
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align: center;
+}
+</style>
 <div class="container-fluid">
 
 
@@ -78,6 +84,9 @@
 	<h4>When a player rolls a natural 20 they gain an <strong>Action Surge</strong>. An <strong>Action Surges</strong> is a currency that may only be used <b>Outside of combat</b> to avoid rolling. Action surges max out at 5. You may use 1 surge for a ten or 3 Surges for a twenty. 4 players may also use up 1 action surge each to perform a &ldquo;<strong>Team Surge</strong>&rdquo; all 4 players roll and the highest roll is used for the action.</h4>
 	
 	<h4>When a player rolls a natural 1 they have the opportunity to take a <strong>moment of weakness</strong>. If they choose to take it then, the roll is considered a critical success with unexpected side effects. These side effects are up to the GC, but shouldn't be too cruel. If they player chooses not to take the <strong>moment of weakness</strong> they gain a <strong>Moment of strength</strong> A player may spend 5 <strong>moments of strength</strong> to change ANY roll to a critical. This can be done after the roll and <b>includes combat rolls.</b> Moments of strength max out at 10.</h4>
+	
+	<h4><strong>Wild Roll:</strong> Wild rolls can be used whenever the GC wants something random to occur. a player of their choice or the entire group rolls a d20 with no modifier and the GC determines based on the roll. they can also use the following to determine if the random event it favorable or not: 1-5 = bad 6-14 = neutral, 15-20 = good. or 1-10 = bad 11-20 = good. it is up to the GC's choice. for group roles the GC can count total goods vs bad to see overall how the group did. some examples of a wild roll: player: 'Does the room have any ammo?' GC 'make a wild roll' if the player rolls good it does, if they roll bad it doesn't. another example. 'and NPC approaches make a wild roll' if the player roll bad its is a villain but if they roll good it is a helpful NPC.</h4>
+	
 	<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
 	</section>
 	
@@ -288,15 +297,8 @@
 		<p>&nbsp;</p>
 
 		<h3>Shooting:</h3>
-		<P>Standard enemy soldiers have a hit score of 15, this is the amount the player needs to hit.</P>
-		<h4>1: hip fire.</h4>
-		<li>cannot name target but instead must attack core.</li>
-		<h4>2: Aim shot.</h4>
-		<li>standard attack, can name target Head, Body, Arm, Leg <a href = "#shooting">(details below)</a></li>
-		<h4>3: steadied shot, spray or special:</h4>
-		<li><b>Steadied</b>: same as aim-shot but add +1 to 2d6 shooting roll, does double damage if weakness is known.</li>
-		<li><b>Spray</b>: with a machine gun you unload targeting multiple people</li>
-		<li><b>Special</b>: Something special to the weapons such as an under barrel grenade launcher.</li>
+		<p>see: <a href = "#shooting"> Shooting Combat </a></p>
+		
 		<p>&nbsp;</p>
 		<h3>Melee:</h3>
 		<p>When a player makes a melee attack, they roll fist. if the roll is greater than 15, than it succeeded. If it is between 5 and 10 the enemy soldier makes a counter melee attack to defend. if it is below 5, the attack auto-fails.</P>
@@ -310,6 +312,15 @@
 		<h3>Enemy Combat:</h3> 
 		<p>When a group of enemy soldiers attack, instead of rolling per each individual soldier. The GC rolls a 1d20 + number of attackers - 1 (for a maximum of +10). The idea being to speed up enemies combat turn.</p>
 		<p>A player-soldier starts with a hit score of 15. When an enemy soldier shoots, this is the amount the enemy soldiers need to meet to hit the player. This can be changed via powers. Standard armour does not change hit score.<p>
+		<p>If the enemy hits its target, then the GC rolls 1d12 to determine where the bullet landed. (chart below):
+		<table style="width:25%">
+		<tr><td>12</td><td>Head</td></tr>
+		<tr><td>11,10</td><td>Right Arm</td></tr>
+		<tr><td>9,8</td><td>Left Arm</td></tr>
+		<tr><td>7,6</td><td>Right Leg</td></tr>
+		<tr><td>5,4</td><td>Left Leg</td></tr>
+		<tr><td>3,2,1</td><td>Core</td></tr>
+		</table>
 		<p>&nbsp;</p>
 		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
 	</div></section>
@@ -321,15 +332,24 @@
 		<p>Armour absorbs damage before it hits the player but breaks down slowly. For example lets say a player has 15 armour and is shot with a 20 bullet. the armour reduces the bullet to only 5 damage but the armour itself is also damaged and now is 14 armour.</p>
 		<p>However, some attacks may ignore armour and hit the HP directly such as armour piercing rounds or specific called shots that hit weak points in the armour. The exact functionality of armour is left up to GC. for example you could have a full body shield that only has 1 armour and reduces all damage to zero. Said armour could recharges every other turn; forcing attacks to be made in quick succession.</p>
 		<p>&nbsp;</p>
-		<p>Cover, Cover is different than armour, instead of reducing the damage done, cover makes the role harder, so if an enemy needs a 15 to hit but they're in -5 cover, the player subtracts his roll by 5 so if they roll a 16 then subtract cover the attack misses. same goes for the enemies attack role if the player is in cover. if someone is in full cover they cannot be targeted with a normal attack.</p>
+		<p><strong>Cover:</strong> Cover is different than armour, instead of reducing the damage done, cover makes the role harder, so if an enemy needs a 15 to hit but they're in -5 cover, the player subtracts his roll by 5 so if they roll a 16 then subtract cover the attack misses. same goes for the enemies attack role if the player is in cover. if someone is in full cover they cannot be targeted with a normal attack. <strong>Players must spend one action to enter cover.</strong> they may spend an additional action to take 'full cover' when in full cover they cannot be targeted, but must also leave full cover for free to make an attack themselves.</p>
 		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
 	</div></section>
 	<p>&nbsp;</p>
 	
 	<section id = 'shooting'><div class = well>
 		<h2><strong>-Shooting Mechanics-</strong></h2>
+		<h4>When shooting the player-soldier names the type of shot then rolls a D20 + FIST + Specialist mod (If they have it for the weapon). If the attack is successful and an aimed/steadied shot, the player then names a target (head,body,limb) and rolls 2D6s to see if they hit (chart below). If the player is using a weapon outside its effective range, they do not add the specialist mod.</h4>
 		<p>&nbsp;</p>
-		<h4>When shooting the player-soldier rolls a D20 + FIST + Specialist mod (If they have it for the weapon). If the attack is successful and an aimed/steadied shot, the player then names a target (head,body,limb) and rolls 2D6s to see if they hit (chart below). If the player is using a weapon outside its effective range, they do not add the specialist mod.</h4>
+		<h3>Shooting:</h3>
+		<h4>1: hip fired shot.</h4>
+		<li>cannot name target but instead must attack core.</li>
+		<h4>2: Aimed shot.</h4>
+		<li>standard attack, can name target Head, Body, Arm, Leg <a href = "#shooting">(details below)</a></li>
+		<h4>3: Focused shot, spray or special:</h4>
+		<li><b>Focused</b>: same as aim-shot but add +1 to 2d6 shooting roll, does double damage if weakness is known.</li>
+		<li><b>Spray</b>: with a machine gun you unload targeting multiple people</li>
+		<li><b>Special</b>: Something special to the weapons such as an under barrel grenade launcher.</li>
 		<p>&nbsp;</p>
 		<h3>Weapon range:</h3>
 		<p><b>Melee</b> : 5- units</p>
@@ -337,16 +357,17 @@
 		<p><b>Assault</b> : 25/75 units</p>
 		<p><b>Sniper</b> : 75+ units</p>
 		<p>&nbsp;</p>
-		<h3>HEAD</h3>
+		<h3>Target rolls:</h3>
+		<h4>HEAD</h4>
 		<p>10 or more : head shot</p>
 		<p>9 to 7 : body shot</p>
 		<p>less 7 : glancing shot</p>
 		<p>&nbsp;</p>
-		<h3>BODY</h3>
+		<h4>BODY</h4>
 		<p>greater 3 : body shot</p>
 		<p>3 or less : glancing shot</p>
 		<p>&nbsp;</p>
-		<h3>ARM/LEG</h3>
+		<h4>ARM/LEG</h4>
 		<p>greater 7 : Limb Shot</p>
 		<p>7 to 5 : body shot</p>
 		<p>4 or less : glancing shot</p>
