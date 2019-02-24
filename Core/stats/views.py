@@ -69,8 +69,8 @@ def CanEditCharacter(request,CIDin):
 
 #player handbook, this is static.
 #future idea: base handbook based on game?
-def PlayerHandbook(request):
-	return render(request, 'stats/playerHB.html')
+def ForestHandbook(request):
+	return render(request, 'stats/TheForestHandBook.html')
 
 #Index----------------------------------------
 #---------------------------------------------

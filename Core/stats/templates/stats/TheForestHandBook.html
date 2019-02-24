@@ -1,0 +1,591 @@
+{% extends 'stats/base.html' %}
+
+{% block title %}Player Handbook{% endblock %}
+
+{% block content %}
+
+<style>
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  text-align: center;
+}
+{% include 'stats/CssStar.html'%}
+</style>
+<div class="container-fluid">
+
+
+	<div class="row">
+	<div class="col-md-12 text-center">
+	<h1><strong>The Forest Table Top R.P.G.</strong></h1>
+	</div></div>
+	
+	
+	<p>&nbsp;</p>
+	<section id = 'contents'>
+	<div class = well-lg>
+	<h2> <b>Contents </b></h2>
+	<h4><li><a href = "#intro">Introduction</a></h4></li>
+	<h4><li><a href = "#stat"> Basic Stats </a></h4></li>
+	<h4><li><a href = "#surge"> Surges and Moments</a></h4></li>
+	<h4><li><a href = "#grade"> Grade System</a></h4></li>
+	<h4><li><a href = "#skill"> Specialized Skills</a></h4></li>
+	<h4><li><a href = "#magic"> Magic</a></h4></li>
+	<h4><li><a href = "#power"> Unique Powers </a></h4></li>
+	<h4><li><a href = "#hidden"> Hidden Abilities </a></h4></li>
+	<h4><li><a href = "#hp"> Health </a></h4></li>
+	<h4><li><a href = "#loadout"> Equipment Loadout</a></h4></li>
+	<h4><li><a href = "#combat"> Basic Combat </a></h4></li>
+	<h4><li><a href = "#armor"> Armour </a></h4></li>
+	<h4><li><a href = "#shooting"> Shooting Combat </a></h4></li>
+	<h4><li><a href = "#shootingT"> Tank Combat </a></h4></li>
+	<h4><li><a href = "#exp"> Experience </a></h4></li>
+	<h4><li><a href = "#lvl"> Leveling </a></h4></li>
+	<h4><li><a href = "#tank"> The Tank </a></h4></li>
+	<h4><li><a href = "#thanks"> Thanks </a></h4></li>
+	<h4><li><a href = "#license"> License </a></h4></li>
+	</div>
+	</section>
+	
+	<section id = 'intro'>
+	<h2><strong>-Introduction-</strong></h2>
+	<h4>Welcome to the forest. you are a WW1 Tank squadron who is about to enter an inter-dimensional rift known as 'The Forest'. This game is designed to solve problems with creativity. instead of a hard list of what you can and can't do. Actions are described by the player and left up the Game Commander's (Game master) discretion. A player may attempt to do anything they can think of within reason. If something is impossible the GC may simply inform them they cannot try that. but anything that seems reasonable should be allowed. The player will roll and it will determine if the player achieved their goal.</h4>
+	</section>
+	<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	
+	<p>&nbsp;</p>
+	<section id = 'stat'>
+		<div class = well>
+		<h2><strong>-Basic Stats-</strong></h2>
+		<p>&nbsp;</p>
+		<h3><strong>Mind</strong>:</h3>
+			<p>&emsp;Intelligence</p>
+		<h3><strong>Face:</strong></h3>
+			<p>&emsp;Charisma</p>
+		<h3><strong>Fist</strong>:</h3>
+			<p>&emsp;Attacking</p>
+		<h3><strong>Eyes</strong>:</h3>
+			<p>&emsp;Perception</p>
+		<h3><strong>Heart</strong>:</h3>
+			<p>&emsp;Resistance</p>
+		<h3><strong>Tech</strong>:</h3>
+			<p>&emsp;This is based on the technology itself. for example a tank could have a tech stat of +5 which the driver would roll to try and cross a muddy field</p>
+		<h3><strong>Power</strong>:</h3>
+			<p>&emsp; This would be used for any kind of magic stat or super power. each spell/spell group or power would have a unique ability mode per player. (Could be used for curtain hidden abilities) this stat can grow as the player learns how to use it. for example if a player learns fireball it would start +0 but after a while as they use it a lot it would become +1 and so on</p>
+			<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	
+	
+	<p>&nbsp;</p>
+	
+	<section id = 'surge'>
+	<h2><strong>-Surges and Moments-</strong></h2>
+	<h4>This game has a special way of dealing with critical successes and critical failures. They are called: "<strong>Action Surges</strong>" and "<strong>Moments of Weakness</strong>".</h4>
+	
+	<h4>When a player rolls a natural 20 they gain an <strong>Action Surge</strong>. An <strong>Action Surges</strong> is a currency that may only be used <b>Outside of combat</b> to avoid rolling. Action surges max out at 5. You may use 1 surge for a ten or 3 Surges for a twenty. 4 players may also use up 1 action surge each to perform a &ldquo;<strong>Team Surge</strong>&rdquo; all 4 players roll and the highest roll is used for the action.</h4>
+	
+	<h4>When a player rolls a natural 1 they have the opportunity to take a <strong>moment of weakness</strong>. If they choose to take it then, the roll is considered a critical success with unexpected side effects. These side effects are up to the GC, but shouldn't be too cruel. If they player chooses not to take the <strong>moment of weakness</strong> they gain a <strong>Moment of strength</strong> A player may spend 5 <strong>moments of strength</strong> to change ANY roll to a critical. This can be done after the roll and <b>includes combat rolls.</b> Moments of strength max out at 10.</h4>
+	
+	<h4><strong>Wild Roll:</strong> Wild rolls can be used whenever the GC wants something random to occur. a player of their choice or the entire group rolls a d20 with no modifier and the GC determines based on the roll. they can also use the following to determine if the random event it favorable or not: 1-5 = bad 6-14 = neutral, 15-20 = good. or 1-10 = bad 11-20 = good. it is up to the GC's choice. for group roles the GC can count total goods vs bad to see overall how the group did. some examples of a wild roll: player: 'Does the room have any ammo?' GC 'make a wild roll' if the player rolls good it does, if they roll bad it doesn't. another example. 'and NPC approaches make a wild roll' if the player roll bad its is a villain but if they roll good it is a helpful NPC.</h4>
+	
+	<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</section>
+	
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	
+	<section id = 'grade'><div class = well>
+		<h2><strong>-Grade system-</strong></h2>
+		<p>&nbsp;</p>
+		<p>Players are given a starting 'Grade' in the following classes:</p>
+		<p>&nbsp;</p>
+		<p>Written Exams (MIND)</p>
+		<p>Combat Range (FIST)</p>
+		<p>Field Exercises (EYES)</p>
+		<p>Group Tasks (FACE)</p>
+		<p>&nbsp;</p>
+		<p>(grades MUST average a C (score wise NOT modifier wise))</p>
+		<p>Letter : Stat Modifier : score</p>
+		<p>-----------------------------------------------</p>
+		<p>A : +4 : 5</p>
+		<p>B : +2 : 4</p>
+		<p>C : +1 : 3</p>
+		<p>D : 0  : 2</p>
+		<p>E : -2 : 1</p>
+		<p>&nbsp;</p>
+		<p>Players can choose to get really good grades in some categories and crap grades in other. OR they can spend them evenly to be a more rounded but less specialized soldier.</p>
+		<p>&nbsp;</p>
+		<p>Example grades:</p>
+		<p>AAEE -&gt; average(5,5,1,1) = 3</p>
+		<p>CCCC -&gt; average(3,3,3,3) = 3</p>
+		<p>ACDD -&gt; average(5,3,2,2) = 3</p>
+		<p>BCCD -&gt; average(4,3,3,2) = 3</p>
+		<p>&nbsp;</p>
+		<p>These modifiers can be altered after the game starts. the grade system is only a jumping off point. through leveling or rewards a player could get there -2 to 0 or there +4 to a +6. etc. (Max +6 after level up)</p>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	<p>&nbsp;</p>
+		
+	<section id = 'skill'><div class = well>
+		<h2><strong>-Specialized Skills-</strong></h2>
+		<p>&nbsp;</p>
+		<h4>players are given 6 points to spend on specialized skills. players cannot take skills in categorize they got a D or E in.</h4>
+		<p>&nbsp;</p>
+		<p><b>specialist mod starts out at +4</b></p>
+		<p>&nbsp;</p>
+		<h3>Combat (Fist)</h3>
+		<p>----------------------------------------</p>
+		<p>Sniper range : 1</p>
+		<p>Assault range : 1</p>
+		<p>CQC range : 1</p>
+		<p>Melee range : 1</p>
+		<p>Explosives : 1</p>
+		<p>&nbsp;</p>
+		<h3>Intellectual (Mind)</h3>
+		<p>----------------------------------------</p>
+		<p>Engineering : 2</p>
+		<p>Military Tactics : 2</p>
+		<p>Medicine : 2</p>
+		<p>&nbsp;</p>
+		<h3>Speaker (Face)</h3>
+		<p>----------------------------------------</p>
+		<p>Espionage : 2</p>
+		<p>Diplomacy : 2</p>
+		<p>Interrogation : 2</p>
+		<p>&nbsp;</p>
+		<h3>Recon (Eyes)</h3>
+		<p>----------------------------------------</p>
+		<p>Scout : 2</p>
+		<p>Natural Survival : 2</p>
+		<p>Trap Disarmament : 2</p>
+		<p>&nbsp;</p>
+		<h4>When a player makes a skill roll, they add the stat mod + specialist mod (for example a player who trained with snipers and got an A in FIST would roll a D20 + 8.) If the player doesn't know the skill, then the roll a normal D20 plus the associated Stat with NO specialist mod. (for example a player who didn&rsquo;t train in melee and only got a C in Fist would roll a D20 + 1 + 0)If the player is attempting to do something outside of what is listed above have them roll a D20 + the stat mod that makes the most sense.</h4>
+		
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	<p>&nbsp;</p>
+	
+	<section id = 'magic'><div class = well>
+		<h2><strong>-Magic-</strong></h2>
+		<p>&nbsp;</p>
+		<h4>While adventuring in the forest soldiers may learn magical abilities. when casting a spell the soldier will usually roll a mind score to see it it succeeds. (the GC may make exceptions). offensive spells would follow similar logic to making an attack. for upkeep spells the soldier must sacrifice an action each turn for each unique spell they're up keeping. they cannot upkeep more spells than they have actions unless they have a specific reason in-game, such as a charm that grants free upkeep on X number of spells. In addition to the mind score spells have specific rules and generally fall into one of three categories below: Physical, Spiritual, Mental.</h4>
+		<div class = well><h2>Physical Magic:</h2>
+		<h3>Physical magic is a broad category for all the magic that effects the physical world.</h3>
+		<h4>Physical Magic has 3 basic components:</h4>
+		<h4><ol>
+			<li>structure </li>
+			<li>composition</li>
+			<li>behavior</li>
+		</ol></h4>
+		<h4>Each component has a cost, when the player casts the spell the highest cost is used. for example if a player wants to cast a fireball. Structure = ball(cost 1 action). composition = fire (cost 1 action). behavior = projectile (cost 2 actions). the over all cost is 2, because projectile costs 2.) if the player wishes to combine anything lets say for example they want to combine fire with earth to make lava. Then the composition costs are added together. so it would end up costing fire (1) + earth (1) = 2 action points. A player may choose to spend more then one round if they do not have enough action points that turn.</h4>
+		<h4>Examples:</h4>
+		<h3>Structure</h3>
+		<h4>
+			<li>Wall (cost 1)</li>
+			<li>ball (cost 1)</li>
+			<li>weapon (cost 2)</li>
+			<li>armour (cost 2)</li>
+		</h4>
+		<h3>composition</h3>
+		<h4>
+			<li>fire (cost 1)</li>
+			<li>Earth (cost 1)</li>
+			<li>water (cost 1)</li>
+			<li>Air (cost 1)</li>
+			<li>divine Light (cost 2)</li>
+			<li>Darkness (cost 2)</li>
+			<li>organic matter (cost 3)</li>
+		</h4>
+		<h3>behavior</h3>
+		<h4>
+			<li>do nothing (cost 0)</li>
+			<li>resist change (cost 1)</li>
+			<li>Projectile (cost 2)</li>
+			<li>Identify foe (cost 3)</li>
+			<li>Identify friend (cost 3)</li>
+			<li> combine with target (cost 3)</li>
+		</h4></div>
+		<div class = well><h2>Spiritual Magic:</h2>
+		<h3>Spiritual magic effects things like the souls, life energy, and emotions.</h3>
+		<h4>Spiritual Spells have 2 basic components:</h4>
+		<h4><ol>
+			<li>Sacrifice</li>
+			<li>Effect</li>
+		</ol></h4>
+		<h4>When casting a Spiritual spell the player first pays the cost then casts. for example if a player wants to cause fear in their enemies the cost may be a blood sacrifice. the player rolls a die based on the difficulty of the spell and takes that much damage -2. so for example a d4 can deal a max of 2 damage.  and takes that much damage. The blood sacrifice has no effect on the success of the spell. A player my also choose to gain negative max health as a sacrifice instead of making a blood sacrifice roll for upkeep spells. It is up to the GC what sacrifices can be used. This would usually be [number of upkeep spiritual spells] * [spell difficulty]. so harder spells require more blood.</h4>
+		<h4>Examples:</h4>
+		<h3>Sacrifice</h3>
+		<h4>
+			<li>Blood Sacrifice roll</li>
+			<li>Temporary lower max life</li>
+			<li>Temporary Stat reduction</li>
+		</h4>
+		<h3>Effect</h3>
+		<h4>
+			<li>Reanimate dead</li>
+			<li>Manipulate target emotions</li>
+			<li>drain target's life</li>
+		</h4>
+		</div>
+		<div class = well><h2>Mental Magic:</h2>
+		<h3>Only demons can use mental magic.</h3>
+		</div>
+		
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	<p>&nbsp;</p>
+	
+	<section id = 'power'><div class = well>
+		<h2><strong>-Unique Powers-</strong></h2>
+		<p>&nbsp;</p>
+		<h4>In addition to magic soldiers my also learn unique powers while adventuring in the forest. These abilities are usually more powerful than regular magic or skills. It is up to the GC what kind of powers the players can get. Unlike magic, these powers should be generally vague and not super specific. for example instead of saying the player can now 'summon a fireball that requires 15 or better and deals 5 damage' the power could be 'player may summon and control fire' this then allows the players to solve various problems with their fire ability, not just use it as an attack. they may start a campfire for warmth or illuminate a dark space. when they player uses the power they roll a d20 + the power score. difficult things should require a higher roll and is left up to the GC. for example if you wanted to throw a fire ball, it would likely be only as difficult as a basic attack. but if you wanted to spread a wave of fire across several enemies this would defiantly require a higher roll such as a 19 or better. Power Value can increase making hard rolls easier for the player.</h4>
+		<h2>Some types of powers:</h2>
+		<h3><li>Technology</h3></li>
+		<h3><li>Divine Gift<h3></li>
+		<h3><li>Genetic Modification<h3></li>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	<p>&nbsp;</p>
+	
+	<section id = 'hidden'>
+		<h2><strong>-Hidden Talents-</strong></h2>
+		<h4>Each player will be able to choose one or several hidden talents depending on size. the GC should work with the player to give them something that makes them special but also is balanced with others and doesn&rsquo;t break the game. These hidden talents offer special skills or items and do not need to be revealed player to player.</h4>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</section>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	
+	<section id = 'hp'><div class = well>
+		<h2><strong>-Health-</strong></h2>
+		<p>&nbsp;</p>
+		<p>character health takes the form of a five pointed star. at the top of the star is the Head HP, the left and right sides are left and right arms and legs. and finally in the middle is the core HP</p>
+		<p>&nbsp;</p>
+		<h3><b>Standard soldier/player Health:</b></h3>
+		<div class="container">
+		{% load static %}
+			<div class="col-md-8">
+				<img class="img-responsive center-block" src="{% static 'stats/rpg/Star.png' %}" alt="Star"/>
+				<div class="top">Head<br><b>25</b></div>
+				<div class="mid-left">Left Arm<br><b>30</b></div>
+				<div class="center">Core<br><b>50</b></div>
+				<div class="mid-right">Right Arm<br><b>30</b></div>
+				<div class="bottom-left">Left Leg<br><b>30</b></div>
+				<div class="bottom-right">Right Leg<br><b>30</b></div>
+			</div>
+		</div>
+		<p><b>Heath States:</b></p>
+		<p>if any body part is 10 or lower it is considered damaged and will take negatives on rolls.</p>
+		<p>if any body part is 5 or lower it is considered disabled and cannot be used. If this is core or head, they are no longer conscious.</p>
+		<p>if any body part is 0 then it is permanently disable until fixed by a medical professional or replaced. If it is the head or Core that reaches 0, the person dies. They can however be resuscitated in given situations.</p>
+		<p>&nbsp;</p>
+		<p>Non-Lethal attacks cannot drop any body part below 1</p>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	<p>&nbsp;</p>
+	
+	<section id = 'loadout'>
+	<h2><strong>-Loadout-</strong></h2>
+		<h4>When players leave the tank they tell the Game Command which weapons, gear, armour, etc. they're bringing with them. It is up to the commander and should be 'within reason'</h4>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</section>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+
+	
+	<section id = 'combat'><div class = well>
+		<h2><strong>-Combat-</strong></h2>
+		<p>&nbsp;</p>
+		<p>At the beginning of Combat everyone rolls eye stat to determine Combat order. Generally, Enemy soldiers will have a 10 (special enemies may go earlier or later based on GC discretion). The idea being: players who roll well go first, then enemies, then players who roll poorly. If all players roll higher than 10, then all players go first.</p>
+		<p>&nbsp;</p>
+		<h3>Actions:</h3>
+		<p>Each player-soldier has 3 action points and 1 break points per rotation. During his turn he can spend the actions on things such as movement or attacking. The exact nature of what they are doing determines the amount of action points they need to spend (as decided by the GC). For example: they can move a normal distance in 1 or they can sprint much further by spending all 3 action points.</p>
+		<p>For movement during combat they may spend 1 action to move 30 units</p>	
+		<p>During any turn if a player is about to be effected by an action they can spend there breakpoints to react to the action. this could be dodging an explosion. or taking a shot at someone attempting to run past them. It is important that the player is somehow effected by the action to allow them to take a break point.</p>
+		<p>Ties go to the defender if they are in cover otherwise they go to the attacker.</p>
+		<p>Guard, a player may choose to guard a zone for 1 action. This allows them to use their reaction to attack anyone that enters the zone.</p>
+		<p>&nbsp;</p>
+
+		<h3>Shooting:</h3>
+		<p>see: <a href = "#shooting"> Shooting Combat </a></p>
+		
+		<p>&nbsp;</p>
+		<h3>Melee:</h3>
+		<p>When a player makes a melee attack, they roll fist. if the roll is greater than 15, than it succeeded. If it is between 5 and 10 the enemy soldier makes a counter melee attack to defend. if it is below 5, the attack auto-fails.</P>
+		<h4>1: Light</h4>
+		<h4>2: Medium</h4>
+		<h4>3: Heavy</h4>
+		<p>&nbsp;</p>
+		<h3>Other:</h3>
+		<h4>Grenades can be thrown 20 units + (FIST * 5). (This has a minimum of 20 units)</h4>
+		<p>&nbsp;</p>
+		<h3>Enemy Combat:</h3> 
+		<p>When a group of enemy soldiers attack, instead of rolling per each individual soldier. The GC rolls a 1d20 + number of attackers - 1 (for a maximum of +10). The idea being to speed up enemies combat turn.</p>
+		<p>A player-soldier starts with a hit score of 15. When an enemy soldier shoots, this is the amount the enemy soldiers need to meet to hit the player. This can be changed via powers. Standard armour does not change hit score.<p>
+		<p>If the enemy hits its target, then the GC rolls 1d12 to determine where the bullet landed. (below):
+		<div class="container">
+		{% load static %}
+		<div class="col-md-8">
+			<img class="img-responsive center-block" src="{% static 'stats/rpg/Star.png' %}" alt="Star"/>
+			<div class="top">Head<br>12</div>
+			<div class="mid-left">Left Arm<br>11,10</div>
+			<div class="center">Core<br>3,2,1</div>
+			<div class="mid-right">Right Arm<br>9,8</div>
+			<div class="bottom-left">Left Leg<br>7,6</div>
+			<div class="bottom-right">Right Leg<br>5,4</div>	
+			</div>
+		</div>		
+		<p>&nbsp;</p>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	<p>&nbsp;</p>
+	
+	<section id = 'armor'><div class = well>
+		<h2><strong>-Armour-</strong></h2>
+		<p>&nbsp;</p>
+		<p>Armour absorbs damage before it hits the player but breaks down slowly. For example lets say a player has 15 armour and is shot with a 20 bullet. the armour reduces the bullet to only 5 damage but the armour itself is also damaged and now is 14 armour.</p>
+		<p>However, some attacks may ignore armour and hit the HP directly such as armour piercing rounds or specific called shots that hit weak points in the armour. The exact functionality of armour is left up to GC. for example you could have a full body shield that only has 1 armour and reduces all damage to zero. Said armour could recharges every other turn; forcing attacks to be made in quick succession.</p>
+		<p>&nbsp;</p>
+		<p><strong>Cover:</strong> Cover is different than armour, instead of reducing the damage done, cover makes the role harder, so if an enemy needs a 15 to hit but they're in -5 cover, the player subtracts his roll by 5 so if they roll a 16 then subtract cover the attack misses. same goes for the enemies attack role if the player is in cover. if someone is in full cover they cannot be targeted with a normal attack. <strong>Players must spend one action to enter cover.</strong> they may spend an additional action to take 'full cover' when in full cover they cannot be targeted, but must also leave full cover for free to make an attack themselves.</p>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	<p>&nbsp;</p>
+	
+	<section id = 'shooting'><div class = well>
+		<h2><strong>-Shooting Mechanics-</strong></h2>
+		<h4>When shooting the player-soldier names the type of shot then rolls a D20 + FIST + Specialist mod (If they have it for the weapon). If the attack is successful and an aimed/steadied shot, the player then names a target (head,body,limb) and rolls 2D6s to see if they hit (chart below). If the player is using a weapon outside its effective range, they do not add the specialist mod.</h4>
+		<p>&nbsp;</p>
+		<h3>Shooting:</h3>
+		<h4>1: hip fired shot.</h4>
+		<li>cannot name target but instead must attack core.</li>
+		<h4>2: Aimed shot.</h4>
+		<li>standard attack, can name target Head, Body, Arm, Leg <a href = "#shooting">(details below)</a></li>
+		<h4>3: Focused shot, spray or special:</h4>
+		<li><b>Focused</b>: same as aim-shot but add +1 to 2d6 shooting roll, does double damage if weakness is known.</li>
+		<li><b>Spray</b>: with a machine gun you unload targeting multiple people</li>
+		<li><b>Special</b>: Something special to the weapons such as an under barrel grenade launcher.</li>
+		<p>&nbsp;</p>
+		<h3>Weapon range:</h3>
+		<p><b>Melee</b> : 5- units</p>
+		<p><b>CQC</b> : 5-25 units</p>
+		<p><b>Assault</b> : 25/75 units</p>
+		<p><b>Sniper</b> : 75+ units</p>
+		<p>&nbsp;</p>
+		<h3>Target rolls:</h3>
+		<h4>HEAD</h4>
+		<p>10 or more : head shot</p>
+		<p>9 to 7 : body shot</p>
+		<p>less 7 : glancing shot</p>
+		<p>&nbsp;</p>
+		<h4>CORE</h4>
+		<p>greater 3 : body shot</p>
+		<p>3 or less : glancing shot</p>
+		<p>&nbsp;</p>
+		<h4>ARM/LEG</h4>
+		<p>greater 7 : Limb Shot</p>
+		<p>7 to 5 : body shot</p>
+		<p>4 or less : glancing shot</p>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	<p>&nbsp;</p>
+
+	
+	<section id = 'shootingT'><div class = well>
+		<h2><strong>-Tank or artillery Combat-</strong></h2>
+		<p>&nbsp;</p>
+		<p>players within the tank do not get a turn, instead each player declares an action. On the tanks turn, all at once the players roll and actions are resolved.</p>
+		<p>when firing a tank or artillery, if the shot misses, then first roll a 1d4 or 1d8. This system can also be used with grenades.</p>
+		<p>&nbsp;</p>
+		<p>(1d4 rules)</p>
+		<p>1 - up</p>
+		<p>2 - right</p>
+		<p>3 - down</p>
+		<p>4 - left</p>
+		<p>&nbsp;</p>
+		<p>(1d8 rules)</p>
+		<p>1 - up</p>
+		<p>2 - up right</p>
+		<p>3 - right</p>
+		<p>4 - down right</p>
+		<p>5 - down</p>
+		<p>6 - down left</p>
+		<p>7 - left</p>
+		<p>8 - up left</p>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</div></section>
+	<p>&nbsp;</p>
+	
+	<section id = 'exp'>
+		<h2><strong>-Experience-</strong></h2>
+		<h4>This game doesn&rsquo;t have experience. Instead rewards are given after major story events or defeating great opponents.</h4>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</section>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	
+	
+	<section id = 'lvl'>
+		<h2><strong>-Leveling-</strong></h2>
+		<h4>After each major story event or great opponents. the players are rewarded. These should be associated with said victory and is entirely up to the GC (so if you are the GC don&rsquo;t be too harsh. remember to reward your players. Make them feel like they actually accomplished something. Reward creativity but on the same note. don&rsquo;t spoil them. they should feel like they worked toward and earned the rewards.)</h4>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</section>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+	
+	
+	<section id = 'tank'>
+		<h2><strong>-The Tank-</strong></h2>
+		<h4>The tank is your mobile home base. you can always restock on food, ammo etc.</h4>
+		<h4><strong>Do NOT lose your tank.</strong> the tank has the forest regulator. without that, it is impossible to navigate the forest. The tank is also actively tracking your location and mapping out previous zones so you don&rsquo;t have to. <strong>This is your home! </strong><strong>Take care of your home!</strong></h4>
+		<h4>the tank is also able to burn a fuel cell to return to the forest in emergency situations. but use it sparingly because you only have 3 fuel cells to start out, Also you have no idea where in the forest you will end up.</h4>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</section>	
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+		
+	<section id = 'thanks'>
+	<h2><strong>-Thanks-</strong></h2>
+		<h4>To Ali, Ben, Brian, David, Noel and Zach, Thanks for everything. Without the first Rangers there would be no forest.</h4>
+		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</section>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+
+	<section id = 'license'>
+	<h2><strong>-License--</strong></h2>
+	<div class="panel-group" id="License">
+		<div class="panel">
+		 <div class="panel-heading">
+			<h4 class="panel-title">
+			  <a data-toggle="collapse" data-parent="#License" href="#LicenseText"><h4>The rules on this page are licensed under the Open Game License. (click for details)</h4></a>
+			</h4>
+		  </div>
+		  <div id="LicenseText" class="panel-collapse collapse">
+			<div class="panel-body">
+				
+<P>THIS LICENSE IS APPROVED FOR GENERAL USE.  PERMISSION TO DISTRIBUTE THIS LICENSE
+IS MADE BY WIZARDS OF THE COAST!</P>
+
+<P>OPEN GAME LICENSE Version  1.0a</P>
+
+<P>The following text is the property of Wizards of the Coast, Inc. and is
+Copyright 2000 Wizards of the Coast, Inc ("Wizards"). All Rights Reserved.</P>
+
+<P>1. Definitions: (a)"Contributors" means the copyright and/or trademark
+owners who have contributed Open Game Content; (b)"Derivative Material"
+means copyrighted material including derivative works and translations
+(including into other computer languages), potation, modification,
+correction, addition, extension, upgrade, improvement, compilation,
+abridgment or other form in which an existing work may be recast,
+transformed or adapted;  (c) "Distribute" means to reproduce, license, rent,
+lease, sell, broadcast, publicly display, transmit or otherwise distribute;
+(d)"Open Game Content" means the game mechanic and includes the methods,
+procedures, processes and routines to the extent such content does not
+embody the Product Identity and is an enhancement over the prior art and any
+additional content clearly identified as Open Game Content by the
+Contributor,  and means any work covered by this License, including
+translations and derivative works under copyright law, but specifically
+excludes Product Identity. (e) "Product Identity" means product and product
+line names, logos and identifying marks including trade dress; artifacts;
+creatures characters; stories, storylines, plots, thematic elements,
+dialogue, incidents, language, artwork, symbols, designs, depictions,
+likenesses, formats, poses, concepts, themes and graphic, photographic and
+other visual or audio representations; names and descriptions of characters,
+spells, enchantments, personalities, teams, personas, likenesses and special
+abilities; places, locations, environments, creatures, equipment, magical or
+supernatural abilities or effects, logos, symbols, or graphic designs; and
+any other trademark or registered trademark clearly identified as Product
+identity by the owner of the Product Identity, and which specifically
+excludes the Open Game Content; (f) "Trademark" means the logos, names,
+mark, sign, motto, designs that are used by a Contributor to identify itself
+or its products or the associated products contributed to the Open Game
+License by the Contributor (g) "Use", "Used" or "Using" means to use,
+Distribute, copy, edit, format, modify, translate and otherwise create
+Derivative Material of Open Game Content. (h) "You" or "Your" means the
+licensee in terms of this agreement.</P>
+
+<P>2. The License:  This License applies to any Open Game Content that contains
+a notice indicating that the Open Game Content may only be Used under and in
+terms of this License. You must affix such a notice to any Open Game Content
+that you Use. No terms may be added to or subtracted from this License
+except as described by the License itself. No other terms or conditions may
+be applied to any Open Game Content distributed using this License.</P>
+
+<P>3.Offer and Acceptance: By Using the Open Game Content You indicate Your
+acceptance of the terms of this License.</P>
+
+<P>4. Grant and Consideration: In consideration for agreeing to use this
+License, the Contributors grant You a perpetual, worldwide, royalty-free,
+non-exclusive license with the exact terms of this License to Use, the Open
+Game Content.</P>
+
+<P>5.Representation of Authority to Contribute: If You are contributing
+original material as Open Game Content, You represent that Your
+Contributions are Your original creation and/or You have sufficient rights
+to grant the rights conveyed by this License.</P>
+
+<P>6.Notice of License Copyright: You must update the COPYRIGHT NOTICE portion
+of this License to include the exact text of the COPYRIGHT NOTICE of any
+Open Game Content You are copying, modifying or distributing, and You must
+add the title, the copyright date, and the copyright holder's name to the
+COPYRIGHT NOTICE of any original Open Game Content you Distribute.</P>
+
+<P>7. Use of Product Identity:  You agree not to Use any Product Identity,
+including as an indication as to compatibility, except as expressly licensed
+in another, independent Agreement with the owner of each element of that
+Product Identity.  You agree not to indicate compatibility or
+co-adaptability with any Trademark or Registered Trademark in conjunction with a work containing
+Open Game Content except as expressly licensed in another, independent
+Agreement with the owner of such Trademark or Registered Trademark. The use of any Product Identity
+in Open Game Content does not constitute a challenge to the ownership of
+that Product Identity.  The owner of any Product Identity used in Open Game
+Content shall retain all rights, title and interest in and to that Product
+Identity.</P>
+
+<P>8. Identification: If you distribute Open Game Content You must clearly
+indicate which portions of the work that you are distributing are Open Game
+Content.</P>
+
+<P>9. Updating the License:  Wizards or its designated Agents may publish
+updated versions of this License.  You may use any authorized version of
+this License to copy, modify and distribute any Open Game Content originally
+distributed under any version of this License.</P>
+
+<P>10 Copy of this License:  You MUST include a copy of this License with every
+copy of the Open Game Content You Distribute.</P>
+
+<P>11. Use of Contributor Credits: You may not market or advertise the Open
+Game Content using the name of any Contributor unless You have written
+permission from the Contributor to do so.</P>
+
+<P>12 Inability to Comply: If it is impossible for You to comply with any of
+the terms of this License with respect to some or all of the Open Game
+Content due to statute, judicial order, or governmental regulation then You
+may not Use any Open Game Material so affected.</P>
+
+<P>13 Termination: This License will terminate automatically if You fail to
+comply with all terms herein and fail to cure such breach within 30 days of
+becoming aware of the breach. All sublicenses shall survive the termination
+of this License.</P>
+
+<P>14 Reformation: If any provision of this License is held to be
+unenforceable, such provision shall be reformed only to the extent necessary
+to make it enforceable.</P>
+
+<P>15 COPYRIGHT NOTICE<br>
+Open Game License v 1.0 Copyright 2000, Wizards of the Coast, Inc.</P>
+
+			</div>
+		  </div>
+		</div>
+
+	</div>
+	<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
+	</section>
+	<p>&nbsp;</p>
+	<p>&nbsp;</p>
+
+	
+</div>
+
+
+{% endblock %}
