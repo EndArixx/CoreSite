@@ -62,7 +62,7 @@ table, th, td {
 			<p>&emsp;Intelligence</p>
 		<h3><strong>Face:</strong></h3>
 			<p>&emsp;Charisma</p>
-		<h3><strong>Fist</strong>:</h3>
+		<h3><strong><section id = 'fist'>Fist:</section></strong></h3>
 			<p>&emsp;Attacking</p>
 		<h3><strong>Eyes</strong>:</h3>
 			<p>&emsp;Perception</p>
@@ -310,13 +310,24 @@ table, th, td {
 		
 		<p>&nbsp;</p>
 		<h3>Melee:</h3>
-		<p>When a player makes a melee attack, they roll fist. if the roll is greater than 15, than it succeeded. If it is between 5 and 10 the enemy soldier makes a counter melee attack to defend. if it is below 5, the attack auto-fails.</P>
+		<p>When a player makes a melee attack, they roll fist based on the level of the attack. If it fails by more than 5 the enemy soldier makes a counter melee attack to defend.</P>
 		<h4>1: Light</h4>
+		<p>Does a small amoung of damage.</p>
+		<pre>[To hit <a href = "#fist">Fist</a> roll of 12 or greater]</pre>
 		<h4>2: Medium</h4>
+		<p>Does a fair amount of damage. capable of half-healthing some enemies.</p>
+		<pre>[To hit <a href = "#fist">Fist</a> roll of 15 or greater]</pre>
 		<h4>3: Heavy</h4>
+		<p>Does a alot of damage. Capable of killing some enemies in one hit</p>
+		<pre>[To hit <a href = "#fist">Fist</a> roll of 20 or greater]</pre>
+		<h4>4: Special melee attack</h4>
+		<p>player performs an action such as: Push, knockdown, pull Etc.<p>
+		<pre>[To hit <a href = "#fist">Fist</a> roll of 15 or greater]</pre>
 		<p>&nbsp;</p>
 		<h3>Other:</h3>
 		<h4>Grenades can be thrown 20 units + (FIST * 5). (This has a minimum of 20 units)</h4>
+		<pre>[To hit <a href = "#fist">Fist</a> roll of 20 or greater]</pre>
+		<pre>[Failed rolls between 1 and 10 cause drift. with a distance of 1d6<a href = "#shootingT">(see 'Tank or artillery Combat')</a>]</pre>
 		<p>&nbsp;</p>
 		<h3>Enemy Combat:</h3> 
 		<p>When a group of enemy soldiers attack, instead of rolling per each individual soldier. The GC rolls a 1d20 + number of attackers - 1 (for a maximum of +10). The idea being to speed up enemies combat turn.</p>
@@ -356,34 +367,45 @@ table, th, td {
 		<p>&nbsp;</p>
 		<h3>Shooting:</h3>
 		<h4>1: hip fired shot.</h4>
-		<li>cannot name target but instead must attack core.</li>
+		Cannot name target but instead must attack core.<br>
+		<pre>[To hit <a href = "#fist">Fist</a> roll of 20 or greater]</pre>
 		<h4>2: Aimed shot.</h4>
-		<li>standard attack, can name target Head, Body, Arm, Leg <a href = "#shooting">(details below)</a></li>
+		Standard attack, can name target Head, Body, Arm, Leg <a href = "#shooting">(details below)</a><br>
+		<pre>[To hit <a href = "#fist">Fist</a> roll of 15 or greater.]</pre>
 		<h4>3: Focused shot, spray or special:</h4>
-		<li><b>Focused</b>: same as aim-shot but add +1 to 2d6 shooting roll, does double damage if weakness is known.</li>
-		<li><b>Spray</b>: with a machine gun you unload targeting multiple people</li>
-		<li><b>Special</b>: Something special to the weapons such as an under barrel grenade launcher.</li>
+		<b>Focused</b>: same as aim-shot but add +1 to 2d6 shooting roll, does double damage if weakness is known.<br>
+		<pre>[To hit <a href = "#fist">Fist</a> roll of 10 or greater.]</pre>
+		<b>Spray/MultiShot</b>: with a machine gun you unload targeting multiple people<br>
+		<pre>[To hit roll <a href = "#fist">Fist</a> requires 15 to hit first target. 16 to hit second. 17 to hit third, etc.]</pre>
+		<b>Special</b>: Something special to the weapons such as an under barrel grenade launcher.<br>
+		<pre>[Hit based on CG instruction. generally to hit  <a href = "#fist">Fist</a> roll of 15 or greater.]</pre>
 		<p>&nbsp;</p>
 		<h3>Weapon range:</h3>
-		<p><b>Melee</b> : 5- units</p>
+		<p><b>Melee</b> : 0-5 units</p>
 		<p><b>CQC</b> : 5-25 units</p>
 		<p><b>Assault</b> : 25/75 units</p>
 		<p><b>Sniper</b> : 75+ units</p>
 		<p>&nbsp;</p>
+		<h3>Special weapon rules:</h3>
+		<p><b>Bolt Action:</b> Bolt action rifles cannot be fired more than once per turn.</p>
+		<p><b>Semi Auto:</b> Semi auto weapons may be fired multiple times per round. (assuming the player has actions remaining)</p>
+		<p><b>Automatic weapons:</b> Machine guns cannot be focused, but instead may spray to make a multi attack.</p>
+		<p><b>Bayonet:</b> if a weapon has a bayonet attached, it can be used as a melee range weapon without switching.</p>
+		<p>&nbsp;</p>
 		<h3>Target rolls:</h3>
 		<h4>HEAD</h4>
-		<p>10 or more : head shot</p>
-		<p>9 to 7 : body shot</p>
-		<p>less 7 : glancing shot</p>
+		<pre>[10 or more : head shot]</pre>
+		<pre>[9 to 7 : body shot]</pre>
+		<pre>[less 7 : glancing shot]</pre>
 		<p>&nbsp;</p>
 		<h4>CORE</h4>
-		<p>greater 3 : body shot</p>
-		<p>3 or less : glancing shot</p>
+		<pre>[greater 3 : body shot]</pre>
+		<pre>[3 or less : glancing shot]</pre>
 		<p>&nbsp;</p>
 		<h4>ARM/LEG</h4>
-		<p>greater 7 : Limb Shot</p>
-		<p>7 to 5 : body shot</p>
-		<p>4 or less : glancing shot</p>
+		<pre>[greater 7 : Limb Shot]</pre>
+		<pre>[7 to 5 : body shot]</pre>
+		<pre>[4 or less : glancing shot]</pre>
 		<p>&nbsp;</p><p><a href = "#contents">[Return to top]</a></p>
 	</div></section>
 	<p>&nbsp;</p>
@@ -393,7 +415,8 @@ table, th, td {
 		<h2><strong>-Tank or artillery Combat-</strong></h2>
 		<p>&nbsp;</p>
 		<p>players within the tank do not get a turn, instead each player declares an action. On the tanks turn, all at once the players roll and actions are resolved.</p>
-		<p>when firing a tank or artillery, if the shot misses, then first roll a 1d4 or 1d8. This system can also be used with grenades.</p>
+		<p>when firing a tank or artillery, if the shot misses the player rolls the shots drift. First roll a 1d4 or 1d8 (based on GC instruction). After the direction has been determined a distance dice is chosen based on the type of artillery and the player rolls it.</p>
+		<p><b>example:</b> The shot missed. The player rolls a [1d8] and gets a 1 for the direction then rolls a [1d6] and get a 5 for the distance. The shot then lands 5 spaces up, (a distance of 25 units) above of the original target.</p>
 		<p>&nbsp;</p>
 		<p>(1d4 rules)</p>
 		<p>1 - up</p>
