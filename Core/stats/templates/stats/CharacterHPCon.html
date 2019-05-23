@@ -272,23 +272,35 @@
 			<div class="col-sm-6">
 				<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#ArmorALL{{ character.CID }}">Edit Armor</button>
 			</div>
-		</div>
-		<div class="row">
 			<div class="col-sm-6">
-				<form action="{% url 'CharacterHPFullHeal' character.CID %}" method="post">
-					{% csrf_token %}
-					<input type='hidden' name="Redirect" value="{{ Redirector }}" />
-					<input class="btn btn-greener btn-block" type="submit" value="Reset Health">
-				</form>
+				<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#ResetHP{{ character.CID }}">Reset Health</button>
 			</div>
 			<div class="col-sm-6">
-				<form action="{% url 'CharacterArmorReset' character.CID %}" method="post">
-					{% csrf_token %}
-					<input type='hidden' name="Redirect" value="{{ Redirector }}" />
-					<input class="btn btn-greener btn-block" type="submit" value="Reset Armor">
-				</form>
+				<button type="button" class="btn btn-greener btn-block" data-toggle="modal" data-target="#ResetArmor{{ character.CID }}">Reset Armor</button>
 			</div>
 		</div>
+		<div class="modal fade" id="ResetHP{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+			<form action="{% url 'CharacterHPFullHeal' character.CID %}" method="post">
+				{% csrf_token %}
+				<p>Are you sure you want to reset {{character}}'s health?</p>
+				<input type='hidden' name="Redirect" value="{{ Redirector }}" />
+					{% csrf_token %}
+					<input type='hidden' name="Redirect" value="{{ Redirector }}" />
+					<input class="btn btn-greener" type="submit" value="Yes, Reset Health">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+			</form>
+		</div></div></div></div>	
+		<div class="modal fade" id="ResetArmor{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
+			<form action="{% url 'CharacterArmorReset' character.CID %}" method="post">
+				{% csrf_token %}
+				<p>Are you sure you want to reset {{character}}'s armor?</p>
+				<input type='hidden' name="Redirect" value="{{ Redirector }}" />
+					{% csrf_token %}
+					<input type='hidden' name="Redirect" value="{{ Redirector }}" />
+					<input class="btn btn-greener" type="submit" value="Yes, Reset Armor">
+				<button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+			</form>
+		</div></div></div></div>	
 		<div class="modal fade" id="HPALL{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
 			<form action="{% url 'CharacterHPHealALL' character.CID %}" method="post">
 				{% csrf_token %}

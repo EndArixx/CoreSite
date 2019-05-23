@@ -349,7 +349,7 @@ def CharacterHPFullHeal(request, CIDin):
 			characterhp.Temp_Right_Leg_HP = 0
 			characterhp.Temp_Left_Leg_HP = 0
 			
-			characterhp.save()
+			saveHP(characterhp)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -375,12 +375,71 @@ def CharacterArmorReset(request, CIDin):
 			characterArmorValue.Right_Leg_Armor = characterArmorValue.Max_Right_Leg_Armor
 			characterArmorValue.Left_Leg_Armor 	= characterArmorValue.Max_Left_Leg_Armor
 			
-			characterArmorValue.save()
+			saveArmor(characterArmorValue)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
 
+def checkHP(characterhp):	
+	if characterhp.Head_HP > characterhp.Max_Head_HP:
+		characterhp.Head_HP = characterhp.Max_Head_HP
+	elif characterhp.Head_HP < 0:
+		characterhp.Head_HP = 0
+	if characterhp.Core_HP  > characterhp.Max_Core_HP:
+		characterhp.Core_HP  = characterhp.Max_Core_HP 
+	elif characterhp.Core_HP < 0:
+		characterhp.Core_HP  = 0
+	if characterhp.Right_Arm_HP  > characterhp.Max_Right_Arm_HP:
+		characterhp.Right_Arm_HP  = characterhp.Max_Right_Arm_HP 
+	elif characterhp.Right_Arm_HP < 0:
+		characterhp.Right_Arm_HP = 0
+	if characterhp.Left_Arm_HP  > characterhp.Max_Left_Arm_HP:
+		characterhp.Left_Arm_HP  = characterhp.Max_Left_Arm_HP 
+	elif characterhp.Left_Arm_HP < 0:
+		characterhp.Left_Arm_HP = 0
+	if characterhp.Right_Leg_HP  > characterhp.Max_Right_Leg_HP:
+		characterhp.Right_Leg_HP  = characterhp.Max_Right_Leg_HP 
+	elif characterhp.Right_Leg_HP < 0:
+		characterhp.Right_Leg_HP = 0
+	if characterhp.Left_Leg_HP  > characterhp.Max_Left_Leg_HP:
+		characterhp.Left_Leg_HP  = characterhp.Max_Left_Leg_HP
+	elif characterhp.Left_Leg_HP < 0:
+		characterhp.Left_Leg_HP = 0		
 		
+def checkArmor(characterArmorValue):	
+	if characterArmorValue.Head_Armor > characterArmorValue.Max_Head_Armor:
+		characterArmorValue.Head_Armor = characterArmorValue.Max_Head_Armor
+	elif characterArmorValue.Head_Armor < 0:
+		characterArmorValue.Head_Armor = 0
+	if characterArmorValue.Core_Armor > characterArmorValue.Max_Core_Armor:
+		characterArmorValue.Core_Armor = characterArmorValue.Max_Core_Armor
+	elif characterArmorValue.Core_Armor < 0:
+		characterArmorValue.Core_Armor = 0
+	if characterArmorValue.Right_Arm_Armor > characterArmorValue.Max_Right_Arm_Armor:
+		characterArmorValue.Right_Arm_Armor = characterArmorValue.Max_Right_Arm_Armor
+	elif characterArmorValue.Right_Arm_Armor< 0:
+		characterArmorValue.Right_Arm_Armor = 0
+	if characterArmorValue.Left_Arm_Armor > characterArmorValue.Max_Left_Arm_Armor:
+		characterArmorValue.Left_Arm_Armor = characterArmorValue.Max_Left_Arm_Armor
+	elif characterArmorValue.Left_Arm_Armor < 0:
+		characterArmorValue.Left_Arm_Armor = 0
+	if characterArmorValue.Right_Leg_Armor > characterArmorValue.Max_Right_Leg_Armor:
+		characterArmorValue.Right_Leg_Armor = characterArmorValue.Max_Right_Leg_Armor
+	elif characterArmorValue.Right_Leg_Armor < 0:
+		characterArmorValue.Right_Leg_Armor = 0
+	if characterArmorValue.Left_Leg_Armor > characterArmorValue.Max_Left_Leg_Armor:
+		characterArmorValue.Left_Leg_Armor = characterArmorValue.Max_Left_Leg_Armor
+	elif characterArmorValue.Left_Leg_Armor < 0:
+		characterArmorValue.Left_Leg_Armor = 0
+		
+def saveHP(characterhp):
+	checkHP(characterhp)
+	characterhp.save()
+	
+def saveArmor(characterArmorValue):
+	checkArmor(characterArmorValue)
+	characterArmorValue.save()
+
 def CharacterHPHealALL(request, CIDin):	
 	if CanEditCharacter(request,CIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
@@ -440,23 +499,8 @@ def CharacterHPHealALL(request, CIDin):
 						if form.cleaned_data['LegRightHP_f'] != None:
 							characterhp.Right_Leg_HP = form.cleaned_data['LegRightHP_f']
 						if form.cleaned_data['LegLeftHP_f'] != None:
-							characterhp.Left_Leg_HP = form.cleaned_data['LegLeftHP_f']
-							
-					#consider writing a 'check max HP/Armor Method		
-					if characterhp.Head_HP > characterhp.Max_Head_HP:
-						characterhp.Head_HP = characterhp.Max_Head_HP
-					if characterhp.Core_HP  > characterhp.Max_Core_HP:
-						characterhp.Core_HP  = characterhp.Max_Core_HP 
-					if characterhp.Right_Arm_HP  > characterhp.Max_Right_Arm_HP:
-						characterhp.Right_Arm_HP  = characterhp.Max_Right_Arm_HP 
-					if characterhp.Left_Arm_HP  > characterhp.Max_Left_Arm_HP:
-						characterhp.Left_Arm_HP  = characterhp.Max_Left_Arm_HP 
-					if characterhp.Right_Leg_HP  > characterhp.Max_Right_Leg_HP:
-						characterhp.Right_Leg_HP  = characterhp.Max_Right_Leg_HP 
-					if characterhp.Left_Leg_HP  > characterhp.Max_Left_Leg_HP:
-						characterhp.Left_Leg_HP  = characterhp.Max_Left_Leg_HP 
-					
-				characterhp.save()
+							characterhp.Left_Leg_HP = form.cleaned_data['LegLeftHP_f']	
+			saveHP(characterhp)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -466,6 +510,14 @@ def CharacterArmorALL(request, CIDin):
 		characterArmorValue = Character_Equipped_Armor_Value.objects.get(CID = CIDin)
 		characterArmorName  = Character_Equipped_Armor.objects.get(CID = CIDin)
 		if request.method == 'POST':
+			#set maximum values
+			characterArmorValue.Max_Head_Armor 		= characterArmorName.Equiped_Head.Value
+			characterArmorValue.Max_Core_Armor 		= characterArmorName.Equiped_Core.Value
+			characterArmorValue.Max_Right_Arm_Armor = characterArmorName.Equiped_Right_Arm.Value
+			characterArmorValue.Max_Left_Arm_Armor 	= characterArmorName.Equiped_Left_Arm.Value
+			characterArmorValue.Max_Right_Leg_Armor = characterArmorName.Equiped_Right_Leg.Value
+			characterArmorValue.Max_Left_Leg_Armor 	= characterArmorName.Equiped_Left_Leg.Value
+			
 			form = ArmorAllForm(request.POST)
 			if form.is_valid():
 				if(form.cleaned_data['AddorO_f'] == 'Add_f'):
@@ -493,22 +545,8 @@ def CharacterArmorALL(request, CIDin):
 					if form.cleaned_data['LegRightArmor_f'] != None:
 						characterArmorValue.Right_Leg_Armor = form.cleaned_data['LegRightArmor_f']
 					if form.cleaned_data['LegLeftArmor_f'] != None:
-						characterArmorValue.Left_Leg_Armor = form.cleaned_data['LegLeftArmor_f']
-						
-			#consider writing a 'check max HP/Armor Method				
-			if characterArmorValue.Head_Armor > characterArmorValue.Max_Head_Armor:
-				characterArmorValue.Head_Armor = characterArmorValue.Max_Head_Armor
-			if characterArmorValue.Core_Armor > characterArmorValue.Max_Core_Armor:
-				characterArmorValue.Core_Armor = characterArmorValue.Max_Core_Armor
-			if characterArmorValue.Right_Arm_Armor > characterArmorValue.Max_Right_Arm_Armor:
-				characterArmorValue.Right_Arm_Armor = characterArmorValue.Max_Right_Arm_Armor
-			if characterArmorValue.Left_Arm_Armor > characterArmorValue.Max_Left_Arm_Armor:
-				characterArmorValue.Left_Arm_Armor = characterArmorValue.Max_Left_Arm_Armor
-			if characterArmorValue.Right_Leg_Armor > characterArmorValue.Max_Right_Leg_Armor:
-				characterArmorValue.Right_Leg_Armor = characterArmorValue.Max_Right_Leg_Armor
-			if characterArmorValue.Left_Leg_Armor > characterArmorValue.Max_Left_Leg_Armor:
-				characterArmorValue.Left_Leg_Armor = characterArmorValue.Max_Left_Leg_Armor
-		characterArmorValue.save()
+						characterArmorValue.Left_Leg_Armor = form.cleaned_data['LegLeftArmor_f']		
+			saveArmor(characterArmorValue)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))		
@@ -534,8 +572,9 @@ def CharacterDamageHead(request, CIDin):
 					characterhp.Head_HP = characterhp.Head_HP - rem
 					if(characterhp.Head_HP < 0):
 						characterhp.Head_HP = 0
-				characterhp.save()
-				characterArmorValue.save()
+				
+				saveHP(characterhp)
+				saveArmor(characterArmorValue)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -554,7 +593,7 @@ def CharacterHealHead(request, CIDin):
 						characterhp.Head_HP = hp
 					else:
 						characterhp.Head_HP = characterhp.Max_Head_HP
-			characterhp.save()
+			saveHP(characterhp)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -580,8 +619,9 @@ def CharacterDamageCore(request, CIDin):
 					characterhp.Core_HP = characterhp.Core_HP - rem
 					if(characterhp.Core_HP < 0):
 						characterhp.Core_HP = 0
-				characterhp.save()
-				characterArmorValue.save()
+				
+				saveHP(characterhp)
+				saveArmor(characterArmorValue)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -601,7 +641,7 @@ def CharacterHealCore(request, CIDin):
 						characterhp.Core_HP = hp
 					else:
 						characterhp.Core_HP = characterhp.Max_Core_HP
-				characterhp.save()
+				saveHP(characterhp)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))		
@@ -627,8 +667,9 @@ def CharacterDamageRightArm(request, CIDin):
 					characterhp.Right_Arm_HP = characterhp.Right_Arm_HP - rem
 					if(characterhp.Right_Arm_HP < 0):
 						characterhp.Right_Arm_HP = 0
-				characterhp.save()
-				characterArmorValue.save()
+				
+				saveHP(characterhp)
+				saveArmor(characterArmorValue)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -647,7 +688,7 @@ def CharacterHealRightArm(request, CIDin):
 						characterhp.Right_Arm_HP = hp
 					else:
 						characterhp.Right_Arm_HP = characterhp.Max_Right_Arm_HP
-				characterhp.save()
+				saveHP(characterhp)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))		
@@ -673,8 +714,9 @@ def CharacterDamageLeftArm(request, CIDin):
 					characterhp.Left_Arm_HP = characterhp.Left_Arm_HP - rem
 					if(characterhp.Left_Arm_HP < 0 ):
 						characterhp.Left_Arm_HP = 0
-				characterhp.save()
-				characterArmorValue.save()
+				
+				saveHP(characterhp)
+				saveArmor(characterArmorValue)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -693,7 +735,7 @@ def CharacterHealLeftArm(request, CIDin):
 						characterhp.Left_Arm_HP = hp
 					else:
 						characterhp.Left_Arm_HP = characterhp.Max_Left_Arm_HP
-				characterhp.save()
+				saveHP(characterhp)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))		
@@ -719,8 +761,9 @@ def CharacterDamageRightLeg(request, CIDin):
 					characterhp.Right_Leg_HP = characterhp.Right_Leg_HP - rem
 					if(characterhp.Right_Leg_HP < 0):
 						characterhp.Right_Leg_HP = 0
-				characterhp.save()
-				characterArmorValue.save()
+				
+				saveHP(characterhp)
+				saveArmor(characterArmorValue)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -739,7 +782,8 @@ def CharacterHealRightLeg(request, CIDin):
 						characterhp.Right_Leg_HP = hp
 					else:
 						characterhp.Right_Leg_HP = characterhp.Max_Right_Leg_HP
-				characterhp.save()
+				
+				saveHP(characterhp)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))	
@@ -765,8 +809,9 @@ def CharacterDamageLeftLeg(request, CIDin):
 					characterhp.Left_Leg_HP = characterhp.Left_Leg_HP - rem
 					if(characterhp.Right_Leg_HP < 0):
 						characterhp.Left_Leg_HP = 0
-				characterhp.save()
-				characterArmorValue.save()
+				
+				saveHP(characterhp)
+				saveArmor(characterArmorValue)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))
@@ -786,7 +831,8 @@ def CharacterHealLeftLeg(request, CIDin):
 						characterhp.Left_Leg_HP = hp
 					else:
 						characterhp.Left_Leg_HP = characterhp.Max_Left_Leg_HP
-				characterhp.save()
+				
+				saveHP(characterhp)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
 		return HttpResponseRedirect(reverse('index'))			
