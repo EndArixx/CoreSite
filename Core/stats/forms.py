@@ -33,9 +33,9 @@ class ArmorAllForm(forms.Form):
 	
 class HPFormDamage(forms.Form):
 	skipArmor_f = forms.BooleanField(label='Ignore Armor?',required=False) 
-	Value_f = forms.IntegerField(label='Amount', initial=0,required=True) 
+	Value_f = forms.IntegerField(label='Amount',min_value=0, initial=0,required=True) 
 	
 class HPFormHeal(forms.Form):
 	OverHeal_f = forms.BooleanField(label='Temporary HP?',required=False) 
-	Value_f = forms.IntegerField(label='Amount', initial=0,required=True) 
+	Value_f = forms.IntegerField(label='Amount',min_value=0, initial=0,required=True) 
 	
