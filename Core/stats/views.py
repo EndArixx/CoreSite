@@ -405,6 +405,20 @@ def checkHP(characterhp):
 		characterhp.Left_Leg_HP  = characterhp.Max_Left_Leg_HP
 	elif characterhp.Left_Leg_HP < 0:
 		characterhp.Left_Leg_HP = 0		
+	
+	if characterhp.Temp_Head_HP < 0:
+		characterhp.Temp_Head_HP = 0
+	if characterhp.Temp_Core_HP < 0:
+		characterhp.Temp_Core_HP = 0
+	if characterhp.Temp_Right_Arm_HP < 0:
+		haracterhp.Temp_Right_Arm_HP = 0
+	if characterhp.Temp_Left_Arm_HP < 0:
+		characterhp.Temp_Left_Arm_HP = 0
+	if characterhp.Temp_Right_Leg_HP < 0:
+		characterhp.Temp_Right_Leg_HP = 0
+	if characterhp.Temp_Left_Leg_HP < 0:
+		characterhp.Temp_Left_Leg_HP = 0
+	
 		
 def checkArmor(characterArmorValue):	
 	if characterArmorValue.Head_Armor > characterArmorValue.Max_Head_Armor:
@@ -822,7 +836,6 @@ def CharacterHealLeftLeg(request, CIDin):
 		if request.method == 'POST':
 			form = HPFormHeal(request.POST)
 			if form.is_valid():
-				
 				if form.cleaned_data['OverHeal_f']:
 					characterhp.Temp_Left_Leg_HP += form.cleaned_data['Value_f'] 
 				else:
@@ -831,7 +844,7 @@ def CharacterHealLeftLeg(request, CIDin):
 						characterhp.Left_Leg_HP = hp
 					else:
 						characterhp.Left_Leg_HP = characterhp.Max_Left_Leg_HP
-				
+						
 				saveHP(characterhp)
 		return HttpResponseRedirect(getRedirectOrHome(request))
 	else:
