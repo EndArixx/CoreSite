@@ -12,3 +12,5 @@ from django.contrib.staticfiles import finders
 def cccindex(request):
 	return render(request, 'ccc/index.html')
 
+def PanelHelper(request):
+	return render(request, 'ccc/PanelHelper.html')

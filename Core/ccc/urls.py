@@ -8,4 +8,5 @@ urlpatterns = [
 	path('', views.cccindex, name='cccindex'),
 	url(r'^login/$', auth_views.LoginView.as_view(template_name='/login.html'), name='login'),
 	url(r'^logout/$', auth_views.LogoutView.as_view(next_page ='/'), name='logout'),
+	path('PanelHelper',views.PanelHelper, name = 'PanelHelper'),
 ]

@@ -1,0 +1,35 @@
+{% extends 'stats/base.html' %}
+
+{% block title %}Panel Helper{% endblock %}
+
+{% block content %}
+<style>
+#palette {
+  width: 700px;
+  list-style-type: none;
+}
+
+#palette li {
+  height: 85px;
+  width: 55px;
+  cursor: pointer;
+  float: left;
+  margin: 0px;
+  border: solid 1px;
+  border-color: black
+}
+
+#palette li.active {
+  border: solid 1px;
+  border-color: white
+}
+</style>
+		<div height="100%" width="100%">
+		  <ul id="palette"></ul>
+		</div
+<script>
+		{% load static %}
+	<script src="{% static 'ccc/PanelGrid.js' %}"></script>   
+</script>  
+
+{% endblock %}
