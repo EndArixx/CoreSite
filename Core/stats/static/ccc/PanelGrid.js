@@ -1,24 +1,31 @@
+//---------------------------------------------------------------------
+//Constants------------------------------------------------------------
+//---------------------------------------------------------------------
 const twelve = 12
-var hexColor = '#DDA0DD'
+const panelgrid = document.getElementById('panelgrid'), nameSpan = document.getElementById('name'), hexSpan=document.getElementById('hex');
+
+//---------------------------------------------------------------------
+//Variables------------------------------------------------------------
+//---------------------------------------------------------------------
 var theGrid = new Array(twelve);
 var checked = false
+var showgrid = true
 var firstX
 var firstY
+var sel = document.getElementById('colorchooser');
+var tog = document.getElementById('gridtoggle');
+
+//---------------------------------------------------------------------
+//Init-----------------------------------------------------------------
+//---------------------------------------------------------------------
+sel.style.backgroundColor = sel.options[sel.selectedIndex].value
 
 for (var i = 0; i < theGrid.length; i++) {
   theGrid[i] = new Array(twelve);
 }
-
-//var h = 1; 
-
-// for (var i = 0; i < twelve; i++) { 
-    // for (var j = 0; j < twelve; j++) { 
-        // theGrid[i][j] = h++; 
-    // } 
-// } 
-
-const palette = document.getElementById('palette'), nameSpan = document.getElementById('name'), hexSpan=document.getElementById('hex');
-
+for (var i = 0; i < sel.length; i++) { 
+	sel.options[i].style.backgroundColor = sel.options[i].value
+}
 for (var i = 0; i < twelve; i++) { 
     for (var j = 0; j < twelve; j++) { 
 		const li = document.createElement('li');
@@ -28,29 +35,53 @@ for (var i = 0; i < twelve; i++) {
 		li.dataset.x = j
 		li.dataset.y = i
 		theGrid[i][j] = li; 
-		palette.appendChild(li);
+		panelgrid.appendChild(li);
     } 
 }  
 
-palette.onclick = e => {
+
+//---------------------------------------------------------------------
+//Events---------------------------------------------------------------
+//---------------------------------------------------------------------
+sel.onclick = e => {
+	sel.style.backgroundColor = sel.options[sel.selectedIndex].value
+}
+
+tog.onclick = e => {
+	if(showgrid){showgrid = false}
+	else{showgrid = true}
+	for (var i = 0; i < twelve; i++) { 
+		for (var j = 0; j < twelve; j++) { 
+			if(showgrid)theGrid[i][j].style.borderColor = "#000000" 
+			else theGrid[i][j].style.borderColor = theGrid[i][j].style.backgroundColor
+		}
+	}
+}
+
+
+panelgrid.onclick = e => {
 	const li = e.target;
-	if (palette.active) palette.active.className = palette.active.className.replace(' active', '');
-	palette.active=li;
+	if (panelgrid.active) panelgrid.active.className = panelgrid.active.className.replace(' active', '');
+	panelgrid.active=li;
 	li.className+=' active';
 	
 	if(checked) {	
-		Painter(firstX,firstY,Number(li.dataset.x),Number(li.dataset.y),hexColor)
+		Painter(firstX,firstY,Number(li.dataset.x),Number(li.dataset.y),sel.options[sel.selectedIndex].value)
 		checked = false;
 	}
 	else
-	{
-		//li.style.backgroundColor = '#32CD32';
+	{	
+		//use black for current because it will not be allowed as an option
+		li.style.backgroundColor = "#000000";
 		firstX = li.dataset.x
 		firstY = li.dataset.y
 		checked = true;
 	}
 };
 
+//---------------------------------------------------------------------
+//Functions------------------------------------------------------------
+//---------------------------------------------------------------------
 function Painter(Ax, Ay, Bx, By, color){
 	var startx
 	var starty
@@ -76,6 +107,9 @@ function Painter(Ax, Ay, Bx, By, color){
 	for (var i = starty; i <= endy; i++) { 
 		for (var j = startx; j <= endx; j++) { 
 			theGrid[i][j].style.backgroundColor = color;
+			if(!showgrid){
+				theGrid[i][j].style.borderColor = color;
+			}
 		}	
 	}
 }

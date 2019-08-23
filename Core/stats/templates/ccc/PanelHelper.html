@@ -4,12 +4,12 @@
 
 {% block content %}
 <style>
-#palette {
+#panelgrid {
   width: 700px;
   list-style-type: none;
 }
 
-#palette li {
+#panelgrid li {
   height: 85px;
   width: 55px;
   cursor: pointer;
@@ -19,17 +19,167 @@
   border-color: black
 }
 
-#palette li.active {
-  border: solid 1px;
+#panelgrid li.active {
+  border: solid 2px;
   border-color: white
+  }
+  
+  .scrollable-menu {
+    height: auto;
+    max-height: 200px;
+    overflow-x: hidden;
+	}
 }
 </style>
+
+		<div class="dropdown">
+		  <select class="form-control" id ="colorchooser">
+			<option value="#FF0000">red</option>
+			<option value="#FFA07A">lightsalmon</option>
+			<option value="#FA8072">salmon</option>
+			<option value="#E9967A">darksalmon</option>
+			<option value="#F08080">lightcoral</option>
+			<option value="#CD5C5C">indianred</option>
+			<option value="#DC143C">crimson</option>
+			<option value="#B22222">firebrick</option>
+			<option value="#8B0000">darkred</option>
+			<option value="#FF7F50">coral</option>
+			<option value="#FF6347">tomato</option>
+			<option value="#FF4500">orangered</option>
+			<option value="#FFD700">gold</option>
+			<option value="#FFA500">orange</option>
+			<option value="#FF8C00">darkorange</option>
+			<option value="#7CFC00">lawngreen</option>
+			<option value="#7FFF00">chartreuse</option>
+			<option value="#32CD32">limegreen</option>
+			<option value="#00FF00">lime</option>
+			<option value="#228B22">forestgreen</option>
+			<option value="#008000">green</option>
+			<option value="#006400">darkgreen</option>
+			<option value="#ADFF2F">greenyellow</option>
+			<option value="#FFFF00">yellow</option>
+			<option value="#9ACD32">yellowgreen</option>
+			<option value="#00FF7F">springgreen</option>
+			<option value="#00FA9A">mediumspringgreen</option>
+			<option value="#90EE90">lightgreen</option>
+			<option value="#98FB98">palegreen</option>
+			<option value="#8FBC8F">darkseagreen</option>
+			<option value="#3CB371">mediumseagreen</option>
+			<option value="#2E8B57">seagreen</option>
+			<option value="#808000">olive</option>
+			<option value="#556B2F">darkolivegreen</option>
+			<option value="#6B8E23">olivedrab</option>
+			<option value="#E0FFFF">lightcyan</option>
+			<option value="#00FFFF">cyan</option>
+			<option value="#00FFFF">aqua</option>
+			<option value="#7FFFD4">aquamarine</option>
+			<option value="#66CDAA">mediumaquamarine</option>
+			<option value="#AFEEEE">paleturquoise</option>
+			<option value="#40E0D0">turquoise</option>
+			<option value="#48D1CC">mediumturquoise</option>
+			<option value="#00CED1">darkturquoise</option>
+			<option value="#20B2AA">lightseagreen</option>
+			<option value="#5F9EA0">cadetblue</option>
+			<option value="#008B8B">darkcyan</option>
+			<option value="#008080">teal</option>
+			<option value="#B0E0E6">powderblue</option>
+			<option value="#ADD8E6">lightblue</option>
+			<option value="#87CEFA">lightskyblue</option>
+			<option value="#87CEEB">skyblue</option>
+			<option value="#00BFFF">deepskyblue</option>
+			<option value="#B0C4DE">lightsteelblue</option>
+			<option value="#1E90FF">dodgerblue</option>
+			<option value="#6495ED">cornflowerblue</option>
+			<option value="#4682B4">steelblue</option>
+			<option value="#4169E1">royalblue</option>
+			<option value="#0000FF">blue</option>
+			<option value="#0000CD">mediumblue</option>
+			<option value="#00008B">darkblue</option>
+			<option value="#000080">navy</option>
+			<option value="#191970">midnightblue</option>
+			<option value="#7B68EE">mediumslateblue</option>
+			<option value="#6A5ACD">slateblue</option>
+			<option value="#483D8B">darkslateblue</option>
+			<option value="#E6E6FA">lavender</option>
+			<option value="#D8BFD8">thistle</option>
+			<option value="#DDA0DD">plum</option>
+			<option value="#EE82EE">violet</option>
+			<option value="#DA70D6">orchid</option>
+			<option value="#FF00FF">fuchsia</option>
+			<option value="#FF00FF">magenta</option>
+			<option value="#BA55D3">mediumorchid</option>
+			<option value="#9370DB">mediumpurple</option>
+			<option value="#8A2BE2">blueviolet</option>
+			<option value="#9400D3">darkviolet</option>
+			<option value="#9932CC">darkorchid</option>
+			<option value="#8B008B">darkmagenta</option>
+			<option value="#800080">purple</option>
+			<option value="#4B0082">indigo</option>
+			<option value="#FFC0CB">pink</option>
+			<option value="#FFB6C1">lightpink</option>
+			<option value="#FF69B4">hotpink</option>
+			<option value="#FF1493">deeppink</option>
+			<option value="#DB7093">palevioletred</option>
+			<option value="#C71585">mediumvioletred
+			<option value="#FFFFFF">white</option>
+			<option value="#FFFAFA">snow</option>
+			<option value="#F0FFF0">honeydew</option>
+			<option value="#F5FFFA">mintcream</option>
+			<option value="#F0FFFF">azure</option>
+			<option value="#F0F8FF">aliceblue</option>
+			<option value="#F8F8FF">ghostwhite</option>
+			<option value="#F5F5F5">whitesmoke</option>
+			<option value="#FFF5EE">seashell</option>
+			<option value="#F5F5DC">beige</option>
+			<option value="#FDF5E6">oldlace</option>
+			<option value="#FFFAF0">floralwhite</option>
+			<option value="#FFFFF0">ivory</option>
+			<option value="#FAEBD7">antiquewhite</option>
+			<option value="#FAF0E6">linen</option>
+			<option value="#FFF0F5">lavenderblush</option>
+			<option value="#FFE4E1">mistyrose</option>
+			<option value="#DCDCDC">gainsboro</option>
+			<option value="#D3D3D3">lightgray</option>
+			<option value="#C0C0C0">silver</option>
+			<option value="#A9A9A9">darkgray</option>
+			<option value="#808080">gray</option>
+			<option value="#696969">dimgray</option>
+			<option value="#778899">lightslategray</option>
+			<option value="#708090">slategray</option>
+			<option value="#2F4F4F">darkslategray</option>
+			<!-- <option value="#000000">black</option> -->
+			<option value="#FFF8DC">cornsilk</option>
+			<option value="#FFEBCD">blanchedalmond</option>
+			<option value="#FFE4C4">bisque</option>
+			<option value="#FFDEAD">navajowhite</option>
+			<option value="#F5DEB3">wheat</option>
+			<option value="#DEB887">burlywood</option>
+			<option value="#D2B48C">tan</option>
+			<option value="#BC8F8F">rosybrown</option>
+			<option value="#F4A460">sandybrown</option>
+			<option value="#DAA520">goldenrod</option>
+			<option value="#CD853F">peru</option>
+			<option value="#D2691E">chocolate</option>
+			<option value="#8B4513">saddlebrown</option>
+			<option value="#A0522D">sienna</option>
+			<option value="#A52A2A">brown</option>
+			<option value="#800000">maroon</option>
+			<option value="#FFFFE0">lightyellow</option>
+			<option value="#FFFACD">lemonchiffon</option>
+			<option value="#FAFAD2">lightgoldenrodyellow</option>
+			<option value="#FFEFD5">papayawhip</option>
+			<option value="#FFE4B5">moccasin</option>
+			<option value="#FFDAB9">peachpuff</option>
+			<option value="#EEE8AA">palegoldenrod</option>
+			<option value="#F0E68C">khaki</option>
+			<option value="#BDB76B">darkkhaki</option>
+		  </select>
+		</div>
+		<button type="button" id="gridtoggle" class="btn btn-greener">toggle Grid</button>
 		<div height="100%" width="100%">
-		  <ul id="palette"></ul>
-		</div
-<script>
-		{% load static %}
-	<script src="{% static 'ccc/PanelGrid.js' %}"></script>   
-</script>  
+			<ul id="panelgrid"></ul>
+			{% load static %}
+			<script src="{% static 'ccc/PanelGrid.js' %}"></script>  
+		</div>
 
 {% endblock %}
