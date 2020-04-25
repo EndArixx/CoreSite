@@ -26,6 +26,7 @@ admin.site.register(Player,PlayerAdmin)
 # admin.site.register(character_Access)
 # admin.site.register(Group_Access)
 
+
 #Faction-----------------------------------------------------------------------------
 class Faction_ChainInline(admin.StackedInline):
 	model = Faction_Chain
@@ -101,6 +102,9 @@ class Group_EventInline(admin.StackedInline):
 	ordering = ('GC_DisplayOrder','EID')
 	model = Group_Event
 	extra = 0	
+class Group_CharactersInline(admin.StackedInline):
+	model = Character_Group
+	extra = 0	
 	
 class GroupAdmin(admin.ModelAdmin):
 	ordering = ('Name','GID')
@@ -109,10 +113,14 @@ class GroupAdmin(admin.ModelAdmin):
 	public_GroupInline,
 	Group_EventInline,
 	Group_War_CrimeInline,
+	Group_CharactersInline,
 	Group_AccessInLine]	
 admin.site.register(Group,GroupAdmin)
 
 #Character--------------------------------------------------------------------------------
+class Character_GroupInLine(admin.StackedInline):
+	model = Character_Group
+	extra = 0
 class Character_StatusInline(admin.StackedInline):
 	model = Character_Status
 	extra = 0
@@ -122,7 +130,6 @@ class Character_DetailsInline(admin.StackedInline):
 class Character_HPInline(admin.StackedInline):
 	model = Character_HP
 	form = AlwaysChangedModelForm
-	
 class Character_StatInline(admin.StackedInline):
 	model = Character_Stat
 	extra = 0
@@ -152,8 +159,9 @@ class Character_War_CrimeInline(admin.StackedInline):
 	
 	
 class CharacterAdmin(admin.ModelAdmin):
-	ordering = ('GID','Name')
+	ordering = ('Name',)
 	inlines = [
+	Character_GroupInLine,
 	Character_StatusInline,
 	Character_DetailsInline,
 	Character_HPInline,

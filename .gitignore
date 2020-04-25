@@ -108,3 +108,4 @@ Core/Core/settings.py
 *.png
 *.jpg
 !Core/stats/static/stats/rpg/Star.png
+Core/.vscode/*

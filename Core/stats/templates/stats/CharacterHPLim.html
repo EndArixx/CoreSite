@@ -2,7 +2,7 @@
 	<div class="well-lg">
     {% if characterHP %}
 	<div class="text-center">
-		<h2><a href="{% url 'CharacterSheet' character.CID %}">{{ character.Name }}</a>'s Health</h2>
+		<h2><a href="{% url 'character' theGroup.GID character.CID %}">{{ character.Name }}</a>'s Health</h2>
 <!--  --------------------------------------------------------------------------------- -->
 		<div class="row">
 			<div class="col-sm-4 col-sm-offset-4">

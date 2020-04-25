@@ -8,7 +8,7 @@
 	<h1>{{ Group.Name }}</h1>
 	<div class = well>
     {% for Character in chractersInGroup %}
-        <h2><b><a href="../CharacterSheet/{{ Character.CID }}">{{ Character.Name }}</a></b></h2>
+        <h2><b><a href="{% url 'character' Group.GID Character.CID.CID %}">{{ Character.CID.Name }}</a></b></h2>
     {% endfor %}
 	</div>
 	<div class = well-lg>

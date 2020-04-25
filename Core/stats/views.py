@@ -40,21 +40,21 @@ def CanViewGroup(request,GIDin):
 				userHasGroup = accessstats.IsPlayer
 	return userHasGroup
 	
-def CanViewCharacter(request,CIDin):
+def CanViewCharacter(request,CIDin, GIDin):
 	userHasCharacter = False
 	character = Character.objects.filter(CID = CIDin).first()
 	if character:
-		userHasCharacter = CanViewGroup(request, character.GID)
+		userHasCharacter = CanViewGroup(request, GIDin)
 		if not userHasCharacter and request.user.is_authenticated:
 			accessstats = character_Access.objects.filter(PID = getPid(request), CID = CIDin).first()
 			if accessstats != None:
 				userHasCharacter = accessstats.HasAccess
 	return userHasCharacter
 	
-def CanEditCharacter(request,CIDin):
+def CanEditCharacter(request,CIDin, GIDin):
 	userCanEditCharacter = False
 	character = Character.objects.filter(CID = CIDin).first()
-	if isGameCommander(request,character.GID):
+	if isGameCommander(request, GIDin):
 		userCanEditCharacter = True
 	elif character:
 		if request.user.is_authenticated:
@@ -97,7 +97,7 @@ def index(request):
 def group(request, GIDin):
 	if CanViewGroup(request, GIDin):
 		theGroup = get_object_or_404(Group,GID = GIDin)
-		chractersInGroup = Character.objects.filter(GID = GIDin).order_by('Name')
+		chractersInGroup = Character_Group.objects.filter(GID = GIDin)
 		isGC = isGameCommander(request,GIDin)
 		return render(request, 'stats/group.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup, 'isGC':isGC})
 	else:
@@ -191,23 +191,24 @@ def FactionPage(request, GIDin,FIDin):
 #Player---------------------------------------
 #---------------------------------------------
 def player(request, PID):
-	#John Validate player.
+	#Jaki Validate player.
 	return HttpResponse("You're looking at the characters of %s." % PID)
 	
 #Character------------------------------------
 #---------------------------------------------
-def Character_Sheet(request, CIDin):
-	Access = CanViewCharacter(request, CIDin)
+def Character_Sheet(request, GIDin, CIDin):
+	Access = CanViewCharacter(request, CIDin, GIDin)
 	htmlpage = 'stats/{0}.html'
 	if not Access:
 		return HttpResponseRedirect(reverse('index'))
-	
+
+	theGroup = get_object_or_404(Group,GID = GIDin)
 	character = get_object_or_404(Character,CID = CIDin)
-	isGC = isGameCommander(request, character.GID)
+	isGC = isGameCommander(request, GIDin)
 	redirectID = 0
 	try:
 		#Some Things may be hidden from everyone but the player owner and the DB.
-		if CanEditCharacter(request, CIDin):
+		if CanEditCharacter(request, CIDin, GIDin):
 			characterStatus = Character_Status.objects.filter(CID = CIDin).order_by('SUID__Name')
 			characterPower = Character_Power.objects.filter(CID = CIDin).order_by('Name')	
 			characterWeapon = Character_Weapon.objects.filter(CID = CIDin).order_by('WID__Name')	
@@ -228,10 +229,10 @@ def Character_Sheet(request, CIDin):
 			
 		#These tables do not have a hidden column. 
 		characterHP = get_object_or_404(Character_HP,CID = CIDin)	
-			#john this is dirty
+			#Jaki this is dirty
 		characterArmor = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
 		characterArmorName  = Character_Equipped_Armor.objects.filter(CID = CIDin).first()
-		groupMembers = Character.objects.filter(GID = character.GID).order_by('Name')
+		groupMembers = Character_Group.objects.filter(GID = GIDin)
 		characterStat = Character_Stat.objects.filter(CID = CIDin).order_by('STID__Name')	
 		characterSkill = Character_Skill.objects.filter(CID = CIDin).order_by('SID__Name')	
 		
@@ -241,7 +242,7 @@ def Character_Sheet(request, CIDin):
 		hpHealAllForm = HPAllForm()
 		armorAllForm = ArmorAllForm()
 		#redirect
-		Redirector  = reverse('CharacterSheet',  kwargs={'CIDin': CIDin})
+		Redirector  = reverse('character',  kwargs={'GIDin': GIDin,'CIDin': CIDin})
 		if not character.Image:		
 			character.Image = 'default.png'
 		else:
@@ -251,7 +252,7 @@ def Character_Sheet(request, CIDin):
 				
 			
 	except Exception as e:
-		print(str(e))
+		print("ERROR: "+str(e))
 		raise Http404("Error loading character: " + str(character.Name))
 
 	return render(request, htmlpage, {
@@ -259,6 +260,7 @@ def Character_Sheet(request, CIDin):
 	'characterHP': characterHP,
 	'characterArmor': characterArmor,
 	'characterArmorName': characterArmorName,
+	'theGroup': theGroup,
 	'groupMembers': groupMembers,
 	'characterStat': characterStat,
 	'characterSkill': characterSkill,
@@ -274,8 +276,7 @@ def Character_Sheet(request, CIDin):
 	'hpHealAllForm': hpHealAllForm,
 	'armorAllForm':armorAllForm,
 	'Redirector':Redirector,
-	'isGC':isGC})	
-	
+	'isGC':isGC})		
 	
 
 #Character Health------------------------------	
@@ -290,7 +291,7 @@ def HealthPage(request, GIDin):
 	if CanViewGroup(request, GIDin):
 		#grab the data
 		theGroup = get_object_or_404(Group,GID = GIDin)
-		charactersInGroup = Character.objects.filter(GID = GIDin)
+		charactersInGroup = Character_Group.objects.filter(GID = GIDin)
 		characterHPset = Character_HP.objects.filter(CID__in = set(charactersInGroup.values_list('CID', flat=True)))	
 		characterArmorset = Character_Equipped_Armor_Value.objects.filter(CID__in = set(charactersInGroup.values_list('CID', flat=True)))
 		characterArmorNameset  = Character_Equipped_Armor.objects.filter(CID__in = set(charactersInGroup.values_list('CID', flat=True)))
@@ -299,10 +300,10 @@ def HealthPage(request, GIDin):
 		charactersCon = set()
 		charactersLim = set()
 		for char in charactersInGroup:
-			if CanEditCharacter(request, char.CID):
-				charactersCon.add(char)
+			if CanEditCharacter(request, char.CID.CID, GIDin):
+				charactersCon.add(char.CID)
 			else:
-				charactersLim.add(char)
+				charactersLim.add(char.CID)
 				
 		#Sort them for display
 		charactersCon = sorted(charactersCon, key=lambda o: o.Name)		
@@ -326,13 +327,13 @@ def HealthPage(request, GIDin):
 			'hpHealAllForm': hpHealAllForm,
 			'armorAllForm':armorAllForm,
 			'Redirector':Redirector,
-			'Group':theGroup}
+			'theGroup':theGroup}
 		return render(request, 'stats/healthControl.html', context)	
 	else:
 		return HttpResponseRedirect(reverse('index'))
 
-def CharacterHPFullHeal(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterHPFullHeal(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		if request.method == 'POST':
 			characterhp.Head_HP = characterhp.Max_Head_HP
@@ -354,8 +355,8 @@ def CharacterHPFullHeal(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
-def CharacterArmorReset(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterArmorReset(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterArmorValue = Character_Equipped_Armor_Value.objects.get(CID = CIDin)
 		characterArmorName  = Character_Equipped_Armor.objects.get(CID = CIDin)
 		if request.method == 'POST':
@@ -454,8 +455,8 @@ def saveArmor(characterArmorValue):
 	checkArmor(characterArmorValue)
 	characterArmorValue.save()
 
-def CharacterHPHealALL(request, CIDin):	
-	if CanEditCharacter(request,CIDin):
+def CharacterHPHealALL(request, GIDin, CIDin):	
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		if request.method == 'POST':
 			form = HPAllForm(request.POST)
@@ -519,8 +520,8 @@ def CharacterHPHealALL(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))
 
-def CharacterArmorALL(request, CIDin):	
-	if CanEditCharacter(request,CIDin):
+def CharacterArmorALL(request, GIDin, CIDin):	
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterArmorValue = Character_Equipped_Armor_Value.objects.get(CID = CIDin)
 		characterArmorName  = Character_Equipped_Armor.objects.get(CID = CIDin)
 		if request.method == 'POST':
@@ -565,8 +566,8 @@ def CharacterArmorALL(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))		
 		
-def CharacterDamageHead(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterDamageHead(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
 		if request.method == 'POST':
@@ -593,8 +594,8 @@ def CharacterDamageHead(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
-def CharacterHealHead(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterHealHead(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		if request.method == 'POST':
 			form = HPFormHeal(request.POST)
@@ -612,8 +613,8 @@ def CharacterHealHead(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
-def CharacterDamageCore(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterDamageCore(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
 		if request.method == 'POST':
@@ -640,8 +641,8 @@ def CharacterDamageCore(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
-def CharacterHealCore(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterHealCore(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		if request.method == 'POST':
 			form = HPFormHeal(request.POST)
@@ -660,8 +661,8 @@ def CharacterHealCore(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))		
 
-def CharacterDamageRightArm(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterDamageRightArm(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
 		if request.method == 'POST':
@@ -688,8 +689,8 @@ def CharacterDamageRightArm(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
-def CharacterHealRightArm(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterHealRightArm(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		if request.method == 'POST':
 			form = HPFormHeal(request.POST)
@@ -707,8 +708,8 @@ def CharacterHealRightArm(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))		
 		
-def CharacterDamageLeftArm(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterDamageLeftArm(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
 		if request.method == 'POST':
@@ -735,8 +736,8 @@ def CharacterDamageLeftArm(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
-def CharacterHealLeftArm(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterHealLeftArm(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		if request.method == 'POST':
 			form = HPFormHeal(request.POST)
@@ -754,8 +755,8 @@ def CharacterHealLeftArm(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))		
 		
-def CharacterDamageRightLeg(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterDamageRightLeg(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
 		if request.method == 'POST':
@@ -782,8 +783,8 @@ def CharacterDamageRightLeg(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
-def CharacterHealRightLeg(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterHealRightLeg(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		if request.method == 'POST':
 			form = HPFormHeal(request.POST)
@@ -802,8 +803,8 @@ def CharacterHealRightLeg(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))	
 		
-def CharacterDamageLeftLeg(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterDamageLeftLeg(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		characterArmorValue = Character_Equipped_Armor_Value.objects.filter(CID = CIDin).first()
 		if request.method == 'POST':
@@ -830,8 +831,8 @@ def CharacterDamageLeftLeg(request, CIDin):
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		
-def CharacterHealLeftLeg(request, CIDin):
-	if CanEditCharacter(request,CIDin):
+def CharacterHealLeftLeg(request, GIDin, CIDin):
+	if CanEditCharacter(request,CIDin, GIDin):
 		characterhp = get_object_or_404(Character_HP, CID = CIDin)
 		if request.method == 'POST':
 			form = HPFormHeal(request.POST)
@@ -857,10 +858,10 @@ def SurgePage(request, GIDin):
 	if isGameCommander(request,GIDin):
 		try:
 			theGroup = get_object_or_404(Group,GID = GIDin)
-			chractersInGroup = Character.objects.filter(GID = GIDin).order_by('Name')
+			chractersInGroup = charactersInGroup = Character_Group.objects.filter(GID = GIDin)
 		except Character.DoesNotExist:
 			raise Http404("group does not exist")
-		return render(request, 'stats/surgeControl.html', {'chractersInGroup': chractersInGroup, 'Group':theGroup})
+		return render(request, 'stats/surgeControl.html', {'chractersInGroup': chractersInGroup, 'theGroup':theGroup})
 	else:
 		return HttpResponseRedirect(reverse('index'))
 		

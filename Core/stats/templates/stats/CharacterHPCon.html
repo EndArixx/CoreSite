@@ -2,7 +2,7 @@
 	<div class="well-lg">
     {% if characterHP %}
 	<div class="text-center">
-		<h2><a href="{% url 'CharacterSheet' character.CID %}">{{ character.Name }}</a>'s Health</h2>
+		<h2><a href="{% url 'character' theGroup.GID character.CID %}">{{ character.Name }}</a>'s Health</h2>
 <!--  --------------------------------------------------------------------------------- -->
 		<div class="row">
 			<div class="col-sm-4 col-sm-offset-4">
@@ -26,7 +26,7 @@
 					</div>
 				</div>
 				<div class="modal fade" id="DamageHead{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterDamageHead' character.CID %}" method="post">
+					<form action="{% url 'CharacterDamageHead' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpDamageForm.as_p }}
@@ -35,7 +35,7 @@
 					</form>
 				</div></div></div></div>
 				<div class="modal fade" id="HealHead{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterHealHead' character.CID %}" method="post">
+					<form action="{% url 'CharacterHealHead' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpHealForm.as_p }}
@@ -68,7 +68,7 @@
 					</div>
 				</div>
 				<div class="modal fade" id="DamageLArm{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterDamageLeftArm' character.CID %}" method="post">
+					<form action="{% url 'CharacterDamageLeftArm' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpDamageForm.as_p }}
@@ -77,7 +77,7 @@
 					</form>
 				</div></div></div></div>
 				<div class="modal fade" id="HealLArm{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterHealLeftArm' character.CID %}" method="post">
+					<form action="{% url 'CharacterHealLeftArm' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpHealForm.as_p }}
@@ -108,7 +108,7 @@
 					</div>
 				</div>
 				<div class="modal fade" id="DamageCore{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterDamageCore' character.CID %}" method="post">
+					<form action="{% url 'CharacterDamageCore' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpDamageForm.as_p }}
@@ -117,7 +117,7 @@
 					</form>
 				</div></div></div></div>
 				<div class="modal fade" id="HealCore{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterHealCore' character.CID %}" method="post">
+					<form action="{% url 'CharacterHealCore' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpHealForm.as_p }}
@@ -148,7 +148,7 @@
 					</div>
 				</div>
 				<div class="modal fade" id="DamageRArm{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterDamageRightArm' character.CID %}" method="post">
+					<form action="{% url 'CharacterDamageRightArm' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpDamageForm.as_p }}
@@ -157,7 +157,7 @@
 					</form>
 				</div></div></div></div>
 				<div class="modal fade" id="HealRArm{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterHealRightArm' character.CID %}" method="post">
+					<form action="{% url 'CharacterHealRightArm' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpHealForm.as_p }}
@@ -190,7 +190,7 @@
 					</div>
 				</div>
 				<div class="modal fade" id="DamageLLeg{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterDamageLeftLeg' character.CID %}" method="post">
+					<form action="{% url 'CharacterDamageLeftLeg' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpDamageForm.as_p }}
@@ -199,7 +199,7 @@
 					</form>
 				</div></div></div></div>
 				<div class="modal fade" id="HealLLeg{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterHealLeftLeg' character.CID %}" method="post">
+					<form action="{% url 'CharacterHealLeftLeg' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpHealForm.as_p }}
@@ -230,7 +230,7 @@
 					</div>
 				</div>
 				<div class="modal fade" id="DamageRLeg{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterDamageRightLeg' character.CID %}" method="post">
+					<form action="{% url 'CharacterDamageRightLeg' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpDamageForm.as_p }}
@@ -239,7 +239,7 @@
 					</form>
 				</div></div></div></div>
 				<div class="modal fade" id="HealRLeg{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-					<form action="{% url 'CharacterHealRightLeg' character.CID %}" method="post">
+					<form action="{% url 'CharacterHealRightLeg' theGroup.GID character.CID %}" method="post">
 						{% csrf_token %}
 						<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 						{{ hpHealForm.as_p }}
@@ -280,7 +280,7 @@
 			</div>
 		</div>
 		<div class="modal fade" id="ResetHP{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-			<form action="{% url 'CharacterHPFullHeal' character.CID %}" method="post">
+			<form action="{% url 'CharacterHPFullHeal' theGroup.GID character.CID %}" method="post">
 				{% csrf_token %}
 				<p>Are you sure you want to reset {{character}}'s health?</p>
 				<input type='hidden' name="Redirect" value="{{ Redirector }}" />
@@ -291,7 +291,7 @@
 			</form>
 		</div></div></div></div>	
 		<div class="modal fade" id="ResetArmor{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-			<form action="{% url 'CharacterArmorReset' character.CID %}" method="post">
+			<form action="{% url 'CharacterArmorReset' theGroup.GID character.CID %}" method="post">
 				{% csrf_token %}
 				<p>Are you sure you want to reset {{character}}'s armor?</p>
 				<input type='hidden' name="Redirect" value="{{ Redirector }}" />
@@ -302,7 +302,7 @@
 			</form>
 		</div></div></div></div>	
 		<div class="modal fade" id="HPALL{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-			<form action="{% url 'CharacterHPHealALL' character.CID %}" method="post">
+			<form action="{% url 'CharacterHPHealALL' theGroup.GID character.CID %}" method="post">
 				{% csrf_token %}
 				<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 				{{ hpHealAllForm.as_p }}
@@ -311,7 +311,7 @@
 			</form>
 		</div></div></div></div>	
 		<div class="modal fade" id="ArmorALL{{ character.CID }}" role="dialog"><div class="modal-dialog"><div class="modal-content"><div class="modal-body">
-			<form action="{% url 'CharacterArmorALL' character.CID %}" method="post">
+			<form action="{% url 'CharacterArmorALL' theGroup.GID character.CID %}" method="post">
 				{% csrf_token %}
 				<input type='hidden' name="Redirect" value="{{ Redirector }}" />
 				{{ armorAllForm.as_p }}

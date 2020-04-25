@@ -12,6 +12,7 @@ class SurgeForm(forms.Form):
 AddorO=[('Add_f','Add'),
 	('Override_f','Override')]
 	
+	
 class HPAllForm(forms.Form):
 	OverHeal_f = forms.BooleanField(label='Temporary HP?',required=False) 
 	AddorO_f = forms.ChoiceField(label='',choices=AddorO, widget=forms.RadioSelect, initial= "Add_f")

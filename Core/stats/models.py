@@ -85,7 +85,7 @@ class Character(models.Model):
 	#names_And FKs
 	CID = models.AutoField(primary_key=True)
 	#PID = models.ForeignKey(Player, on_delete=models.CASCADE) 
-	GID = models.ForeignKey(Group, on_delete=models.CASCADE) 
+	#GID = models.ForeignKey(Group, on_delete=models.CASCADE) 
 	Name =  models.CharField(max_length=200)
 	Image  =  models.CharField(max_length=200, blank=True, null=True)
 	#Details
@@ -103,6 +103,14 @@ class Character(models.Model):
 	GC_notes = models.CharField(max_length=2000,blank=True, null=True)
 	def __str__(self):
 		return self.Name
+
+class Character_Group(models.Model):
+	CID = models.ForeignKey(Character, on_delete=models.CASCADE) 
+	GID =  models.ForeignKey(Group, on_delete=models.CASCADE) 
+	class Meta:
+		unique_together = ('CID', 'GID')
+	def __str__(self):
+		return self.CID.Name + ' - '+ self.GID.Name
 
 class Character_Details(models.Model):	
 	CID = models.ForeignKey(Character, on_delete=models.CASCADE)
