@@ -5,10 +5,19 @@ from django.http import HttpResponseRedirect
 from django.contrib.staticfiles import finders
 
 #models
-# from .models import  *
+from .models import  *
 
+#Comic stuff------------------------------------
+def ComicHome(request):
+	return render(request, 'ccc/index.html')
 
-#Show a list of all the groups
+def ComicSplash(request, inComic):
+	return render(request, 'ccc/index.html')
+
+def ComicPage(request, inComic, inPage):
+	return render(request, 'ccc/index.html')
+
+#HopePage
 def cccindex(request):
 	return render(request, 'ccc/index.html')
 

@@ -239,7 +239,6 @@ class Weapon(models.Model):
 	RID = models.ForeignKey(Weapon_Range, on_delete=models.CASCADE) 
 	AAID  = models.ForeignKey(Weapon_Ammo, on_delete=models.CASCADE) 
 	Name =  models.CharField(max_length=200)
-	Details =  models.CharField(max_length=2000,blank=True, null=True)
 	Capacity = models.IntegerField(default=1)
 	Rarity  = models.IntegerField(default=1)
 	Cost =  models.IntegerField(default=-1)
