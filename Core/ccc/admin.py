@@ -19,7 +19,7 @@ class Series_Season_Inline(admin.StackedInline):
     ordering = ('SeaId__Name',)
     model = Series_Season
     extra = 0
-    
+
 class SeriesAdmin(admin.ModelAdmin):
     ordering = ('Name',)
     inlines = [Series_Season_Inline]

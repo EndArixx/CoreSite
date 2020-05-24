@@ -61,7 +61,7 @@ class Series(models.Model):
     End = models.DateField(null=True)
     class Meta:
         verbose_name = 'Series'
-        verbose_name_plural = '2) serieses' 
+        verbose_name_plural = '2) Serieses' 
     def __str__(self):
         return self.Name
 
